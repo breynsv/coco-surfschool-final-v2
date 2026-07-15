@@ -304,6 +304,24 @@ h1, h2, h3, h4 {
 .philo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin-top: 1.9rem; }
 .philo-grid .extra-card { background: var(--white); border: 1px solid rgba(180,211,196,.4); }
 
+/* Live surf report */
+.sr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); gap: 1rem; margin-top: 1.6rem; }
+.sr-card { background: var(--white); border: 1px solid rgba(180,211,196,.4); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.2rem 1.15rem; display: flex; flex-direction: column; gap: .3rem; justify-content: center; min-height: 108px; }
+.sr-ic { font-size: 1.5rem; line-height: 1; }
+.sr-val { font-family: var(--font-display); font-size: 1.9rem; font-weight: 600; color: var(--ink); line-height: 1.05; letter-spacing: -.01em; }
+.sr-val.sr-sun { font-size: 1.4rem; }
+.sr-val small { font-family: var(--font-body); font-size: .78rem; font-weight: 600; color: var(--ink-soft); }
+.sr-dir { font-family: var(--font-body); font-size: .9rem; color: var(--coral-deep); font-weight: 700; }
+.sr-lbl { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--seafoam-deep); font-weight: 700; }
+.sr-tide-card { grid-column: span 2; }
+.sr-tide { display: flex; gap: 1.3rem; flex-wrap: wrap; margin-top: .1rem; }
+.sr-tide-pt { display: flex; flex-direction: column; font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; color: var(--ink); }
+.sr-tide-pt b { font-family: var(--font-body); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--coral-deep); font-weight: 700; }
+.sr-unavailable { display: none; text-align: center; color: var(--ink-soft); margin-top: 1rem; }
+.sr-down .sr-grid { display: none; }
+.sr-down .sr-unavailable { display: block; }
+@media (max-width: 560px) { .sr-tide-card { grid-column: auto; } }
+
 /* =========================================================
    Accommodation
    ========================================================= */

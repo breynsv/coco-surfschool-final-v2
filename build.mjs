@@ -108,7 +108,7 @@ ${alt}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${u.css}?v=4">
+<link rel="stylesheet" href="${u.css}?v=5">
 <link rel="icon" href="${u.logo}" type="image/png">${ld}
 </head>`;
 }
@@ -248,6 +248,22 @@ const R = {
   </div>
 </section>
 ${trustBar(t)}
+<section class="section section--tint" id="surf-report" data-lang="${lang}" data-tide="${u.root}data/tide.json" data-high="${t.surfReport.high}" data-low="${t.surfReport.low}">
+  <div class="wrap">
+    <div class="section-head center reveal"><p class="eyebrow">${t.surfReport.eyebrow}</p><h2 class="section-title" style="margin-inline:auto">${t.surfReport.title}</h2></div>
+    <div class="sr-grid reveal">
+      <div class="sr-card"><span class="sr-ic" id="sr-air-ic">🌊</span><b class="sr-val" id="sr-air">–</b><span class="sr-lbl">${t.surfReport.air}</span></div>
+      <div class="sr-card"><b class="sr-val" id="sr-wave">–</b><span class="sr-lbl">${t.surfReport.wave}</span></div>
+      <div class="sr-card"><b class="sr-val" id="sr-water">–</b><span class="sr-lbl">${t.surfReport.water}</span></div>
+      <div class="sr-card"><b class="sr-val"><span id="sr-wind">–</span> <small>km/h</small> <span class="sr-dir" id="sr-wind-dir"></span></b><span class="sr-lbl">${t.surfReport.wind}</span></div>
+      <div class="sr-card"><b class="sr-val" id="sr-uv">–</b><span class="sr-lbl">${t.surfReport.uv}</span></div>
+      <div class="sr-card"><b class="sr-val sr-sun"><span id="sr-sunrise">–</span> <small>→</small> <span id="sr-sunset">–</span></b><span class="sr-lbl">${t.surfReport.sunrise} / ${t.surfReport.sunset}</span></div>
+      <div class="sr-card sr-tide-card"><span class="sr-lbl">${t.surfReport.tide}</span><div class="sr-tide" id="sr-tide"><span class="sr-tide-none">–</span></div></div>
+    </div>
+    <p class="sr-unavailable">${t.surfReport.unavailable}</p>
+  </div>
+</section>
+<script src="${u.root}surf-report.js" defer></script>
 <section class="section" id="filosofie">
   <div class="wrap">
     <div class="section-head center reveal"><p class="eyebrow">${t.philosophy.eyebrow}</p><h2 class="section-title" style="margin-inline:auto">${t.philosophy.title}</h2><p class="lead" style="margin-inline:auto">${t.philosophy.lead}</p></div>
