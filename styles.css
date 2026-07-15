@@ -305,7 +305,7 @@ h1, h2, h3, h4 {
 .philo-grid .extra-card { background: var(--white); border: 1px solid rgba(180,211,196,.4); }
 
 /* Live surf report */
-.sr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); gap: 1rem; margin-top: 1.6rem; }
+.sr-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1.6rem; }
 .sr-card { background: var(--white); border: 1px solid rgba(180,211,196,.4); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 1.2rem 1.15rem; display: flex; flex-direction: column; gap: .3rem; justify-content: center; min-height: 108px; }
 .sr-ic { font-size: 1.5rem; line-height: 1; }
 .sr-val { font-family: var(--font-display); font-size: 1.9rem; font-weight: 600; color: var(--ink); line-height: 1.05; letter-spacing: -.01em; }
@@ -320,7 +320,8 @@ h1, h2, h3, h4 {
 .sr-unavailable { display: none; text-align: center; color: var(--ink-soft); margin-top: 1rem; }
 .sr-down .sr-grid { display: none; }
 .sr-down .sr-unavailable { display: block; }
-@media (max-width: 560px) { .sr-tide-card { grid-column: auto; } }
+@media (max-width: 720px) { .sr-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 430px) { .sr-grid { grid-template-columns: 1fr; } .sr-tide-card { grid-column: auto; } }
 
 /* =========================================================
    Accommodation
