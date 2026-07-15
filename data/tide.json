@@ -1,7 +1,48 @@
 {
-  "updated": null,
-  "station": "Les Bourdaines",
+  "updated": "2026-07-15T17:01:25.849Z",
+  "station": "bayonne_boucau",
   "lat": 43.6889,
   "lng": -1.4372,
-  "extremes": []
+  "extremes": [
+    {
+      "type": "high",
+      "time": "2026-07-15T16:24:00+00:00",
+      "height": 1.93
+    },
+    {
+      "type": "low",
+      "time": "2026-07-15T22:32:00+00:00",
+      "height": -1.98
+    },
+    {
+      "type": "high",
+      "time": "2026-07-16T04:55:00+00:00",
+      "height": 1.62
+    },
+    {
+      "type": "low",
+      "time": "2026-07-16T10:45:00+00:00",
+      "height": -1.77
+    },
+    {
+      "type": "high",
+      "time": "2026-07-16T17:11:00+00:00",
+      "height": 1.95
+    },
+    {
+      "type": "low",
+      "time": "2026-07-16T23:19:00+00:00",
+      "height": -1.97
+    },
+    {
+      "type": "high",
+      "time": "2026-07-17T05:40:00+00:00",
+      "height": 1.56
+    },
+    {
+      "type": "low",
+      "time": "2026-07-17T11:32:00+00:00",
+      "height": -1.74
+    }
+  ]
 }
