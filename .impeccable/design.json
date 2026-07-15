@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-10T15:57:02Z",
+  "title": "Design System: Coco Surf School",
+  "extensions": {
+    "colorMeta": {
+      "ink": { "role": "primary", "displayName": "Deep Teal Ink", "canonical": "#23413A", "tonalRamp": ["#0E1B18", "#16297F", "#1A332D", "#23413A", "#3A5A51", "#5E7E75", "#8BA69E", "#C3D4CE"] },
+      "coral-deep": { "role": "primary", "displayName": "Terracotta Coral", "canonical": "#C9705E", "tonalRamp": ["#4A231B", "#6E362A", "#93493A", "#B5604F", "#C9705E", "#DB917F", "#EBB6A9", "#F7DED6"] },
+      "seafoam": { "role": "secondary", "displayName": "Seafoam", "canonical": "#8FBBAA", "tonalRamp": ["#22332E", "#345048", "#476C61", "#5E8B7D", "#77A395", "#8FBBAA", "#B4D3C7", "#DBEBE4"] },
+      "mint": { "role": "neutral", "displayName": "Sea Mist", "canonical": "#DCEDE4", "tonalRamp": ["#2C3E38", "#41594F", "#5C776C", "#7E998E", "#A5BDB2", "#C7E0D3", "#DCEDE4", "#EEF7F2"] },
+      "coral-soft": { "role": "secondary", "displayName": "Coral Tint", "canonical": "#F5D3CA", "tonalRamp": ["#5A342B", "#7E483B", "#A25E4E", "#C27E6E", "#E0A493", "#EFBFB1", "#F5D3CA", "#FBEBE5"] },
+      "cream": { "role": "neutral", "displayName": "Cream", "canonical": "#FAF8F2", "tonalRamp": ["#3A382F", "#54523F", "#736F58", "#9A9680", "#C4C0AC", "#E7E3D6", "#F3EFE6", "#FAF8F2"] },
+      "ink-soft": { "role": "neutral", "displayName": "Muted Ink", "canonical": "#4C635C", "tonalRamp": ["#1B2622", "#293833", "#374B44", "#4C635C", "#6A827A", "#8CA199", "#B4C4BD", "#DCE6E1"] },
+      "gold": { "role": "tertiary", "displayName": "Amber", "canonical": "#E4B24C", "tonalRamp": ["#4A390F", "#6E551A", "#937226", "#B88F33", "#D6A63F", "#E4B24C", "#EFCC85", "#F8E7C1"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero H1 only. Fraunces 500; italic words drop to 400 in coral." },
+      "headline": { "displayName": "Headline", "purpose": "Section titles, capped ~20ch." },
+      "title": { "displayName": "Title", "purpose": "Card, FAQ, and coach-quote headings." },
+      "body": { "displayName": "Body", "purpose": "Paragraph text in muted ink; 62–75ch measure." },
+      "label": { "displayName": "Label / Eyebrow", "purpose": "Uppercase tracked micro-labels and the coral-dash eyebrow kicker." }
+    },
+    "shadows": [
+      { "name": "ambient-rest", "value": "0 4px 18px rgba(45,80,71,.06)", "purpose": "Default resting lift on cards, active lang pill, icon tiles." },
+      { "name": "ambient-lift", "value": "0 18px 50px rgba(45,80,71,.10)", "purpose": "Hover/focus/featured state — a surface rising toward the reader." }
+    ],
+    "motion": [
+      { "name": "ease-house", "value": "cubic-bezier(.22,.61,.36,1)", "purpose": "The one house easing (ease-out) for every transition and reveal." },
+      { "name": "hover-lift", "value": "translateY(-2px to -4px), .25s–.3s", "purpose": "Interactive rise on buttons and cards, paired with ambient-rest → ambient-lift." },
+      { "name": "reveal", "value": "opacity 0→1, translateY(24px)→0, .7s ease-house", "purpose": "Section entrance; disabled under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "lg", "value": "960px" },
+      { "name": "md", "value": "780px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The grounding CTA — deep teal fill, cream text, full pill.",
+      "html": "<button class=\"ds-btn-primary\">Boek een les</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 600; font-size: .96rem; line-height: 1.1; color: #FAF8F2; background: #23413A; border: 1.5px solid transparent; border-radius: 100px; padding: .82rem 1.5rem; box-shadow: 0 4px 18px rgba(45,80,71,.06); cursor: pointer; transition: transform .25s cubic-bezier(.22,.61,.36,1), box-shadow .25s cubic-bezier(.22,.61,.36,1), background .25s cubic-bezier(.22,.61,.36,1); } .ds-btn-primary:hover { background: #1A332D; transform: translateY(-2px); box-shadow: 0 18px 50px rgba(45,80,71,.10); } .ds-btn-primary:focus-visible { outline: 2px solid #8FBBAA; outline-offset: 3px; }"
+    },
+    {
+      "name": "Coral Button",
+      "kind": "button",
+      "refersTo": "button-coral",
+      "description": "The warm, high-intent CTA — coral fill, white text.",
+      "html": "<button class=\"ds-btn-coral\">Reserveer nu</button>",
+      "css": ".ds-btn-coral { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 600; font-size: .96rem; line-height: 1.1; color: #fff; background: #C9705E; border: 1.5px solid transparent; border-radius: 100px; padding: .82rem 1.5rem; cursor: pointer; transition: transform .25s cubic-bezier(.22,.61,.36,1), box-shadow .25s cubic-bezier(.22,.61,.36,1), background .25s cubic-bezier(.22,.61,.36,1); } .ds-btn-coral:hover { background: #B5604F; transform: translateY(-2px); box-shadow: 0 18px 50px rgba(45,80,71,.10); } .ds-btn-coral:focus-visible { outline: 2px solid #23413A; outline-offset: 3px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action — transparent with a mint hairline border.",
+      "html": "<button class=\"ds-btn-ghost\">Bekijk tarieven</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 600; font-size: .96rem; line-height: 1.1; color: #23413A; background: transparent; border: 1.5px solid #B4D3C4; border-radius: 100px; padding: .82rem 1.5rem; cursor: pointer; transition: transform .25s cubic-bezier(.22,.61,.36,1), border-color .25s cubic-bezier(.22,.61,.36,1), background .25s cubic-bezier(.22,.61,.36,1); } .ds-btn-ghost:hover { border-color: #8FBBAA; background: rgba(255,255,255,.5); transform: translateY(-2px); } .ds-btn-ghost:focus-visible { outline: 2px solid #8FBBAA; outline-offset: 3px; }"
+    },
+    {
+      "name": "Eyebrow Kicker",
+      "kind": "custom",
+      "refersTo": "label",
+      "description": "The signature Coral Dash — the recurring section 'you are here' marker.",
+      "html": "<p class=\"ds-eyebrow\">Jouw coach</p>",
+      "css": ".ds-eyebrow { display: inline-flex; align-items: center; gap: .6rem; margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: .74rem; font-weight: 700; letter-spacing: .28em; text-transform: uppercase; color: #C9705E; } .ds-eyebrow::before { content: ''; width: 26px; height: 2px; background: #E9A899; border-radius: 2px; }"
+    },
+    {
+      "name": "Lesson Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "White surface, hairline mint border, soft lift on hover; image bleeds to the card edge.",
+      "html": "<article class=\"ds-card\"><span class=\"ds-card-num\">01</span><h3 class=\"ds-card-title\">Groepsles</h3><p class=\"ds-card-body\">Kleine groepjes van maximum 6, board en wetsuit inbegrepen.</p><span class=\"ds-card-tag\">Beginners</span></article>",
+      "css": ".ds-card { display: block; background: #fff; border: 1px solid rgba(180,211,196,.4); border-radius: 22px; padding: 1.9rem; box-shadow: 0 4px 18px rgba(45,80,71,.06); transition: transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s cubic-bezier(.22,.61,.36,1); } .ds-card:hover { transform: translateY(-4px); box-shadow: 0 18px 50px rgba(45,80,71,.10); } .ds-card-num { font-family: Fraunces, Georgia, serif; font-size: .95rem; font-weight: 600; letter-spacing: .05em; color: #C9705E; } .ds-card-title { font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 1.4rem; color: #23413A; margin: .2rem 0 .5rem; } .ds-card-body { margin: 0; font-family: -apple-system, sans-serif; font-size: .96rem; line-height: 1.68; color: #4C635C; } .ds-card-tag { display: inline-block; margin-top: 1rem; font-family: -apple-system, sans-serif; font-size: .76rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #8FBBAA; background: #DCEDE4; padding: .3rem .7rem; border-radius: 100px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Cream-filled field that recedes into the paper; focus brightens to white with a seafoam border.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Naam</span><input class=\"ds-input\" type=\"text\" placeholder=\"Jouw naam\"></label>",
+      "css": ".ds-field { display: block; } .ds-field-label { display: block; font-family: -apple-system, sans-serif; font-size: .82rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #8FBBAA; margin-bottom: .4rem; } .ds-input { width: 100%; padding: .85rem 1rem; font-family: -apple-system, sans-serif; font-size: 1rem; color: #23413A; background: #FAF8F2; border: 1.5px solid #B4D3C4; border-radius: 14px; transition: border-color .2s, background .2s; } .ds-input::placeholder { color: #6A827A; } .ds-input:focus { outline: none; border-color: #8FBBAA; background: #fff; }"
+    },
+    {
+      "name": "Nav Link",
+      "kind": "nav",
+      "refersTo": "nav",
+      "description": "Ink link with a coral underline that grows left-to-right on hover.",
+      "html": "<a class=\"ds-nav-link\" href=\"#\">Lessen &amp; tarieven</a>",
+      "css": ".ds-nav-link { position: relative; font-family: -apple-system, sans-serif; font-size: .93rem; font-weight: 500; color: #23413A; text-decoration: none; padding: .3rem 0; transition: color .25s cubic-bezier(.22,.61,.36,1); } .ds-nav-link::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 0; height: 2px; background: #E9A899; border-radius: 2px; transition: width .3s cubic-bezier(.22,.61,.36,1); } .ds-nav-link:hover { color: #C9705E; } .ds-nav-link:hover::after { width: 100%; }"
+    },
+    {
+      "name": "FAQ Disclosure",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "White card with a mint chevron that rotates to a coral '+' when open.",
+      "html": "<details class=\"ds-faq\" open><summary class=\"ds-faq-sum\">Heb ik ervaring nodig?<span class=\"ds-faq-chev\">+</span></summary><div class=\"ds-faq-body\"><p>Nee — de meeste leerlingen staan voor het eerst op een board.</p></div></details>",
+      "css": ".ds-faq { background: #fff; border: 1px solid rgba(180,211,196,.45); border-radius: 22px; overflow: hidden; box-shadow: 0 4px 18px rgba(45,80,71,.06); } .ds-faq-sum { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.2rem 1.5rem; font-family: Fraunces, Georgia, serif; font-size: 1.1rem; font-weight: 500; color: #23413A; } .ds-faq-sum::-webkit-details-marker { display: none; } .ds-faq-chev { flex: none; width: 26px; height: 26px; border-radius: 50%; background: #DCEDE4; color: #23413A; display: grid; place-items: center; font-size: 1rem; transition: transform .3s cubic-bezier(.22,.61,.36,1), background .3s; } .ds-faq[open] .ds-faq-chev { transform: rotate(45deg); background: #F5D3CA; } .ds-faq-body { padding: 0 1.5rem 1.3rem; font-family: -apple-system, sans-serif; font-size: .96rem; line-height: 1.68; color: #4C635C; } .ds-faq-body p { margin: 0; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Seafoam Sanctuary",
+    "overview": "Coco Surf School is a small-group surf school on the Landes coast, and the site should feel the way the school promises to feel: an unhurried exhale by the ocean. The whole system is built around a pale, sea-washed calm — mint and cream carrying the surfaces, a warm coral surfacing only where the eye should go. Nothing shouts. Density is low, whitespace is generous, and the reading rhythm is slow on purpose. The character is editorial-pastel: a Fraunces serif carries every heading with a quiet, humanist warmth, set against a clean system sans for body. Depth is barely-there — soft, teal-tinted shadows that lift a card a few pixels rather than dropping it into a hole. This system explicitly rejects the loud SaaS-landing register (dark heroes, neon gradients, glassmorphism, hero-metric templates) and equally rejects sterile minimalism; warmth is carried by palette, serif, and imagery, never by an aggressive layout.",
+    "keyCharacteristics": [
+      "Pale seafoam-and-cream base; coral as a rare, directional accent.",
+      "Fraunces serif for all headings; humanist and warm, never stern.",
+      "Soft, low, teal-tinted elevation — surfaces lift gently, never drop.",
+      "Pill geometry (100px) for every interactive shape; 22–34px rounding for surfaces.",
+      "Generous whitespace and slow reading rhythm; calm is the product."
+    ],
+    "rules": [
+      { "name": "The One Coral Rule", "body": "Coral (coral-deep and its tints) is the only directional accent and appears on ≤10% of any screen. Its rarity is the point — the moment two coral things compete, the pointing stops working.", "section": "colors" },
+      { "name": "The Grounded-Not-Black Rule", "body": "There is no pure black and no pure-neutral gray. Ink is teal (#23413A), text is teal-gray (#4C635C), shadows are teal-tinted. Reaching for #000 or a neutral #888 breaks the coastal warmth.", "section": "colors" },
+      { "name": "The Coral Dash Rule", "body": "The section eyebrow is a deliberate, named brand system: uppercase 0.74rem label, 0.28em tracking, coral-deep, preceded by a 26×2px coral dash. Keep it identical everywhere it appears — a drifting or restyled eyebrow reads as an accident.", "section": "typography" },
+      { "name": "The Serif-Carries-It Rule", "body": "All headings are Fraunces; the body sans is intentionally mute. Never introduce a second display face — contrast is serif-vs-sans and weight, not a new family.", "section": "typography" },
+      { "name": "The Gentle-Lift Rule", "body": "Surfaces rest at shadow-sm and rise to shadow-md with a translateY(-2px to -4px) on hover. Elevation is a response to interaction, not decoration at rest. No shadow is ever darker or tighter than shadow-md.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep coral rare and directional — links, the eyebrow, one CTA, emphasis. If two coral elements compete on a screen, demote one.",
+      "Do set every heading in Fraunces and let italic-coral carry emphasis inside a headline.",
+      "Do ground the system in teal, not black: #23413A ink, #4C635C body, teal-tinted shadows.",
+      "Do keep elevation soft and reactive — shadow-sm at rest, shadow-md + a 2–4px lift on hover, nothing darker.",
+      "Do use the pill (100px) for every interactive shape and 22–34px rounding for surfaces.",
+      "Do keep the eyebrow kicker identical everywhere it appears; its consistency is what makes it a system rather than noise.",
+      "Do cap body measure at 62–75ch and lead paragraphs at ~56ch; the slow reading rhythm is part of the calm."
+    ],
+    "donts": [
+      "Don't use seafoam (#8FBBAA) for small body or long-form text on white/cream — it falls below the 4.5:1 contrast floor. Keep seafoam for short uppercase labels only; use ink-soft for anything meant to be read.",
+      "Don't introduce a second display typeface or a mono 'for technical feel' — this brand isn't technical.",
+      "Don't reach for a dark hero, neon gradient, glassmorphic card, or the big-number hero-metric template.",
+      "Don't use pure black (#000) or a neutral gray (#888) anywhere; it drains the coastal warmth.",
+      "Don't let the eyebrow drift — a restyled, differently-tracked, or recolored kicker reads as an accident. If it can't be identical, drop it for that section instead.",
+      "Don't use border-left/border-right colored stripes on cards or callouts; use full hairline borders, mint/coral-soft tint fills, or leading labels instead.",
+      "Don't harden the shadows — a tight, near-black drop shadow is the fastest way to make this system look like a generic 2014 app."
+    ]
+  }
+}
