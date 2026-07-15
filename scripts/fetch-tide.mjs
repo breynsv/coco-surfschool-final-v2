@@ -8,8 +8,8 @@ if (!KEY) { console.error('STORMGLASS_KEY missing'); process.exit(1); }
 
 const LAT = 43.6889, LNG = -1.4372;          // Les Bourdaines, Seignosse
 const now = Date.now();
-const start = new Date(now - 6 * 3600e3).toISOString();     // 6h back (catch the current cycle)
-const end = new Date(now + 2 * 86400e3).toISOString();      // +2 days
+const start = new Date(now - 26 * 3600e3).toISOString();    // 26h back so the full current day is always covered
+const end = new Date(now + 3 * 86400e3).toISOString();      // +3 days (today + tomorrow + buffer)
 
 const url = `https://api.stormglass.io/v2/tide/extremes/point?lat=${LAT}&lng=${LNG}&start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`;
 

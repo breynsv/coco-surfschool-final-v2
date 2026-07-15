@@ -89,7 +89,7 @@
 <main>
 
 <section class="hero" id="accueil">
-  <img class="palm-mark" src="../assets/images/41a3c55f3d76b98ad1058e6d4a659856.png" alt="" aria-hidden="true" width="240" height="240" style="top:-40px;right:-30px;width:230px" loading="lazy">
+  <img class="palm-mark" src="../assets/images/41a3c55f3d76b98ad1058e6d4a659856.png" alt="" aria-hidden="true" width="240" height="240" style="top:-40px;right:0;width:230px" loading="lazy">
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <p class="eyebrow">Mobile surf school · Seignosse, Hossegor &amp; Capbreton</p>
@@ -112,20 +112,45 @@
   </div></section>
 <section class="section section--tint" id="surf-report" data-lang="en" data-tide="../data/tide.json" data-high="High" data-low="Low">
   <div class="wrap">
-    <div class="section-head center reveal"><p class="eyebrow">Live · Les Bourdaines, Seignosse</p><h2 class="section-title" style="margin-inline:auto">Surf report</h2></div>
-    <div class="sr-grid reveal">
-      <div class="sr-card"><span class="sr-ic" id="sr-air-ic">🌊</span><b class="sr-val" id="sr-air">–</b><span class="sr-lbl">Air</span></div>
-      <div class="sr-card"><b class="sr-val" id="sr-wave">–</b><span class="sr-lbl">Swell</span></div>
-      <div class="sr-card"><b class="sr-val" id="sr-water">–</b><span class="sr-lbl">Water</span></div>
-      <div class="sr-card"><b class="sr-val"><span id="sr-wind">–</span> <small>km/h</small> <span class="sr-dir" id="sr-wind-dir"></span></b><span class="sr-lbl">Wind</span></div>
-      <div class="sr-card"><b class="sr-val" id="sr-uv">–</b><span class="sr-lbl">UV</span></div>
-      <div class="sr-card"><b class="sr-val sr-sun"><span id="sr-sunrise">–</span> <small>→</small> <span id="sr-sunset">–</span></b><span class="sr-lbl">Sunrise / Sunset</span></div>
-      <div class="sr-card sr-tide-card"><span class="sr-lbl">Tide</span><div class="sr-tide" id="sr-tide"><span class="sr-tide-none">–</span></div></div>
+    <p class="eyebrow sr-eyebrow reveal">Live · Les Bourdaines, Seignosse</p>
+    <div class="sr-tabs reveal">
+      <button type="button" class="sr-tab is-active" data-day="0">Today <span id="sr-date"></span></button>
+      <button type="button" class="sr-tab" data-day="1">Tomorrow</button>
+    </div>
+    <div class="sr-rows reveal">
+      <div class="sr-row">
+        <div class="sr-card sr-c-air">
+          <div class="sr-air-top"><span class="sr-ic" id="sr-icon"></span><b class="sr-big" id="sr-air">–</b></div>
+          <div class="sr-air-foot"><span id="sr-cond">–</span><span class="sr-lbl">Air</span></div>
+        </div>
+        <div class="sr-card sr-c-wave"><b class="sr-big" id="sr-wave">–</b><span class="sr-lbl sr-lbl-c">Swell</span></div>
+        <div class="sr-card sr-c-tide">
+          <div class="sr-tide-head"><span class="sr-lbl">Tide</span><span class="sr-coef" id="sr-coef"></span></div>
+          <div class="sr-curve" id="sr-curve" aria-hidden="true"></div>
+          <div class="sr-tide-times" id="sr-tide"></div>
+        </div>
+      </div>
+      <div class="sr-row">
+        <div class="sr-card sr-c-sun">
+          <div class="sr-sun-col"><svg class="sr-sunic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="3"/><path d="M12 8V6.6M7.8 10 6.7 8.9M16.2 10l1.1-1.1M5.6 14H4M20 14h-1.6M3 18.5h18"/><path d="M9.7 5 12 2.7 14.3 5"/></svg><b id="sr-sunrise">–</b><span class="sr-lbl">Sunrise</span></div>
+          <span class="sr-sun-sep"></span>
+          <div class="sr-sun-col"><svg class="sr-sunic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="3"/><path d="M12 8V6.6M7.8 10 6.7 8.9M16.2 10l1.1-1.1M5.6 14H4M20 14h-1.6M3 18.5h18"/><path d="M9.7 3 12 5.3 14.3 3"/></svg><b id="sr-sunset">–</b><span class="sr-lbl">Sunset</span></div>
+        </div>
+        <div class="sr-card sr-c-wind">
+          <div class="sr-wind-row"><b class="sr-big"><span id="sr-wind">–</span> <small>km/h</small></b><span class="sr-dial"><span class="sr-arrow" id="sr-arrow"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3.2l4.4 8H13.2v9.6h-2.4V11.2H7.6z"/></svg></span></span></div>
+          <span class="sr-lbl sr-lbl-c">Wind</span>
+        </div>
+        <div class="sr-card sr-c-uv">
+          <span class="sr-lbl sr-uv-lbl">UV</span>
+          <b class="sr-uvnum" id="sr-uv">–</b>
+          <span class="sr-uvbadge" id="sr-uvbadge"></span>
+        </div>
+      </div>
     </div>
     <p class="sr-unavailable">Conditions currently unavailable.</p>
   </div>
 </section>
-<script src="../surf-report.js" defer></script>
+<script src="../surf-report.js?v=2" defer></script>
 <section class="section" id="filosofie">
   <div class="wrap">
     <div class="section-head center reveal"><p class="eyebrow">Our philosophy</p><h2 class="section-title" style="margin-inline:auto">A little school that takes the time to do it right</h2><p class="lead" style="margin-inline:auto">Quality over quantity. Small groups, experienced coaches and plenty of water time — so you progress faster and have more fun.</p></div>
@@ -155,7 +180,7 @@
       <div class="chips"><span class="chip">Your own group · 1–7</span><span class="chip">±2h total</span><span class="chip">Tailor-made</span></div>
     </article>
     <article class="lesson-card reveal">
-      <div class="lesson-pic"><img src="../assets/images/owner-team.png" alt="Colleagues heading to the ocean with their boards" width="1600" height="1600" loading="lazy" decoding="async"></div>
+      <div class="lesson-pic"><img src="../assets/images/a29fce_9ddbf1309cf04bb189e246d843dfc188.jpg" alt="Colleagues heading to the ocean with their boards" width="1600" height="1600" loading="lazy" decoding="async"></div>
       <div class="card-head"><h3>Companies &amp; team building</h3><span class="from">on request</span></div>
       <p>A sporty day out with your colleagues! Team spirit, stress relief and smiles all round.</p>
       <div class="chips"><span class="chip">On request</span><span class="chip">Team bonding</span></div>

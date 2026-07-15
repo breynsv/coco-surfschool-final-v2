@@ -79,6 +79,9 @@ const REVIEWS = {
 };
 const G_LOGO = '<symbol id="g-logo" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></symbol>';
 const WA_SVG = '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16.004 0h-.008C7.174 0 .002 7.174.002 16c0 3.5 1.128 6.744 3.046 9.38L1.05 31.3l6.128-1.96A15.9 15.9 0 0 0 16.004 32C24.826 32 32 24.826 32 16S24.826 0 16.004 0Zm9.318 22.6c-.386 1.09-1.918 1.994-3.14 2.258-.836.178-1.928.32-5.604-1.204-4.7-1.948-7.726-6.724-7.962-7.034-.226-.31-1.9-2.53-1.9-4.826 0-2.296 1.166-3.424 1.636-3.904.386-.394.914-.574 1.42-.574.164 0 .312.008.446.014.408.018.612.042.88.684.334.804 1.146 2.79 1.244 2.994.1.204.166.442.03.752-.128.31-.24.446-.442.684-.204.238-.398.42-.602.676-.186.222-.396.462-.16.868.236.398 1.05 1.73 2.256 2.802 1.556 1.386 2.844 1.816 3.29 2.002.334.138.732.106 1.006-.204.35-.398.78-1.058 1.216-1.71.31-.462.7-.52 1.108-.366.42.146 2.65 1.25 2.964 1.408.31.158.516.234.592.366.076.132.076.766-.31 1.856Z"/></svg>';
+const SUN_UP = '<svg class="sr-sunic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="3"/><path d="M12 8V6.6M7.8 10 6.7 8.9M16.2 10l1.1-1.1M5.6 14H4M20 14h-1.6M3 18.5h18"/><path d="M9.7 5 12 2.7 14.3 5"/></svg>';
+const SUN_DOWN = '<svg class="sr-sunic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="3"/><path d="M12 8V6.6M7.8 10 6.7 8.9M16.2 10l1.1-1.1M5.6 14H4M20 14h-1.6M3 18.5h18"/><path d="M9.7 3 12 5.3 14.3 3"/></svg>';
+const WIND_ARROW = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3.2l4.4 8H13.2v9.6h-2.4V11.2H7.6z"/></svg>';
 
 function head(lang, key, c) {
   const t = c.pages[key], u = urls(lang, key);
@@ -232,7 +235,7 @@ const R = {
     const h = t.hero;
     return `
 <section class="hero" id="accueil">
-  <img class="palm-mark" src="${u.img('41a3c55f3d76b98ad1058e6d4a659856.png')}" alt="" aria-hidden="true" width="240" height="240" style="top:-40px;right:-30px;width:230px" loading="lazy">
+  <img class="palm-mark" src="${u.img('41a3c55f3d76b98ad1058e6d4a659856.png')}" alt="" aria-hidden="true" width="240" height="240" style="top:-40px;right:0;width:230px" loading="lazy">
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <p class="eyebrow">${h.eyebrow}</p>
@@ -250,20 +253,45 @@ const R = {
 ${trustBar(t)}
 <section class="section section--tint" id="surf-report" data-lang="${lang}" data-tide="${u.root}data/tide.json" data-high="${t.surfReport.high}" data-low="${t.surfReport.low}">
   <div class="wrap">
-    <div class="section-head center reveal"><p class="eyebrow">${t.surfReport.eyebrow}</p><h2 class="section-title" style="margin-inline:auto">${t.surfReport.title}</h2></div>
-    <div class="sr-grid reveal">
-      <div class="sr-card"><span class="sr-ic" id="sr-air-ic">🌊</span><b class="sr-val" id="sr-air">–</b><span class="sr-lbl">${t.surfReport.air}</span></div>
-      <div class="sr-card"><b class="sr-val" id="sr-wave">–</b><span class="sr-lbl">${t.surfReport.wave}</span></div>
-      <div class="sr-card"><b class="sr-val" id="sr-water">–</b><span class="sr-lbl">${t.surfReport.water}</span></div>
-      <div class="sr-card"><b class="sr-val"><span id="sr-wind">–</span> <small>km/h</small> <span class="sr-dir" id="sr-wind-dir"></span></b><span class="sr-lbl">${t.surfReport.wind}</span></div>
-      <div class="sr-card"><b class="sr-val" id="sr-uv">–</b><span class="sr-lbl">${t.surfReport.uv}</span></div>
-      <div class="sr-card"><b class="sr-val sr-sun"><span id="sr-sunrise">–</span> <small>→</small> <span id="sr-sunset">–</span></b><span class="sr-lbl">${t.surfReport.sunrise} / ${t.surfReport.sunset}</span></div>
-      <div class="sr-card sr-tide-card"><span class="sr-lbl">${t.surfReport.tide}</span><div class="sr-tide" id="sr-tide"><span class="sr-tide-none">–</span></div></div>
+    <p class="eyebrow sr-eyebrow reveal">${t.surfReport.eyebrow}</p>
+    <div class="sr-tabs reveal">
+      <button type="button" class="sr-tab is-active" data-day="0">${t.surfReport.today} <span id="sr-date"></span></button>
+      <button type="button" class="sr-tab" data-day="1">${t.surfReport.tomorrow}</button>
+    </div>
+    <div class="sr-rows reveal">
+      <div class="sr-row">
+        <div class="sr-card sr-c-air">
+          <div class="sr-air-top"><span class="sr-ic" id="sr-icon"></span><b class="sr-big" id="sr-air">–</b></div>
+          <div class="sr-air-foot"><span id="sr-cond">–</span><span class="sr-lbl">${t.surfReport.air}</span></div>
+        </div>
+        <div class="sr-card sr-c-wave"><b class="sr-big" id="sr-wave">–</b><span class="sr-lbl sr-lbl-c">${t.surfReport.wave}</span></div>
+        <div class="sr-card sr-c-tide">
+          <div class="sr-tide-head"><span class="sr-lbl">${t.surfReport.tide}</span><span class="sr-coef" id="sr-coef"></span></div>
+          <div class="sr-curve" id="sr-curve" aria-hidden="true"></div>
+          <div class="sr-tide-times" id="sr-tide"></div>
+        </div>
+      </div>
+      <div class="sr-row">
+        <div class="sr-card sr-c-sun">
+          <div class="sr-sun-col">${SUN_UP}<b id="sr-sunrise">–</b><span class="sr-lbl">${t.surfReport.sunrise}</span></div>
+          <span class="sr-sun-sep"></span>
+          <div class="sr-sun-col">${SUN_DOWN}<b id="sr-sunset">–</b><span class="sr-lbl">${t.surfReport.sunset}</span></div>
+        </div>
+        <div class="sr-card sr-c-wind">
+          <div class="sr-wind-row"><b class="sr-big"><span id="sr-wind">–</span> <small>km/h</small></b><span class="sr-dial"><span class="sr-arrow" id="sr-arrow">${WIND_ARROW}</span></span></div>
+          <span class="sr-lbl sr-lbl-c">${t.surfReport.wind}</span>
+        </div>
+        <div class="sr-card sr-c-uv">
+          <span class="sr-lbl sr-uv-lbl">${t.surfReport.uv}</span>
+          <b class="sr-uvnum" id="sr-uv">–</b>
+          <span class="sr-uvbadge" id="sr-uvbadge"></span>
+        </div>
+      </div>
     </div>
     <p class="sr-unavailable">${t.surfReport.unavailable}</p>
   </div>
 </section>
-<script src="${u.root}surf-report.js" defer></script>
+<script src="${u.root}surf-report.js?v=2" defer></script>
 <section class="section" id="filosofie">
   <div class="wrap">
     <div class="section-head center reveal"><p class="eyebrow">${t.philosophy.eyebrow}</p><h2 class="section-title" style="margin-inline:auto">${t.philosophy.title}</h2><p class="lead" style="margin-inline:auto">${t.philosophy.lead}</p></div>
