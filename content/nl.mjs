@@ -8,7 +8,7 @@ const CARDS = [
 export default {
   waText: 'Hallo Coco Surf School, ik wil graag een surfles boeken.',
   ui: {
-    nav: { lessons: 'Lessen &amp; tarieven', coach: 'Coach', stay: 'Verblijf', srilanka: 'Sri Lanka', contact: 'Contact', learn: 'Leren surfen' },
+    nav: { lessons: 'Lessen &amp; tarieven', coach: 'Coach', stay: 'Verblijf', rental: 'Verhuur', srilanka: 'Sri Lanka', contact: 'Contact', learn: 'Leren surfen' },
     navLabel: 'Hoofdnavigatie', book: 'Boek nu', langLabel: 'Taalkeuze', menuOpen: 'Menu openen',
     crumbHome: 'Home', footTagline: 'Surfschool in Seignosse &amp; Hossegor. Kwaliteit boven kwantiteit — lessen in kleine groepjes met Annelies.', footNav: 'Ontdek', langWord: 'Taal',
   },
@@ -61,6 +61,15 @@ export default {
       h1: 'Sri Lanka, met de familie',
       body: ['Jouw familieverblijf aan de prachtige zuidkust van Sri Lanka! We brengen onze winters door bij Budhika, Manori en Passandi, die onze Sri Lankaanse familie werden. Sinds Budhika zijn been verloor bij een busongeval leeft het gezin volledig van de inkomsten van de guesthouse; wij helpen hen om de zaak uit te bouwen. Je kan er het hele jaar door verblijven!', 'Het huis ligt op 100 m van het strand van Midigama — „Lazy Left” en „Rams” zijn je thuisspots. Je beleeft het echte Sri Lanka: geniet van je huisgemaakte ontbijt in de jungletuin tussen eekhoorns, pauwen, apen en kokospalmen. Manori staat bekend om haar keuken — coconut rotti en egg hoppers bij het ontbijt, rijst &amp; curry ’s avonds. Ayurvedische massage op aanvraag.'],
       cta: 'Meer over het kamp', g1: 'Surfen op een golf in Midigama, Sri Lanka', g2: 'Budhika, Manori en Passandi, de Sri Lankaanse familie', g3: 'Een pauw op het dak van het huis in Sri Lanka',
+    },
+    rental: {
+      title: 'Verhuur — surfplanken &amp; wetsuits | Coco Surf School', desc: 'Huur een surfplank of wetsuit bij Coco Surf School in Seignosse &amp; Hossegor — van 2 uur tot een week.', h1: 'Verhuur', crumb: 'Verhuur',
+      eyebrow: 'Verhuur', h1html: 'Materiaal <em>huren</em>', lead: 'Huur je surfplank of wetsuit bij ons — van 2 uur tot een hele week. Ophalen ter plaatse.',
+      board: 'Surf (enkel plank)', wetsuit: 'Wetsuit',
+      cols1: ['Tarief', '2u', '½ dag', '1 dag', '2 dagen'], cols2: ['Tarief', '3 dagen', '4 dagen', '5 dagen', '6 dagen', '1 week'],
+      rows1: { board: ['€15', '€20', '€30', '€50'], wetsuit: ['€10', '€10', '€15', '€25'] },
+      rows2: { board: ['€70', '€80', '€90', '€100', '€110'], wetsuit: ['€35', '€45', '€55', '€65', '€70'] },
+      note: '<strong>Goed om te weten —</strong> verhuur ter plaatse. Vraag ernaar bij je reservatie of via WhatsApp.', cta: 'Reserveer je materiaal',
     },
     contact: {
       title: 'Contact &amp; reservatie — Coco Surf School Hossegor &amp; Seignosse', desc: 'Boek je surfles bij Coco Surf School. Telefoon +33 6 47 45 42 65, e-mail cocobosurfschool@gmail.com. Voorschot van 30%.', h1: 'Contact', crumb: 'Contact',

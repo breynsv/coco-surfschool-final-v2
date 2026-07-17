@@ -161,6 +161,46 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.coco-surfschool.com/es/alojamiento/"/>
   </url>
   <url>
+    <loc>https://www.coco-surfschool.com/fr/location/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.coco-surfschool.com/fr/location/"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.coco-surfschool.com/nl/verhuur/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.coco-surfschool.com/de/verleih/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.coco-surfschool.com/en/rental/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.coco-surfschool.com/es/alquiler/"/>
+  </url>
+  <url>
+    <loc>https://www.coco-surfschool.com/nl/verhuur/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.coco-surfschool.com/fr/location/"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.coco-surfschool.com/nl/verhuur/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.coco-surfschool.com/de/verleih/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.coco-surfschool.com/en/rental/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.coco-surfschool.com/es/alquiler/"/>
+  </url>
+  <url>
+    <loc>https://www.coco-surfschool.com/de/verleih/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.coco-surfschool.com/fr/location/"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.coco-surfschool.com/nl/verhuur/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.coco-surfschool.com/de/verleih/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.coco-surfschool.com/en/rental/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.coco-surfschool.com/es/alquiler/"/>
+  </url>
+  <url>
+    <loc>https://www.coco-surfschool.com/en/rental/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.coco-surfschool.com/fr/location/"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.coco-surfschool.com/nl/verhuur/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.coco-surfschool.com/de/verleih/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.coco-surfschool.com/en/rental/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.coco-surfschool.com/es/alquiler/"/>
+  </url>
+  <url>
+    <loc>https://www.coco-surfschool.com/es/alquiler/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.coco-surfschool.com/fr/location/"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.coco-surfschool.com/nl/verhuur/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.coco-surfschool.com/de/verleih/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.coco-surfschool.com/en/rental/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.coco-surfschool.com/es/alquiler/"/>
+  </url>
+  <url>
     <loc>https://www.coco-surfschool.com/fr/contact/</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.coco-surfschool.com/fr/contact/"/>
     <xhtml:link rel="alternate" hreflang="nl" href="https://www.coco-surfschool.com/nl/contact/"/>

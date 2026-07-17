@@ -22,6 +22,7 @@ const PAGES = {
   lessons:   { fr: 'cours-de-surf',           en: 'surf-lessons',           nl: 'surflessen',           de: 'surfkurse',            es: 'clases-de-surf' },
   coach:     { fr: 'monitrice-de-surf',       en: 'surf-coach',             nl: 'surfcoach',            de: 'surf-coach',           es: 'monitora-de-surf' },
   stay:      { fr: 'hebergement',             en: 'accommodation',          nl: 'accommodatie',         de: 'unterkunft',           es: 'alojamiento' },
+  rental:    { fr: 'location',                en: 'rental',                 nl: 'verhuur',              de: 'verleih',              es: 'alquiler' },
   contact:   { fr: 'contact',                 en: 'contact',                nl: 'contact',              de: 'kontakt',              es: 'contacto' },
   hossegor:  { fr: 'cours-de-surf-hossegor',  en: 'surf-lessons-hossegor',  nl: 'surflessen-hossegor',  de: 'surfkurse-hossegor',   es: 'clases-de-surf-hossegor' },
   seignosse: { fr: 'cours-de-surf-seignosse', en: 'surf-lessons-seignosse', nl: 'surflessen-seignosse', de: 'surfkurse-seignosse',  es: 'clases-de-surf-seignosse' },
@@ -29,7 +30,7 @@ const PAGES = {
   learn:     { fr: 'apprendre-a-surfer',      en: 'learn-to-surf',          nl: 'leren-surfen',         de: 'surfen-lernen',        es: 'aprender-a-surfear' },
 };
 const KEYS = Object.keys(PAGES);
-const NAV = ['lessons', 'coach', 'stay', 'contact'];
+const NAV = ['lessons', 'coach', 'stay', 'rental', 'contact'];
 
 const abs = (lang, key) => `${SITE}/${lang}/${PAGES[key][lang] ? PAGES[key][lang] + '/' : ''}`;
 
@@ -365,6 +366,17 @@ ${reviewsSection(t, lang)}
 </div></div></section>`;
   },
 
+  rental(u, t, ui) {
+    const table = (cols, rows) => `<div class="rental-table-wrap"><table class="rental-table"><thead><tr>${cols.map((h, i) => `<th${i === 0 ? '' : ' class="num"'}>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr><th>${r[0]}</th>${r.slice(1).map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    return `
+<section class="page-hero"><div class="wrap"><div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p></div></div></section>
+<section class="section"><div class="wrap">
+  <div class="reveal">${table(t.cols1, [[t.board, ...t.rows1.board], [t.wetsuit, ...t.rows1.wetsuit]])}</div>
+  <div class="reveal" style="margin-top:1.3rem">${table(t.cols2, [[t.board, ...t.rows2.board], [t.wetsuit, ...t.rows2.wetsuit]])}</div>
+  <p class="lessons-note reveal" style="margin-top:1.5rem"><span>💡</span><span>${t.note}</span></p>
+  <p class="reveal" style="margin-top:1.6rem;text-align:center"><a class="btn btn--primary" href="${u.contact}">${t.cta}</a></p>
+</div></section>`;
+  },
   srilanka(u, t, ui) {
     return `
 <section class="section srilanka" style="padding-top:clamp(2.4rem,5vw,3.4rem)"><div class="wrap">
@@ -418,7 +430,7 @@ ${reviewsSection(t, lang)}
 </div></section>`;
   },
 };
-const RENDER = { home: R.home, lessons: R.lessons, coach: R.coach, stay: R.stay, srilanka: R.srilanka, contact: R.contact, hossegor: R.article, seignosse: R.article, team: R.article, learn: R.article };
+const RENDER = { home: R.home, lessons: R.lessons, coach: R.coach, stay: R.stay, rental: R.rental, srilanka: R.srilanka, contact: R.contact, hossegor: R.article, seignosse: R.article, team: R.article, learn: R.article };
 
 async function build() {
   let n = 0;

@@ -8,7 +8,7 @@ const CARDS = [
 export default {
   waText: 'Bonjour Coco Surf School, j’aimerais réserver un cours de surf.',
   ui: {
-    nav: { lessons: 'Cours &amp; tarifs', coach: 'Coach', stay: 'Hébergement', srilanka: 'Sri Lanka', contact: 'Contact', learn: 'Apprendre à surfer' },
+    nav: { lessons: 'Cours &amp; tarifs', coach: 'Coach', stay: 'Hébergement', rental: 'Location', srilanka: 'Sri Lanka', contact: 'Contact', learn: 'Apprendre à surfer' },
     navLabel: 'Navigation principale', book: 'Réserver', langLabel: 'Choix de la langue', menuOpen: 'Ouvrir le menu',
     crumbHome: 'Accueil', footTagline: 'École de surf à Seignosse &amp; Hossegor. La qualité avant la quantité — des cours en petits groupes avec Annelies.', footNav: 'Naviguer', langWord: 'Langue',
   },
@@ -61,6 +61,15 @@ export default {
       h1: 'Sri Lanka, en famille',
       body: ['Votre séjour en famille sur la magnifique côte sud du Sri Lanka ! Nous passons nos hivers chez Budhika, Manori et Passandi, devenus notre famille sri-lankaise. Depuis que Budhika a perdu sa jambe dans un accident de bus, la famille vit entièrement des revenus de la guesthouse ; nous les aidons à développer leur activité. Vous pouvez y séjourner toute l’année !', 'La maison se trouve à 100 m de la plage de Midigama — « Lazy Left » et « Rams » sont vos spots. Vous vivrez le vrai Sri Lanka : petit-déjeuner maison dans le jardin-jungle, entre écureuils, paons, singes et cocotiers. Manori est réputée pour sa cuisine — rotti à la noix de coco et egg hoppers le matin, riz &amp; curry le soir. Massage ayurvédique sur demande.'],
       cta: 'En savoir plus sur le camp', g1: 'Surf sur une vague à Midigama, Sri Lanka', g2: 'Budhika, Manori et Passandi, la famille sri-lankaise', g3: 'Un paon sur le toit de la maison au Sri Lanka',
+    },
+    rental: {
+      title: 'Location — planches de surf &amp; combinaisons | Coco Surf School', desc: 'Louez une planche de surf ou une combinaison chez Coco Surf School à Seignosse &amp; Hossegor — de 2 heures à une semaine.', h1: 'Location', crumb: 'Location',
+      eyebrow: 'Location', h1html: 'Louer du <em>matériel</em>', lead: 'Louez votre planche ou votre combinaison chez nous — de 2 heures à une semaine complète. Retrait sur place.',
+      board: 'Surf (planche seule)', wetsuit: 'Combinaison',
+      cols1: ['Tarif', '2H', '½ J', '1 J', '2 J'], cols2: ['Tarif', '3 jours', '4 jours', '5 jours', '6 jours', '1 semaine'],
+      rows1: { board: ['15 €', '20 €', '30 €', '50 €'], wetsuit: ['10 €', '10 €', '15 €', '25 €'] },
+      rows2: { board: ['70 €', '80 €', '90 €', '100 €', '110 €'], wetsuit: ['35 €', '45 €', '55 €', '65 €', '70 €'] },
+      note: '<strong>Bon à savoir —</strong> location sur place. Demandez-nous lors de votre réservation ou via WhatsApp.', cta: 'Réservez votre matériel',
     },
     contact: {
       title: 'Contact &amp; réservation — Coco Surf School Hossegor &amp; Seignosse', desc: 'Réservez votre cours de surf à Coco Surf School. Téléphone +33 6 47 45 42 65, email cocobosurfschool@gmail.com. Acompte de 30 %.', h1: 'Contact', crumb: 'Contact',

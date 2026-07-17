@@ -8,7 +8,7 @@ const CARDS = [
 export default {
   waText: 'Hola Coco Surf School, me gustaría reservar una clase de surf.',
   ui: {
-    nav: { lessons: 'Clases &amp; tarifas', coach: 'Coach', stay: 'Alojamiento', contact: 'Contacto', learn: 'Aprender a surfear' },
+    nav: { lessons: 'Clases &amp; tarifas', coach: 'Coach', stay: 'Alojamiento', rental: 'Alquiler', contact: 'Contacto', learn: 'Aprender a surfear' },
     navLabel: 'Navegación principal', book: 'Reservar', langLabel: 'Selección de idioma', menuOpen: 'Abrir menú',
     crumbHome: 'Inicio', footTagline: 'Escuela de surf en Seignosse &amp; Hossegor. Calidad antes que cantidad — clases en grupos pequeños con Annelies.', footNav: 'Descubrir', langWord: 'Idioma',
   },
@@ -54,6 +54,15 @@ export default {
         { pin: 'Seignosse', h: 'Campings', p: 'Varios campings cerca, ideales en verano: Natureo, Les Marittimes y Les Oyats.', href: 'https://seignosse-tourisme.com', link: 'Ver los campings' },
         { pin: 'Oficina de turismo de Seignosse', h: 'Más opciones', p: 'Encuentra más alojamientos y consejos a través de la oficina de turismo de Seignosse.', href: 'https://seignosse-tourisme.com', link: 'seignosse-tourisme.com' },
       ],
+    },
+    rental: {
+      title: 'Alquiler — tablas de surf &amp; neoprenos | Coco Surf School', desc: 'Alquila una tabla de surf o un neopreno en Coco Surf School en Seignosse &amp; Hossegor — de 2 horas a una semana.', h1: 'Alquiler', crumb: 'Alquiler',
+      eyebrow: 'Alquiler', h1html: 'Alquila tu <em>material</em>', lead: 'Alquila tu tabla o tu neopreno con nosotros — de 2 horas a una semana entera. Recogida in situ.',
+      board: 'Surf (solo tabla)', wetsuit: 'Neopreno',
+      cols1: ['Tarifa', '2 h', '½ día', '1 día', '2 días'], cols2: ['Tarifa', '3 días', '4 días', '5 días', '6 días', '1 semana'],
+      rows1: { board: ['€15', '€20', '€30', '€50'], wetsuit: ['€10', '€10', '€15', '€25'] },
+      rows2: { board: ['€70', '€80', '€90', '€100', '€110'], wetsuit: ['€35', '€45', '€55', '€65', '€70'] },
+      note: '<strong>Bueno saberlo —</strong> alquiler in situ. Pregúntanos al reservar o por WhatsApp.', cta: 'Reserva tu material',
     },
     contact: {
       title: 'Contacto &amp; reserva — Coco Surf School Hossegor &amp; Seignosse', desc: 'Reserva tu clase de surf en Coco Surf School. Teléfono +33 6 47 45 42 65, email cocobosurfschool@gmail.com. Anticipo del 30 %.', h1: 'Contacto', crumb: 'Contacto',

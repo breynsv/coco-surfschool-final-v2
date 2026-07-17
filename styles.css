@@ -304,6 +304,15 @@ h1, h2, h3, h4 {
 .philo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin-top: 1.9rem; }
 .philo-grid .extra-card { background: var(--white); border: 1px solid rgba(180,211,196,.4); }
 
+/* Rental price tables */
+.rental-table-wrap { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1px solid rgba(180,211,196,.4); }
+.rental-table { width: 100%; border-collapse: collapse; background: var(--white); min-width: 480px; }
+.rental-table thead th { background: var(--seafoam); color: #fff; text-align: right; padding: .95rem 1.15rem; font-family: var(--font-body); font-weight: 700; font-size: .78rem; letter-spacing: .05em; text-transform: uppercase; }
+.rental-table thead th:first-child { text-align: left; }
+.rental-table tbody th { text-align: left; padding: .9rem 1.15rem; font-weight: 600; color: var(--ink); font-family: var(--font-display); font-size: 1.02rem; }
+.rental-table tbody td { text-align: right; padding: .9rem 1.15rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rental-table tbody tr:nth-child(even) { background: var(--cream-2); }
+
 /* Live surf report */
 .sr-eyebrow { justify-content: center; margin-bottom: 1rem; }
 .sr-tabs { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.6rem; }

@@ -8,7 +8,7 @@ const CARDS = [
 export default {
   waText: 'Hallo Coco Surf School, ich möchte gerne einen Surfkurs buchen.',
   ui: {
-    nav: { lessons: 'Kurse &amp; Preise', coach: 'Coach', stay: 'Unterkunft', contact: 'Kontakt', learn: 'Surfen lernen' },
+    nav: { lessons: 'Kurse &amp; Preise', coach: 'Coach', stay: 'Unterkunft', rental: 'Verleih', contact: 'Kontakt', learn: 'Surfen lernen' },
     navLabel: 'Hauptnavigation', book: 'Buchen', langLabel: 'Sprachauswahl', menuOpen: 'Menü öffnen',
     crumbHome: 'Start', footTagline: 'Surfschule in Seignosse &amp; Hossegor. Qualität vor Quantität — Kurse in kleinen Gruppen mit Annelies.', footNav: 'Entdecken', langWord: 'Sprache',
   },
@@ -54,6 +54,15 @@ export default {
         { pin: 'Seignosse', h: 'Campingplätze', p: 'Mehrere Campingplätze in der Nähe, ideal im Sommer: Natureo, Les Marittimes und Les Oyats.', href: 'https://seignosse-tourisme.com', link: 'Campingplätze ansehen' },
         { pin: 'Tourismusbüro Seignosse', h: 'Weitere Optionen', p: 'Finde weitere Unterkünfte und Tipps über das Tourismusbüro von Seignosse.', href: 'https://seignosse-tourisme.com', link: 'seignosse-tourisme.com' },
       ],
+    },
+    rental: {
+      title: 'Verleih — Surfbretter &amp; Neoprenanzüge | Coco Surf School', desc: 'Leih ein Surfbrett oder einen Neoprenanzug bei Coco Surf School in Seignosse &amp; Hossegor — von 2 Stunden bis eine Woche.', h1: 'Verleih', crumb: 'Verleih',
+      eyebrow: 'Verleih', h1html: 'Material <em>leihen</em>', lead: 'Leih dein Surfbrett oder deinen Neoprenanzug bei uns — von 2 Stunden bis zu einer ganzen Woche. Abholung vor Ort.',
+      board: 'Surf (nur Brett)', wetsuit: 'Neoprenanzug',
+      cols1: ['Tarif', '2 Std.', '½ Tag', '1 Tag', '2 Tage'], cols2: ['Tarif', '3 Tage', '4 Tage', '5 Tage', '6 Tage', '1 Woche'],
+      rows1: { board: ['15 €', '20 €', '30 €', '50 €'], wetsuit: ['10 €', '10 €', '15 €', '25 €'] },
+      rows2: { board: ['70 €', '80 €', '90 €', '100 €', '110 €'], wetsuit: ['35 €', '45 €', '55 €', '65 €', '70 €'] },
+      note: '<strong>Gut zu wissen —</strong> Verleih vor Ort. Frag einfach bei deiner Buchung oder per WhatsApp.', cta: 'Material reservieren',
     },
     contact: {
       title: 'Kontakt &amp; Reservierung — Coco Surf School Hossegor &amp; Seignosse', desc: 'Buche deinen Surfkurs bei Coco Surf School. Telefon +33 6 47 45 42 65, E-Mail cocobosurfschool@gmail.com. 30 % Anzahlung.', h1: 'Kontakt', crumb: 'Kontakt',
