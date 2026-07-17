@@ -334,7 +334,7 @@ ${reviewsSection(t, lang)}
 
   lessons(u, t, ui) {
     return `
-<section class="page-hero"><div class="wrap"><div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p><div class="hero-cta"><a class="btn btn--primary" href="${u.contact}">${t.cta1}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.cta2}</a></div></div></div></section>
+<section class="page-hero"><div class="wrap"><div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p><div class="hero-cta"><a class="btn btn--primary" href="${u.contact}">${t.cta1}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.cta2}</a></div><p class="we-speak">We speak <span aria-hidden="true">🇫🇷 🇳🇱 🇩🇪 🇬🇧 🇪🇸</span></p></div></div></section>
 <section class="section"><div class="wrap"><div class="lessons-grid">
   ${lessonCards(u, t.cards)}
 </div><p class="lessons-note reveal"><span>💡</span><span>${t.note}</span></p></div></section>
@@ -350,7 +350,7 @@ ${reviewsSection(t, lang)}
   coach(u, t, ui) {
     return `
 <section class="section section--tint" id="coach" style="padding-top:clamp(2.4rem,5vw,3.4rem)"><div class="wrap coach-grid">
-  <div class="coach-photo reveal"><img src="${u.img('owner-coach.png')}" alt="${t.imgAlt}" width="1448" height="1086" fetchpriority="high" decoding="async"></div>
+  <div class="coach-photo reveal"><img src="${u.img('owner-coach-new.png')}" alt="${t.imgAlt}" width="1448" height="1086" fetchpriority="high" decoding="async"></div>
   <div class="coach-body reveal">
     <p class="eyebrow">${t.eyebrow}</p>
     <h1 class="section-title">${t.h1}</h1>
