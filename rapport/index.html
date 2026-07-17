@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Coco Surf School — Jouw feedback is verwerkt</title>
+<style>
+  :root{
+    --bg:#F5F9F7; --surface:#FFFFFF;
+    --ink:#23413A; --ink-soft:#4C635C;
+    --seafoam:#8FBBAA; --seafoam-deep:#3F6957; --seafoam-tint:#E3EFE9;
+    --coral:#E9A899; --coral-soft:#F5D3CA; --coral-deep:#B0543F;
+    --line:rgba(63,105,87,.16);
+    --shadow-sm:0 4px 18px rgba(45,80,71,.06);
+    --shadow-md:0 18px 50px rgba(45,80,71,.10);
+    --serif:Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink-soft);
+    font-family:var(--sans);font-size:17px;line-height:1.65;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .wrap{max-width:940px;margin:0 auto;padding:0 24px}
+  h1,h2,h3{font-family:var(--serif);color:var(--ink);font-weight:600;
+    text-wrap:balance;letter-spacing:-.01em;margin:0}
+  a{color:var(--coral-deep)}
+  .eyebrow{font-family:var(--sans);text-transform:uppercase;letter-spacing:.16em;
+    font-size:.72rem;font-weight:700;color:var(--coral-deep);margin:0}
+
+  /* ---- hero ---- */
+  .hero{position:relative;overflow:hidden;
+    background:linear-gradient(165deg,#EAF3EE 0%,var(--seafoam-tint) 48%,#DCEBE3 100%);
+    padding:64px 0 0}
+  .hero .wrap{position:relative;z-index:2;padding-bottom:96px}
+  .hero-badge{display:inline-flex;align-items:center;gap:.5rem;
+    background:rgba(255,255,255,.72);border:1px solid var(--line);
+    border-radius:999px;padding:.32rem .8rem;font-size:.8rem;font-weight:600;
+    color:var(--seafoam-deep);margin-bottom:1.3rem}
+  .hero-badge .dot{width:.5rem;height:.5rem;border-radius:50%;background:var(--seafoam-deep);
+    box-shadow:0 0 0 4px rgba(63,105,87,.16)}
+  .hero h1{font-size:clamp(2.1rem,5.4vw,3.3rem);line-height:1.08;margin:.2rem 0 .9rem}
+  .hero h1 em{font-style:normal;color:var(--coral-deep)}
+  .hero p.lead{font-size:1.12rem;max-width:34em;margin:0 0 1.7rem;color:var(--ink-soft)}
+  .cta-row{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;border-radius:999px;
+    padding:.72rem 1.35rem;font-weight:700;font-size:.95rem;text-decoration:none;
+    transition:transform .15s ease,box-shadow .15s ease}
+  .btn--primary{background:var(--coral-deep);color:#fff;box-shadow:var(--shadow-sm)}
+  .btn--primary:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+  .btn--ghost{color:var(--seafoam-deep);border:1px solid var(--line);background:rgba(255,255,255,.5)}
+  .btn--ghost:hover{background:#fff}
+  .wave{position:absolute;left:0;right:0;bottom:-1px;width:100%;display:block;z-index:1}
+
+  /* ---- sections ---- */
+  section.block{padding:52px 0}
+  .sec-head{display:flex;align-items:baseline;gap:.9rem;margin-bottom:1.6rem;flex-wrap:wrap}
+  .sec-head h2{font-size:clamp(1.5rem,3.4vw,2rem)}
+  .sec-head .count{font-family:var(--sans);font-size:.8rem;font-weight:700;color:var(--seafoam-deep);
+    background:var(--seafoam-tint);border-radius:999px;padding:.2rem .7rem}
+
+  /* done grid */
+  .done-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:20px;
+    padding:22px 22px 20px;box-shadow:var(--shadow-sm)}
+  .card h3{font-size:1.12rem;margin-bottom:.7rem;display:flex;align-items:center;gap:.55rem}
+  .card h3 .pin{font-size:1rem}
+  ul.ticks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem}
+  ul.ticks li{position:relative;padding-left:1.7rem;font-size:.95rem;line-height:1.5}
+  ul.ticks li::before{content:"";position:absolute;left:0;top:.36em;width:1.05rem;height:1.05rem;
+    border-radius:50%;background:var(--seafoam-tint);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233F6957' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+    background-size:.7rem;background-repeat:no-repeat;background-position:center}
+  ul.ticks li em{font-style:italic;color:var(--ink)}
+  .card.wide{grid-column:1/-1}
+  .card.wide ul.ticks{columns:2;column-gap:2.2rem}
+  @media(max-width:620px){.card.wide ul.ticks{columns:1}}
+
+  /* input / action items */
+  .actions{display:flex;flex-direction:column;gap:14px}
+  .action{display:flex;gap:1rem;background:var(--surface);border:1px solid var(--line);
+    border-radius:16px;padding:18px 20px;box-shadow:var(--shadow-sm);
+    position:relative;overflow:hidden}
+  .action .num{flex:0 0 auto;width:2rem;height:2rem;border-radius:50%;
+    background:var(--coral-soft);color:var(--coral-deep);font-family:var(--serif);
+    font-weight:700;font-size:1.05rem;display:grid;place-items:center;margin-top:.1rem}
+  .action .body h3{font-size:1.02rem;margin-bottom:.15rem}
+  .action .body p{margin:0;font-size:.94rem}
+
+  .note{background:var(--seafoam-tint);border-radius:20px;padding:22px 24px;
+    display:flex;gap:.9rem;align-items:flex-start}
+  .note .ic{font-size:1.3rem;line-height:1}
+  .note p{margin:0;font-size:.96rem;color:var(--seafoam-deep)}
+  .note strong{color:var(--ink)}
+
+  footer{padding:40px 0 60px;text-align:center;color:var(--seafoam-deep);font-size:.86rem}
+  footer .sign{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--ink);margin-bottom:.3rem}
+
+  @media(prefers-reduced-motion:no-preference){
+    .hero .wrap>*{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+    .hero .wrap>*:nth-child(2){animation-delay:.06s}
+    .hero .wrap>*:nth-child(3){animation-delay:.12s}
+    .hero .wrap>*:nth-child(4){animation-delay:.18s}
+    @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Coco Surf School · websiterapport</p>
+    <div class="hero-badge"><span class="dot"></span> Alles live · 5 talen (FR · NL · DE · EN · ES)</div>
+    <h1>Dag Bo — jouw feedback is <em>verwerkt</em></h1>
+    <p class="lead">Ik heb al je opmerkingen uit de review doorgenomen en aangepast.
+      Hieronder een overzicht van wat er veranderde, en de paar dingen waar ik nog jouw
+      input voor nodig heb.</p>
+    <div class="cta-row">
+      <a class="btn btn--primary" href="https://breynsv.github.io/coco-surfschool-final-v2/" target="_blank" rel="noopener">🌊 Bekijk de website</a>
+      <a class="btn btn--ghost" href="#input">Wat ik nog nodig heb ↓</a>
+    </div>
+  </div>
+  <svg class="wave" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,48 C240,88 480,88 720,58 C960,28 1200,28 1440,54 L1440,90 L0,90 Z" fill="#F5F9F7"/>
+  </svg>
+</header>
+
+<main>
+  <section class="block wrap">
+    <div class="sec-head"><h2>Aangepast en online</h2><span class="count">✓ afgewerkt</span></div>
+    <div class="done-grid">
+
+      <div class="card wide">
+        <h3><span class="pin">🏠</span> Startpagina</h3>
+        <ul class="ticks">
+          <li>Titel niet meer schuin + nieuw, rustiger lettertype</li>
+          <li>Ondertitel: <em>“Uw surfschool in Seignosse, Hossegor &amp; Capbreton”</em></li>
+          <li>De 3 foto’s staan nu in een carrousel</li>
+          <li>Introtekst: <em>voor elke leeftijd, van kinderen tot volwassenen</em> + 5-daagse stage</li>
+          <li><em>“We speak”</em> met de vlaggetjes 🇫🇷 🇳🇱 🇩🇪 🇬🇧 🇪🇸</li>
+          <li>Knop <em>“Boek een surfstage”</em> (boven én onderaan)</li>
+          <li>Max 6 in de deluxe les · grotere groep mogelijk</li>
+          <li>Onze filosofie staat nu op de startpagina</li>
+          <li>Google reviews staan op de pagina</li>
+          <li>Weerbericht verplaatst naar lager (na de coach)</li>
+          <li>Spots: eerst Seignosse, dan Hossegor + nieuwe foto’s</li>
+          <li>Prijzen €44 / €38 / €180 / €220 · duur “±2u (1u30 in het water)”</li>
+          <li>Teambuilding-kaartje: <em>“… en fun”</em></li>
+          <li><em>“Zin om met ons te surfen?”</em></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="pin">🏄</span> Lessen &amp; tarieven</h3>
+        <ul class="ticks">
+          <li>Nieuwe prijzen</li>
+          <li>Groeps- en deluxe-foto’s</li>
+          <li>“We speak”-vlaggetjes toegevoegd</li>
+          <li>Overal “±2u totaal”</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="pin">👩‍🏫</span> Coach</h3>
+        <ul class="ticks">
+          <li>Nieuwe foto van jou</li>
+          <li><em>“Daarom stellen we de formule deluxe voor …”</em></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="pin">🛹</span> Verhuur / Location</h3>
+        <ul class="ticks">
+          <li>Nieuwe pagina in het menu (alle talen)</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="pin">🌴</span> Surfen in Hossegor</h3>
+        <ul class="ticks">
+          <li>Nieuwe foto</li>
+          <li><em>“Kom surfen met ons”</em> + deluxe formule</li>
+          <li>“of Capbreton” · “getij en golfcondities”</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="pin">🏖️</span> Surfen in Seignosse</h3>
+        <ul class="ticks">
+          <li>“Grotere groep kan ook”</li>
+          <li>“Seignosse, Hossegor en Capbreton”</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="pin">🤝</span> Teambuilding</h3>
+        <ul class="ticks">
+          <li>Nieuwe foto</li>
+          <li>fun · gediplomeerde coach · Capbreton</li>
+          <li><em>“tot 32 personen”</em></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="pin">✉️</span> Contact</h3>
+        <ul class="ticks">
+          <li><em>“Kom surfen met Coco Surf School”</em></li>
+          <li>“Seignosse, Hossegor en Capbreton”</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="pin">🏕️</span> Verblijf</h3>
+        <ul class="ticks">
+          <li>Extra accommodaties (villa / maison de la dune)</li>
+          <li>Campings: Natureo, Les Maritimes, Les Oyats</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><span class="pin">📖</span> Leren surfen</h3>
+        <ul class="ticks">
+          <li>“reken 2u totaal” · “een gediplomeerde coach”</li>
+          <li>5-daagse stage vermeld</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="block wrap" id="input">
+    <div class="sec-head"><h2>Hier heb ik nog jouw input voor nodig</h2><span class="count">5 vragen</span></div>
+    <div class="actions">
+      <div class="action"><div class="num">1</div><div class="body">
+        <h3>Verhuur-tarieven</h3>
+        <p>Ik heb de prijstabel opgebouwd — kloppen de bedragen zoals ze nu op de site staan,
+          vergeleken met jouw tarievenfoto?</p></div></div>
+      <div class="action"><div class="num">2</div><div class="body">
+        <h3>5-daagse stage — prijs</h3>
+        <p>In je nota’s staat één keer €175 en één keer €180 voor de stage. Welke is juist?</p></div></div>
+      <div class="action"><div class="num">3</div><div class="body">
+        <h3>“De foto die er eerst was”</h3>
+        <p>Bij <em>‘Vier manieren om het water in te gaan’</em> — welke foto bedoel je precies?
+          Stuur ze door en ik zet ze terug.</p></div></div>
+      <div class="action"><div class="num">4</div><div class="body">
+        <h3>Maison Irene / kleine glamping</h3>
+        <p>Je schreef <em>“deze mag weg”</em>. Welk kaartje precies mag verdwijnen?</p></div></div>
+      <div class="action"><div class="num">5</div><div class="body">
+        <h3>De letters J en F in een ander lettertype</h3>
+        <p>Een detailwens — laat weten of je dit echt wil, dan zoek ik een mooie oplossing.</p></div></div>
+    </div>
+  </section>
+
+  <section class="block wrap">
+    <div class="note">
+      <span class="ic">🌍</span>
+      <p><strong>Goed om te weten —</strong> Duits en Spaans zijn automatisch vertaald.
+        Laat die eventueel nog eens nalezen door iemand die de taal spreekt.
+        Frans, Nederlands en Engels zijn nagekeken.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p class="sign">Tot op het water 🤙</p>
+  <p>Coco Surf School · Seignosse · Hossegor · Capbreton</p>
+</footer>
+
+</body>
+</html>
