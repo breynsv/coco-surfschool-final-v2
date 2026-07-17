@@ -244,14 +244,50 @@ const R = {
       <p class="lead">${h.lead}</p>
       <div class="hero-cta"><a class="btn btn--primary" href="${u.contact}">${h.cta1}</a><a class="btn btn--ghost" href="${u.lessons}">${h.cta2}</a>${h.cta3 ? `<a class="btn btn--coral" href="${u.lessons}#tarieven">${h.cta3}</a>` : ''}</div>
       <div class="hero-facts">${h.facts.map(f => `<div class="hero-fact"><b>${f.b}</b><span>${f.s}</span></div>`).join('')}</div>
+      <p class="we-speak">We speak <span aria-hidden="true">🇫🇷 🇳🇱 🇩🇪 🇬🇧 🇪🇸</span></p>
     </div>
     <div class="hero-media">
-      <img src="${u.img('owner-hero.png')}" alt="${h.imgAlt}" width="1536" height="1447" fetchpriority="high" decoding="async">
+      <div class="hero-slides">
+        <img src="${u.img('owner-hero-1.png')}" alt="${h.imgAlt}" width="1536" height="1024" fetchpriority="high" decoding="async">
+        <img src="${u.img('owner-hero-2.png')}" alt="" width="1087" height="1447" loading="lazy" decoding="async">
+        <img src="${u.img('owner-hero-3.png')}" alt="" width="1448" height="1086" loading="lazy" decoding="async">
+      </div>
       <div class="hero-badge"><span class="dot">🌊</span><span><b>${h.badge1}</b><span>${h.badge2}</span></span></div>
     </div>
   </div>
 </section>
 ${trustBar(t)}
+<section class="section" id="filosofie">
+  <div class="wrap">
+    <div class="section-head center reveal"><p class="eyebrow">${t.philosophy.eyebrow}</p><h2 class="section-title" style="margin-inline:auto">${t.philosophy.title}</h2><p class="lead" style="margin-inline:auto">${t.philosophy.lead}</p></div>
+    <div class="philo-grid">${t.philosophy.points.map(pt => `<div class="extra-card reveal"><h4>${pt.h}</h4><p>${pt.p}</p></div>`).join('')}</div>
+  </div>
+</section>
+<section class="section" id="cours">
+  <div class="wrap">
+    <div class="section-head reveal"><p class="eyebrow">${t.lessonsT.eyebrow}</p><h2 class="section-title">${t.lessonsT.title}</h2><p class="lead">${t.lessonsT.lead}</p></div>
+    <div class="lessons-grid">
+      ${lessonCards(u, t.lessonsT.cards)}
+    </div>
+    <p style="text-align:center;margin:1.1rem 0 0"><a class="btn btn--ghost" href="${u.lessons}">${t.lessonsT.more}</a></p>
+  </div>
+</section>
+<section class="section section--tint">
+  <div class="wrap">
+    <div class="section-head reveal"><p class="eyebrow">${t.spots.eyebrow}</p><h2 class="section-title">${t.spots.title}</h2><p class="lead">${t.spots.lead}</p></div>
+    <div class="spots-grid">
+      <a class="spot-card reveal" href="${u.seignosse}"><img src="${u.img('a29fce_571dd78100a24c038429f1bfaf22b936.jpg')}" alt="${t.spots.seignosse.alt}" width="1600" height="1600" loading="lazy"><div class="sc-body"><h3>${t.spots.seignosse.h}</h3><p>${t.spots.seignosse.p}</p></div></a>
+      <a class="spot-card reveal" href="${u.hossegor}"><img src="${u.img('owner-hossegor.png')}" alt="${t.spots.hossegor.alt}" width="1537" height="1023" loading="lazy"><div class="sc-body"><h3>${t.spots.hossegor.h}</h3><p>${t.spots.hossegor.p}</p></div></a>
+    </div>
+  </div>
+</section>
+${reviewsSection(t, lang)}
+<section class="section section--tint">
+  <div class="wrap teaser-split">
+    <div class="ts-media reveal"><img src="${u.img('a29fce_449771ae1e2d4c52aa0fbe3159160d3b.jpg')}" alt="${t.coachT.alt}" width="1600" height="1600" loading="lazy"></div>
+    <div class="ts-body reveal"><h2>${t.coachT.title}</h2><p class="coach-quote">${t.coachT.quote}</p><p>${t.coachT.p}</p><p><a class="btn btn--ghost" href="${u.coach}">${t.coachT.cta}</a></p></div>
+  </div>
+</section>
 <section class="section section--tint" id="surf-report" data-lang="${lang}" data-tide="${u.root}data/tide.json" data-high="${t.surfReport.high}" data-low="${t.surfReport.low}">
   <div class="wrap">
     <p class="eyebrow sr-eyebrow reveal">${t.surfReport.eyebrow}</p>
@@ -293,38 +329,7 @@ ${trustBar(t)}
   </div>
 </section>
 <script src="${u.root}surf-report.js?v=2" defer></script>
-<section class="section" id="filosofie">
-  <div class="wrap">
-    <div class="section-head center reveal"><p class="eyebrow">${t.philosophy.eyebrow}</p><h2 class="section-title" style="margin-inline:auto">${t.philosophy.title}</h2><p class="lead" style="margin-inline:auto">${t.philosophy.lead}</p></div>
-    <div class="philo-grid">${t.philosophy.points.map(pt => `<div class="extra-card reveal"><h4>${pt.h}</h4><p>${pt.p}</p></div>`).join('')}</div>
-  </div>
-</section>
-<section class="section" id="cours">
-  <div class="wrap">
-    <div class="section-head reveal"><p class="eyebrow">${t.lessonsT.eyebrow}</p><h2 class="section-title">${t.lessonsT.title}</h2><p class="lead">${t.lessonsT.lead}</p></div>
-    <div class="lessons-grid">
-      ${lessonCards(u, t.lessonsT.cards)}
-    </div>
-    <p style="text-align:center;margin:1.1rem 0 0"><a class="btn btn--ghost" href="${u.lessons}">${t.lessonsT.more}</a></p>
-  </div>
-</section>
-<section class="section section--tint">
-  <div class="wrap">
-    <div class="section-head reveal"><p class="eyebrow">${t.spots.eyebrow}</p><h2 class="section-title">${t.spots.title}</h2><p class="lead">${t.spots.lead}</p></div>
-    <div class="spots-grid">
-      <a class="spot-card reveal" href="${u.seignosse}"><img src="${u.img('a29fce_571dd78100a24c038429f1bfaf22b936.jpg')}" alt="${t.spots.seignosse.alt}" width="1600" height="1600" loading="lazy"><div class="sc-body"><h3>${t.spots.seignosse.h}</h3><p>${t.spots.seignosse.p}</p></div></a>
-      <a class="spot-card reveal" href="${u.hossegor}"><img src="${u.img('owner-hossegor.png')}" alt="${t.spots.hossegor.alt}" width="1537" height="1023" loading="lazy"><div class="sc-body"><h3>${t.spots.hossegor.h}</h3><p>${t.spots.hossegor.p}</p></div></a>
-    </div>
-  </div>
-</section>
-${reviewsSection(t, lang)}
-<section class="section section--tint">
-  <div class="wrap teaser-split">
-    <div class="ts-media reveal"><img src="${u.img('a29fce_449771ae1e2d4c52aa0fbe3159160d3b.jpg')}" alt="${t.coachT.alt}" width="1600" height="1600" loading="lazy"></div>
-    <div class="ts-body reveal"><h2>${t.coachT.title}</h2><p class="coach-quote">${t.coachT.quote}</p><p>${t.coachT.p}</p><p><a class="btn btn--ghost" href="${u.coach}">${t.coachT.cta}</a></p></div>
-  </div>
-</section>
-<section class="cta-band"><div class="wrap"><div><h2>${t.cta.h}</h2><p>${t.cta.p}</p></div><div class="hero-cta"><a class="btn btn--coral" href="${u.contact}">${t.cta.b1}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.cta.b2}</a></div></div></section>`;
+<section class="cta-band"><div class="wrap"><div><h2>${t.cta.h}</h2><p>${t.cta.p}</p></div><div class="hero-cta"><a class="btn btn--coral" href="${u.contact}">${t.cta.b1}</a><a class="btn btn--primary" href="${u.lessons}#tarieven">${t.hero.cta3}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.cta.b2}</a></div></div></section>`;
   },
 
   lessons(u, t, ui) {

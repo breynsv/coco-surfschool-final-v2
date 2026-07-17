@@ -313,6 +313,19 @@ h1, h2, h3, h4 {
 .rental-table tbody td { text-align: right; padding: .9rem 1.15rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .rental-table tbody tr:nth-child(even) { background: var(--cream-2); }
 
+/* Hero image carousel (3 photos, CSS crossfade) */
+.hero-slides { position: relative; width: 100%; aspect-ratio: 4/5; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); }
+.hero-slides img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 0; box-shadow: none; opacity: 0; animation: heroFade 18s infinite; }
+.hero-slides img:nth-child(2) { animation-delay: -6s; }
+.hero-slides img:nth-child(3) { animation-delay: -12s; }
+@keyframes heroFade { 0% { opacity: 0 } 2% { opacity: 1 } 30% { opacity: 1 } 35% { opacity: 0 } 100% { opacity: 0 } }
+@media (prefers-reduced-motion: reduce) { .hero-slides img { animation: none; opacity: 0 } .hero-slides img:first-child { opacity: 1 } }
+@media (max-width: 960px) { .hero-slides { aspect-ratio: 5/4; } }
+
+/* We speak (languages) */
+.we-speak { display: flex; align-items: center; gap: .55rem; margin: 1.3rem 0 0; font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: var(--seafoam-deep); font-weight: 700; }
+.we-speak span { font-size: 1.1rem; letter-spacing: .1em; }
+
 /* Live surf report */
 .sr-eyebrow { justify-content: center; margin-bottom: 1rem; }
 .sr-tabs { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.6rem; }

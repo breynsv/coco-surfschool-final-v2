@@ -51,7 +51,7 @@ export default {
         { pin: 'Seignosse', h: 'Villa de la Dune', p: 'Geräumige Ferienvilla in Seignosse, nur einen Steinwurf von den Stränden und der Schule entfernt.', href: 'https://villadeladune-seignosse.fr', link: 'villadeladune-seignosse.fr' },
         { pin: 'Seignosse', h: 'Maison de la Dune', p: 'Stimmungsvolles Ferienhaus in Seignosse, nahe den Spots und dem Zentrum.', href: 'https://maisondeladune-seignosse.fr', link: 'maisondeladune-seignosse.fr' },
         { pin: 'Labenne Océan', h: 'Board &amp; Breakfast', p: 'Gastgeber Anton empfängt dich in seinem schönen Haus mit Pool — komplett mietbar für bis zu 20 Personen oder Gästezimmer im Surfcamp-Stil.', href: 'https://boardnbreakfast.com', link: 'boardnbreakfast.com' },
-        { pin: 'Seignosse', h: 'Campingplätze', p: 'Mehrere Campingplätze in der Nähe, ideal im Sommer: Natureo, Les Marittimes und Les Oyats.', href: 'https://seignosse-tourisme.com', link: 'Campingplätze ansehen' },
+        { pin: 'Seignosse', h: 'Campingplätze', p: 'Mehrere Campingplätze in der Nähe, ideal im Sommer: Natureo, Les Maritimes und Les Oyats.', href: 'https://seignosse-tourisme.com', link: 'Campingplätze ansehen' },
         { pin: 'Tourismusbüro Seignosse', h: 'Weitere Optionen', p: 'Finde weitere Unterkünfte und Tipps über das Tourismusbüro von Seignosse.', href: 'https://seignosse-tourisme.com', link: 'seignosse-tourisme.com' },
       ],
     },
