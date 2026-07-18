@@ -267,7 +267,7 @@ const R = {
     <div class="hero-media">
       <div class="hero-slides">
         <img class="hs-group" src="${u.img('real-group.jpg')}" alt="${h.imgAlt}" width="1440" height="1440" fetchpriority="high" decoding="async" style="object-position:30% center">
-        <img src="${u.img('real-carousel-kids.jpg')}" alt="" width="1400" height="1053" loading="lazy" decoding="async">
+        <img src="${u.img('real-carousel-kids.jpg')}" alt="" width="1440" height="755" loading="lazy" decoding="async">
         <img src="${u.img('owner-hero-3.png')}" alt="" width="1448" height="1086" loading="lazy" decoding="async">
       </div>
       <div class="hero-badge"><span class="dot">🌊</span><span><b>${h.badge1}</b><span>${h.badge2}</span></span></div>
