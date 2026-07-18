@@ -121,7 +121,7 @@ ${alt}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Petrona:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${u.css}?v=7">
+<link rel="stylesheet" href="${u.css}?v=8">
 <link rel="icon" href="${u.logo}" type="image/png">${ld}
 </head>`;
 }
@@ -429,11 +429,13 @@ ${reviewsSection(t, lang)}
     </ul>
     <p class="deposit-note">${t.deposit}</p>
   </div>
-  <form class="contact-form reveal" data-mailto="cocobosurfschool@gmail.com" novalidate>
+  <form class="contact-form reveal" action="/api/contact" method="post" data-sending="${t.fSending}" data-ok="${t.fOk}" data-err="${t.fErr}" novalidate>
     <div class="field"><label for="c-name">${t.fName}</label><input id="c-name" name="name" type="text" autocomplete="name" required></div>
     <div class="field"><label for="c-email">${t.fEmail}</label><input id="c-email" name="email" type="email" autocomplete="email" required></div>
     <div class="field"><label for="c-msg">${t.fMsg}</label><textarea id="c-msg" name="message" placeholder="${t.fPlaceholder}" required></textarea></div>
+    <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden"><label for="c-company">Company</label><input id="c-company" name="company" type="text" tabindex="-1" autocomplete="off"></div>
     <button type="submit" class="btn btn--coral">${t.send}</button>
+    <p class="form-status" role="status" aria-live="polite" hidden></p>
   </form>
 </div></section>
 <section class="section" id="faq"><div class="wrap">
