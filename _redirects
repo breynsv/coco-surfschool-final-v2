@@ -1,0 +1,75 @@
+# 301 redirects — old Wix site -> new site structure
+# Format (Cloudflare Pages): /old-path  /new-path  301   (first match wins)
+# Source: live Wix sitemaps (pages, en_en, nl_nl) captured 2026-07-18.
+# NOTE: this file is Cloudflare Pages' redirect mechanism. .htaccess is ignored here.
+
+# ---- Home ----
+# Bare domain -> French (x-default). Remove this line to keep the JS language
+# auto-detect selector that index.html renders at the root instead.
+/                         /fr/                     301
+/en                       /en/                     301
+/nl                       /nl/                     301
+/en-home                  /en/                     301
+/nl-home                  /nl/                     301
+
+# ---- French (default-language slugs at root) ----
+/a-propos                 /fr/monitrice-de-surf/   301
+/cours-les-formules       /fr/cours-de-surf/       301
+/tarifs                   /fr/cours-de-surf/       301
+/contact                  /fr/contact/             301
+/surf-camp-sri-lanka      /fr/hebergement/         301
+/book-online              /fr/contact/             301
+
+# ---- English (root slugs) ----
+/about                    /en/surf-coach/          301
+/lessons                  /en/surf-lessons/        301
+/rates                    /en/surf-lessons/        301
+/en-contact               /en/contact/             301
+/en-surf-camp-sri-lanka   /en/accommodation/       301
+
+# ---- Dutch (root slugs) ----
+/over                     /nl/surfcoach/           301
+/lessen                   /nl/surflessen/          301
+/tarieven                 /nl/surflessen/          301
+/nl-contact               /nl/contact/             301
+/nl-surf-camp-sri-lanka   /nl/accommodatie/        301
+
+# ---- /en/ prefixed duplicates -> English targets ----
+/en/a-propos              /en/surf-coach/          301
+/en/about                 /en/surf-coach/          301
+/en/over                  /en/surf-coach/          301
+/en/cours-les-formules    /en/surf-lessons/        301
+/en/lessons               /en/surf-lessons/        301
+/en/lessen                /en/surf-lessons/        301
+/en/tarifs                /en/surf-lessons/        301
+/en/rates                 /en/surf-lessons/        301
+/en/tarieven              /en/surf-lessons/        301
+/en/contact               /en/contact/             301
+/en/en-contact            /en/contact/             301
+/en/nl-contact            /en/contact/             301
+/en/surf-camp-sri-lanka   /en/accommodation/       301
+/en/en-surf-camp-sri-lanka /en/accommodation/      301
+/en/nl-surf-camp-sri-lanka /en/accommodation/      301
+/en/en-home               /en/                     301
+/en/nl-home               /en/                     301
+/en/book-online           /en/contact/             301
+
+# ---- /nl/ prefixed duplicates -> Dutch targets ----
+/nl/a-propos              /nl/surfcoach/           301
+/nl/about                 /nl/surfcoach/           301
+/nl/over                  /nl/surfcoach/           301
+/nl/cours-les-formules    /nl/surflessen/          301
+/nl/lessons               /nl/surflessen/          301
+/nl/lessen                /nl/surflessen/          301
+/nl/tarifs                /nl/surflessen/          301
+/nl/rates                 /nl/surflessen/          301
+/nl/tarieven              /nl/surflessen/          301
+/nl/contact               /nl/contact/             301
+/nl/nl-contact            /nl/contact/             301
+/nl/en-contact            /nl/contact/             301
+/nl/surf-camp-sri-lanka   /nl/accommodatie/        301
+/nl/en-surf-camp-sri-lanka /nl/accommodatie/       301
+/nl/nl-surf-camp-sri-lanka /nl/accommodatie/       301
+/nl/en-home               /nl/                     301
+/nl/nl-home               /nl/                     301
+/nl/book-online           /nl/contact/             301

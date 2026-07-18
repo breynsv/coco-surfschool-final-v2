@@ -132,19 +132,44 @@
     }
   });
 
-  // Contact form -> mailto (demo, no backend)
+  // Contact form -> POST /api/contact (Cloudflare Pages Function -> Resend)
   var form = document.querySelector(".contact-form");
   if (form) {
+    var status = form.querySelector(".form-status");
+    var btn = form.querySelector("button[type=submit]");
+    var setStatus = function (msg, state) {
+      if (!status) return;
+      status.textContent = msg;
+      status.hidden = !msg;
+      status.className = "form-status" + (state ? " form-status--" + state : "");
+    };
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var name = encodeURIComponent(form.name.value || "");
-      var email = encodeURIComponent(form.email.value || "");
-      var msg = encodeURIComponent(form.message.value || "");
-      var subject = "Coco Surf School — " + (form.name.value || "contact");
-      var body = "Name: " + decodeURIComponent(name) + "%0D%0AEmail: " + decodeURIComponent(email) +
-                 "%0D%0A%0D%0A" + decodeURIComponent(msg);
-      window.location.href = "mailto:cocobosurfschool@gmail.com?subject=" +
-        encodeURIComponent(subject) + "&body=" + body;
+      if (!form.reportValidity()) return;
+      var payload = {
+        name: form.name.value || "",
+        email: form.email.value || "",
+        message: form.message.value || "",
+        company: form.company ? form.company.value || "" : "",
+      };
+      if (btn) btn.disabled = true;
+      setStatus(form.getAttribute("data-sending") || "Sending…", "pending");
+      fetch(form.getAttribute("action") || "/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+        .then(function (r) { return r.ok; })
+        .catch(function () { return false; })
+        .then(function (ok) {
+          if (ok) {
+            form.reset();
+            setStatus(form.getAttribute("data-ok") || "Thanks! We'll be in touch soon.", "ok");
+          } else {
+            setStatus(form.getAttribute("data-err") || "Something went wrong. Please email us directly.", "err");
+          }
+          if (btn) btn.disabled = false;
+        });
     });
   }
 })();

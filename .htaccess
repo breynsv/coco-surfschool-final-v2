@@ -1,0 +1,83 @@
+# =============================================================================
+# 301 redirects — old Wix site -> new site structure
+# =============================================================================
+# IMPORTANT: Apache-only. Cloudflare Pages and GitHub Pages IGNORE this file —
+# there, the sibling `_redirects` file does the job. Kept here for reference and
+# in case an Apache/LiteSpeed layer ever fronts the domain.
+#
+# Anchored (^...$) so each rule matches ONE path; trailing slash optional.
+# Source: live Wix sitemaps (pages, en_en, nl_nl) captured 2026-07-18.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+</IfModule>
+
+# ---- Home ----
+# Bare domain -> French (x-default). Comment out to keep root's JS language selector.
+RedirectMatch 301 ^/$                          /fr/
+RedirectMatch 301 ^/en/?$                       /en/
+RedirectMatch 301 ^/nl/?$                       /nl/
+RedirectMatch 301 ^/en-home/?$                  /en/
+RedirectMatch 301 ^/nl-home/?$                  /nl/
+
+# ---- French (default-language slugs at root) ----
+RedirectMatch 301 ^/a-propos/?$                 /fr/monitrice-de-surf/
+RedirectMatch 301 ^/cours-les-formules/?$       /fr/cours-de-surf/
+RedirectMatch 301 ^/tarifs/?$                   /fr/cours-de-surf/
+RedirectMatch 301 ^/contact/?$                  /fr/contact/
+RedirectMatch 301 ^/surf-camp-sri-lanka/?$      /fr/hebergement/
+RedirectMatch 301 ^/book-online/?$              /fr/contact/
+
+# ---- English (root slugs) ----
+RedirectMatch 301 ^/about/?$                    /en/surf-coach/
+RedirectMatch 301 ^/lessons/?$                  /en/surf-lessons/
+RedirectMatch 301 ^/rates/?$                    /en/surf-lessons/
+RedirectMatch 301 ^/en-contact/?$               /en/contact/
+RedirectMatch 301 ^/en-surf-camp-sri-lanka/?$   /en/accommodation/
+
+# ---- Dutch (root slugs) ----
+RedirectMatch 301 ^/over/?$                     /nl/surfcoach/
+RedirectMatch 301 ^/lessen/?$                   /nl/surflessen/
+RedirectMatch 301 ^/tarieven/?$                 /nl/surflessen/
+RedirectMatch 301 ^/nl-contact/?$               /nl/contact/
+RedirectMatch 301 ^/nl-surf-camp-sri-lanka/?$   /nl/accommodatie/
+
+# ---- /en/ prefixed duplicates -> English targets ----
+RedirectMatch 301 ^/en/a-propos/?$              /en/surf-coach/
+RedirectMatch 301 ^/en/about/?$                 /en/surf-coach/
+RedirectMatch 301 ^/en/over/?$                  /en/surf-coach/
+RedirectMatch 301 ^/en/cours-les-formules/?$    /en/surf-lessons/
+RedirectMatch 301 ^/en/lessons/?$               /en/surf-lessons/
+RedirectMatch 301 ^/en/lessen/?$                /en/surf-lessons/
+RedirectMatch 301 ^/en/tarifs/?$                /en/surf-lessons/
+RedirectMatch 301 ^/en/rates/?$                 /en/surf-lessons/
+RedirectMatch 301 ^/en/tarieven/?$              /en/surf-lessons/
+RedirectMatch 301 ^/en/contact/?$               /en/contact/
+RedirectMatch 301 ^/en/en-contact/?$            /en/contact/
+RedirectMatch 301 ^/en/nl-contact/?$            /en/contact/
+RedirectMatch 301 ^/en/surf-camp-sri-lanka/?$   /en/accommodation/
+RedirectMatch 301 ^/en/en-surf-camp-sri-lanka/?$ /en/accommodation/
+RedirectMatch 301 ^/en/nl-surf-camp-sri-lanka/?$ /en/accommodation/
+RedirectMatch 301 ^/en/en-home/?$               /en/
+RedirectMatch 301 ^/en/nl-home/?$               /en/
+RedirectMatch 301 ^/en/book-online/?$           /en/contact/
+
+# ---- /nl/ prefixed duplicates -> Dutch targets ----
+RedirectMatch 301 ^/nl/a-propos/?$              /nl/surfcoach/
+RedirectMatch 301 ^/nl/about/?$                 /nl/surfcoach/
+RedirectMatch 301 ^/nl/over/?$                  /nl/surfcoach/
+RedirectMatch 301 ^/nl/cours-les-formules/?$    /nl/surflessen/
+RedirectMatch 301 ^/nl/lessons/?$               /nl/surflessen/
+RedirectMatch 301 ^/nl/lessen/?$                /nl/surflessen/
+RedirectMatch 301 ^/nl/tarifs/?$                /nl/surflessen/
+RedirectMatch 301 ^/nl/rates/?$                 /nl/surflessen/
+RedirectMatch 301 ^/nl/tarieven/?$              /nl/surflessen/
+RedirectMatch 301 ^/nl/contact/?$               /nl/contact/
+RedirectMatch 301 ^/nl/nl-contact/?$            /nl/contact/
+RedirectMatch 301 ^/nl/en-contact/?$            /nl/contact/
+RedirectMatch 301 ^/nl/surf-camp-sri-lanka/?$   /nl/accommodatie/
+RedirectMatch 301 ^/nl/en-surf-camp-sri-lanka/?$ /nl/accommodatie/
+RedirectMatch 301 ^/nl/nl-surf-camp-sri-lanka/?$ /nl/accommodatie/
+RedirectMatch 301 ^/nl/en-home/?$               /nl/
+RedirectMatch 301 ^/nl/nl-home/?$               /nl/
+RedirectMatch 301 ^/nl/book-online/?$           /nl/contact/

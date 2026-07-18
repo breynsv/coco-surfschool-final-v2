@@ -67,7 +67,7 @@ export default {
     contact: {
       title: 'Kontakt &amp; Reservierung — Coco Surf School Hossegor &amp; Seignosse', desc: 'Buche deinen Surfkurs bei Coco Surf School. Telefon +33 6 47 45 42 65, E-Mail cocobosurfschool@gmail.com. 30 % Anzahlung.', h1: 'Kontakt', crumb: 'Kontakt',
       eyebrow: 'Kontakt', lead: 'Die Schule empfängt dich in Seignosse, Hossegor und Capbreton. Schreib uns, um deinen Kurs zu buchen oder eine Frage zu stellen — wir antworten dir gerne.',
-      phone: 'Telefon', where: 'Wo', deposit: 'Bei der Reservierung wird eine Anzahlung von 30 % verlangt. Zahlung per Überweisung oder bar.', fName: 'Name', fEmail: 'E-Mail', fMsg: 'Nachricht', fPlaceholder: 'Welcher Kurs interessiert dich? Mit wie vielen Personen? Welche Daten?', send: 'Senden', faqTitle: 'Häufige Fragen',
+      phone: 'Telefon', where: 'Wo', deposit: 'Bei der Reservierung wird eine Anzahlung von 30 % verlangt. Zahlung per Überweisung oder bar.', fName: 'Name', fEmail: 'E-Mail', fMsg: 'Nachricht', fPlaceholder: 'Welcher Kurs interessiert dich? Mit wie vielen Personen? Welche Daten?', send: 'Senden', fSending: 'Senden…', fOk: 'Danke! Wir melden uns bald bei dir.', fErr: 'Etwas ist schiefgelaufen. Schreib uns direkt an cocobosurfschool@gmail.com.', faqTitle: 'Häufige Fragen',
       h1: 'Komm surfen mit Coco Surf School',
       faq: [
         { q: 'Wo finden die Surfkurse statt?', a: 'Coco Surf School ist eine mobile Schule zwischen Hossegor und Seignosse: Der beste Spot für dein Niveau wird je nach Bedingungen gewählt. Im Sommer ist die Schule in Seignosse, Les Bourdaines.' },
