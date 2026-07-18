@@ -1,7 +1,7 @@
 // Coco Surf School — design-06 multipage — ENGLISH content
 const CARDS = [
-  { img: 'owner-lesson-deluxe.png', alt: 'A small group of surfers on the beach', title: 'Deluxe group lesson', from: 'from €44', p: 'A lesson with 2 to max 6 people per instructor: the formula between group and private to progress faster. More one-on-one time with the coach.', chips: ['Small group · max 6', '±2h total', 'Gear included'] },
-  { img: 'owner-lesson-group.png', alt: 'Students learning to surf in the white water', title: 'Group lesson', from: 'from €38', p: 'A quality lesson of 7 to 8 people with one instructor. Good vibes and great company included.', chips: ['Largest group · 7–8', '±2h total', 'Gear included'] },
+  { img: 'real-deluxe-group.jpg', alt: 'A small group of surfers on the beach', title: 'Deluxe group lesson', from: 'from €44', p: 'A lesson with 2 to max 6 people per instructor: the formula between group and private to progress faster. More one-on-one time with the coach.', chips: ['Small group · max 6', '±2h total', 'Gear included'] },
+  { img: 'real-lesson-kids.jpg', alt: 'Students learning to surf in the white water', title: 'Group lesson', from: 'from €38', p: 'A quality lesson of 7 to 8 people with one instructor. Good vibes and great company included.', chips: ['Largest group · 7–8', '±2h total', 'Gear included'] },
   { img: 'a29fce_449771ae1e2d4c52aa0fbe3159160d3b.jpg', alt: 'A surfer riding a beautiful green wave', title: 'Private lesson', from: 'from €130', p: 'A lesson just for you, as a couple, with family or friends. An instructor fully dedicated to your progression.', chips: ['Your own group · 1–7', '±2h total', 'Tailor-made'] },
   { img: 'a29fce_9ddbf1309cf04bb189e246d843dfc188.jpg', alt: 'Colleagues heading to the ocean with their boards', title: 'Companies &amp; team building', from: 'on request', p: 'A sporty day out with your colleagues! Team spirit, stress relief, smiles and fun all round.', chips: ['On request', 'Team bonding'] },
 ];
@@ -29,7 +29,7 @@ export default {
       cta: { h: 'Fancy surfing with us?', p: 'Small groups, all levels, board & wetsuit included. Write to us — we’ll be happy to reply.', b1: 'Book a lesson', b2: 'Message us on WhatsApp' },
     },
     lessons: {
-      title: 'Surf lessons &amp; rates — Coco Surf School Hossegor &amp; Seignosse', desc: 'Surf lessons in the Landes: deluxe group (max 6) from €52, group from €40, private from €130. Board & wetsuit included, 1h30.', h1: 'Surf lessons', crumb: 'Lessons & rates',
+      title: 'Surf lessons &amp; rates — Coco Surf School Hossegor &amp; Seignosse', desc: 'Surf lessons in the Landes: deluxe group (max 6) from €44, group from €38, private from €130. Board & wetsuit included, 1h30.', h1: 'Surf lessons', crumb: 'Lessons & rates',
       eyebrow: 'The formulas &amp; rates', h1html: 'Choose the lesson that <em>suits you</em>', lead: 'All lessons last 1h30 in the water — allow ±2h in total (travel and changing included). Board and wetsuit included. Lesson hours depend on the tide, ocean conditions and your level.', cta1: 'Book a lesson', cta2: 'Message us on WhatsApp',
       cards: CARDS, note: '<strong>Good to know —</strong> board and wetsuit are always included. Duration: 1h30 per session — allow ±2h in total (travel and changing included).',
       rates: { eyebrow: 'Rates', title: 'Clear prices, all included', lead: 'Board and wetsuit included · ±2h per lesson (1h30 in the water) · “pp” = per person.', cards: [

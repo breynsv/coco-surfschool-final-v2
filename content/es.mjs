@@ -1,7 +1,7 @@
 // Coco Surf School — design-06 multipage — ESPAÑOL content (machine-translated, needs native proofreading)
 const CARDS = [
-  { img: 'owner-lesson-deluxe.png', alt: 'Un pequeño grupo de surfistas en la playa', title: 'Clase de grupo deluxe', from: 'desde 44 €', p: 'Una clase de 2 a 6 personas máx. por monitor: la fórmula entre grupo y privado para progresar más rápido. Más tiempo con el coach.', chips: ['Grupo pequeño · máx. 6', '±2 h en total', 'Material incluido'] },
-  { img: 'owner-lesson-group.png', alt: 'Alumnos aprendiendo a surfear en la espuma', title: 'Clase de grupo', from: 'desde 38 €', p: 'Una clase de calidad de 7 a 8 personas con un monitor. Buen ambiente y buen rollo incluidos.', chips: ['Grupo más grande · 7–8', '±2 h en total', 'Material incluido'] },
+  { img: 'real-deluxe-group.jpg', alt: 'Un pequeño grupo de surfistas en la playa', title: 'Clase de grupo deluxe', from: 'desde 44 €', p: 'Una clase de 2 a 6 personas máx. por monitor: la fórmula entre grupo y privado para progresar más rápido. Más tiempo con el coach.', chips: ['Grupo pequeño · máx. 6', '±2 h en total', 'Material incluido'] },
+  { img: 'real-lesson-kids.jpg', alt: 'Alumnos aprendiendo a surfear en la espuma', title: 'Clase de grupo', from: 'desde 38 €', p: 'Una clase de calidad de 7 a 8 personas con un monitor. Buen ambiente y buen rollo incluidos.', chips: ['Grupo más grande · 7–8', '±2 h en total', 'Material incluido'] },
   { img: 'a29fce_449771ae1e2d4c52aa0fbe3159160d3b.jpg', alt: 'Una surfista en una bonita ola verde', title: 'Clase privada', from: 'desde 130 €', p: 'Una clase solo para ti, en pareja, en familia o con amigos. Un monitor totalmente dedicado a tu progresión.', chips: ['Tu propio grupo · 1–7', '±2 h en total', 'A medida'] },
   { img: 'a29fce_9ddbf1309cf04bb189e246d843dfc188.jpg', alt: 'Compañeros de trabajo van al océano con sus tablas', title: 'Empresas &amp; team building', from: 'a petición', p: '¡Una salida deportiva entre compañeros! Espíritu de equipo, antiestrés, sonrisas y diversión garantizadas.', chips: ['A petición', 'Cohesión'] },
 ];
@@ -28,7 +28,7 @@ export default {
       cta: { h: '¿Con ganas de surfear con nosotros?', p: 'Grupos pequeños, todos los niveles, tabla &amp; neopreno incluidos. Escríbenos — te respondemos encantados.', b1: 'Reservar una clase', b2: 'Escríbenos por WhatsApp' },
     },
     lessons: {
-      title: 'Clases de surf &amp; tarifas — Coco Surf School Hossegor &amp; Seignosse', desc: 'Clases de surf en las Landes: grupo deluxe (máx. 6) desde 52 €, grupo desde 40 €, privado desde 130 €. Tabla &amp; neopreno incluidos, 1h30.', h1: 'Clases de surf', crumb: 'Clases &amp; tarifas',
+      title: 'Clases de surf &amp; tarifas — Coco Surf School Hossegor &amp; Seignosse', desc: 'Clases de surf en las Landes: grupo deluxe (máx. 6) desde 44 €, grupo desde 38 €, privado desde 130 €. Tabla &amp; neopreno incluidos, 1h30.', h1: 'Clases de surf', crumb: 'Clases &amp; tarifas',
       eyebrow: 'Las fórmulas &amp; tarifas', h1html: 'Elige la clase que va <em>contigo</em>', lead: 'Todas las clases duran 1h30 en el agua — cuenta con ±2 h en total (desplazamiento y cambio incluidos). Tabla y neopreno incluidos. Los horarios dependen de la marea, las condiciones del océano y tu nivel.', cta1: 'Reservar una clase', cta2: 'Escríbenos por WhatsApp',
       cards: CARDS, note: '<strong>Bueno saberlo —</strong> la tabla y el neopreno siempre están incluidos. Duración: 1h30 por sesión — cuenta con ±2 h en total (desplazamiento y cambio incluidos).',
       rates: { eyebrow: 'Tarifas', title: 'Precios claros, todo incluido', lead: 'Tabla y neopreno incluidos · ±2h por clase (1h30 en el agua) · «pp» = por persona.', cards: [

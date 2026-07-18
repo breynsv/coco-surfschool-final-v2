@@ -689,3 +689,28 @@ body.menu-open .wa-fab{opacity:0;visibility:hidden;transition:.2s}
 /* ---- nav active state (multipage) ---- */
 .nav-links a[aria-current]{color:var(--coral-deep)}
 .nav-links a[aria-current]::after{width:100%}
+
+/* ── Top bar: "We speak" + socials, above the fold (added for owner feedback-5) ── */
+.topbar{background:var(--ink);color:#EAF3EE}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:36px;padding-top:5px;padding-bottom:5px}
+.topbar-speak{margin:0;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#EAF3EE;display:flex;align-items:center;gap:.5rem}
+.topbar-speak span{font-size:1rem;letter-spacing:.08em}
+.topbar-social{display:flex;align-items:center;gap:.45rem}
+.topbar-social .soc{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;color:#EAF3EE;opacity:.88;transition:opacity .15s,transform .15s,background .15s}
+.topbar-social .soc:hover{opacity:1;transform:translateY(-1px);color:#fff;background:rgba(255,255,255,.14)}
+.topbar-social .soc svg{width:17px;height:17px}
+@media (max-width:560px){.topbar-speak{font-size:.6rem;letter-spacing:.05em}.topbar-speak span{font-size:.88rem}}
+
+/* ── Hero "150+ Google reviews" trust badge ── */
+.rating-badge{display:inline-flex;align-items:center;gap:.5rem;margin:.1rem 0 1.1rem;padding:.38rem .85rem .38rem .6rem;background:var(--white);border:1px solid var(--mint-line);border-radius:100px;box-shadow:var(--shadow-sm);text-decoration:none;font-size:.86rem;color:var(--ink);font-weight:600;transition:transform .15s,box-shadow .15s}
+.rating-badge:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.rating-badge .rb-stars{color:var(--gold);letter-spacing:.04em;font-size:.98rem;line-height:1}
+.rating-badge b{font-family:var(--font-display);font-size:1rem;line-height:1}
+.rating-badge .rb-count{color:var(--seafoam-deep);font-weight:700}
+
+/* Fix: hero photo collapsed to 0-width on mobile (margin-auto grid item w/ absolutely-positioned slides).
+   Give it a definite width so the real hero photo shows above the text on phones. */
+@media (max-width:960px){
+  .hero-media{ width:100%; }
+  .hero-slides{ width:100%; }
+}

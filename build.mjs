@@ -16,6 +16,15 @@ const C = { fr, en, nl, de, es };
 const OGLOCALE = { fr: 'fr_FR', en: 'en_GB', nl: 'nl_BE', de: 'de_DE', es: 'es_ES' };
 const LANGNAME = { fr: 'Français', en: 'English', nl: 'Nederlands', de: 'Deutsch', es: 'Español' };
 const FLAG = { fr: '🇫🇷', nl: '🇳🇱', de: '🇩🇪', en: '🇬🇧', es: '🇪🇸' };
+// Owner social links — paste the real URLs here to switch the top-bar icons on:
+const FB_URL = 'https://www.facebook.com/Coco-Surfschool-1393366264020009/';
+const IG_URL = 'https://www.instagram.com/coco_surf_school_hossegor/';
+const REVIEWS_WORD = { fr: 'avis Google', en: 'Google reviews', nl: 'Google reviews', de: 'Google-Bewertungen', es: 'reseñas Google' };
+const GOOGLE_REVIEWS_URL = 'https://www.google.com/maps/search/?api=1&amp;query=Coco%20Surf%20School%20Seignosse';
+const SOC_SVG = {
+  fb: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.51 1.49-3.9 3.78-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.9h-2.34V22c4.78-.79 8.44-4.94 8.44-9.94Z"/></svg>',
+  ig: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c2.72 0 3.06.01 4.12.06 1.07.05 1.8.22 2.43.47.66.25 1.22.6 1.77 1.15.55.55.9 1.11 1.15 1.77.25.63.42 1.36.47 2.43C21.99 8.94 22 9.28 22 12s-.01 3.06-.06 4.12c-.05 1.07-.22 1.8-.47 2.43-.25.66-.6 1.22-1.15 1.77-.55.55-1.11.9-1.77 1.15-.63.25-1.36.42-2.43.47-1.06.05-1.4.06-4.12.06s-3.06-.01-4.12-.06c-1.07-.05-1.8-.22-2.43-.47a4.9 4.9 0 0 1-1.77-1.15 4.9 4.9 0 0 1-1.15-1.77c-.25-.63-.42-1.36-.47-2.43C2.01 15.06 2 14.72 2 12s.01-3.06.06-4.12c.05-1.07.22-1.8.47-2.43.25-.66.6-1.22 1.15-1.77.55-.55 1.11-.9 1.77-1.15.63-.25 1.36-.42 2.43-.47C8.94 2.01 9.28 2 12 2Zm0 1.8c-2.67 0-2.99.01-4.04.06-.98.04-1.51.21-1.86.35-.47.18-.8.4-1.15.75-.35.35-.57.68-.75 1.15-.14.35-.31.88-.35 1.86-.05 1.05-.06 1.37-.06 4.04s.01 2.99.06 4.04c.04.98.21 1.51.35 1.86.18.47.4.8.75 1.15.35.35.68.57 1.15.75.35.14.88.31 1.86.35 1.05.05 1.37.06 4.04.06s2.99-.01 4.04-.06c.98-.04 1.51-.21 1.86-.35.47-.18.8-.4 1.15-.75.35-.35.57-.68.75-1.15.14-.35.31-.88.35-1.86.05-1.05.06-1.37.06-4.04s-.01-2.99-.06-4.04c-.04-.98-.21-1.51-.35-1.86a3.1 3.1 0 0 0-.75-1.15 3.1 3.1 0 0 0-1.15-.75c-.35-.14-.88-.31-1.86-.35-1.05-.05-1.37-.06-4.04-.06Zm0 3.06A5.14 5.14 0 1 1 6.86 12 5.14 5.14 0 0 1 12 6.86Zm0 1.8A3.34 3.34 0 1 0 15.34 12 3.34 3.34 0 0 0 12 8.66Zm5.34-3.14a1.2 1.2 0 1 1-1.2 1.2 1.2 1.2 0 0 1 1.2-1.2Z"/></svg>',
+};
 
 const PAGES = {
   home:      { fr: '',                        en: '',                       nl: '',                     de: '',                     es: '' },
@@ -112,7 +121,7 @@ ${alt}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Petrona:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${u.css}?v=6">
+<link rel="stylesheet" href="${u.css}?v=7">
 <link rel="icon" href="${u.logo}" type="image/png">${ld}
 </head>`;
 }
@@ -121,7 +130,15 @@ function header(lang, key, c) {
   const u = urls(lang, key), ui = c.ui;
   const nav = NAV.map(k => `<li><a href="${u[k]}"${k === key ? ' aria-current="page"' : ''}>${ui.nav[k]}</a></li>`).join('\n        ');
   const lsw = LANGS.map(l => `<a href="${u.alt[l]}"${l === lang ? ' aria-current="true"' : ''} hreflang="${l}" title="${LANGNAME[l]}"><span aria-hidden="true">${FLAG[l]}</span> ${l.toUpperCase()}</a>`).join('\n        ');
+  const socials = [
+    FB_URL ? `<a class="soc" href="${FB_URL}" target="_blank" rel="noopener" aria-label="Facebook">${SOC_SVG.fb}</a>` : '',
+    IG_URL ? `<a class="soc" href="${IG_URL}" target="_blank" rel="noopener" aria-label="Instagram">${SOC_SVG.ig}</a>` : '',
+  ].join('');
   return `<body id="top">
+<div class="topbar"><div class="wrap topbar-inner">
+    <p class="topbar-speak">We speak <span aria-hidden="true">🇫🇷 🇳🇱 🇩🇪 🇬🇧 🇪🇸</span></p>
+    ${socials ? `<div class="topbar-social">${socials}</div>` : ''}
+  </div></div>
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="${u.home}" aria-label="Coco Surf School">
@@ -240,6 +257,7 @@ const R = {
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <p class="eyebrow">${h.eyebrow}</p>
+      <a class="rating-badge" href="${GOOGLE_REVIEWS_URL}" target="_blank" rel="noopener"><span class="rb-stars" aria-hidden="true">★★★★★</span><b>5,0</b><span class="rb-count">150+ ${REVIEWS_WORD[lang]}</span></a>
       <h1>${h.h1}</h1>
       <p class="lead">${h.lead}</p>
       <div class="hero-cta"><a class="btn btn--primary" href="${u.contact}">${h.cta1}</a><a class="btn btn--ghost" href="${u.lessons}">${h.cta2}</a>${h.cta3 ? `<a class="btn btn--coral" href="${u.lessons}#tarieven">${h.cta3}</a>` : ''}</div>
@@ -248,8 +266,8 @@ const R = {
     </div>
     <div class="hero-media">
       <div class="hero-slides">
-        <img src="${u.img('owner-hero-1.png')}" alt="${h.imgAlt}" width="1536" height="1024" fetchpriority="high" decoding="async">
-        <img src="${u.img('owner-hero-2.png')}" alt="" width="1087" height="1447" loading="lazy" decoding="async">
+        <img class="hs-group" src="${u.img('real-group.jpg')}" alt="${h.imgAlt}" width="1440" height="1440" fetchpriority="high" decoding="async" style="object-position:30% center">
+        <img src="${u.img('real-carousel-kids.jpg')}" alt="" width="1400" height="1053" loading="lazy" decoding="async">
         <img src="${u.img('owner-hero-3.png')}" alt="" width="1448" height="1086" loading="lazy" decoding="async">
       </div>
       <div class="hero-badge"><span class="dot">🌊</span><span><b>${h.badge1}</b><span>${h.badge2}</span></span></div>
@@ -270,15 +288,6 @@ ${trustBar(t)}
       ${lessonCards(u, t.lessonsT.cards)}
     </div>
     <p style="text-align:center;margin:1.1rem 0 0"><a class="btn btn--ghost" href="${u.lessons}">${t.lessonsT.more}</a></p>
-  </div>
-</section>
-<section class="section section--tint">
-  <div class="wrap">
-    <div class="section-head reveal"><p class="eyebrow">${t.spots.eyebrow}</p><h2 class="section-title">${t.spots.title}</h2><p class="lead">${t.spots.lead}</p></div>
-    <div class="spots-grid">
-      <a class="spot-card reveal" href="${u.seignosse}"><img src="${u.img('a29fce_571dd78100a24c038429f1bfaf22b936.jpg')}" alt="${t.spots.seignosse.alt}" width="1600" height="1600" loading="lazy"><div class="sc-body"><h3>${t.spots.seignosse.h}</h3><p>${t.spots.seignosse.p}</p></div></a>
-      <a class="spot-card reveal" href="${u.hossegor}"><img src="${u.img('owner-spots.png')}" alt="${t.spots.hossegor.alt}" width="1537" height="1023" loading="lazy"><div class="sc-body"><h3>${t.spots.hossegor.h}</h3><p>${t.spots.hossegor.p}</p></div></a>
-    </div>
   </div>
 </section>
 ${reviewsSection(t, lang)}
@@ -329,6 +338,15 @@ ${reviewsSection(t, lang)}
   </div>
 </section>
 <script src="${u.root}surf-report.js?v=2" defer></script>
+<section class="section">
+  <div class="wrap">
+    <div class="section-head reveal"><p class="eyebrow">${t.spots.eyebrow}</p><h2 class="section-title">${t.spots.title}</h2><p class="lead">${t.spots.lead}</p></div>
+    <div class="spots-grid">
+      <a class="spot-card reveal" href="${u.seignosse}"><img src="${u.img('a29fce_571dd78100a24c038429f1bfaf22b936.jpg')}" alt="${t.spots.seignosse.alt}" width="1600" height="1600" loading="lazy"><div class="sc-body"><h3>${t.spots.seignosse.h}</h3><p>${t.spots.seignosse.p}</p></div></a>
+      <a class="spot-card reveal" href="${u.hossegor}"><img src="${u.img('owner-spots.png')}" alt="${t.spots.hossegor.alt}" width="1537" height="1023" loading="lazy"><div class="sc-body"><h3>${t.spots.hossegor.h}</h3><p>${t.spots.hossegor.p}</p></div></a>
+    </div>
+  </div>
+</section>
 <section class="cta-band"><div class="wrap"><div><h2>${t.cta.h}</h2><p>${t.cta.p}</p></div><div class="hero-cta"><a class="btn btn--coral" href="${u.contact}">${t.cta.b1}</a><a class="btn btn--primary" href="${u.lessons}#tarieven">${t.hero.cta3}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.cta.b2}</a></div></div></section>`;
   },
 

@@ -1,7 +1,7 @@
 // Coco Surf School — design-06 multipage — DEUTSCH content (machine-translated, needs native proofreading)
 const CARDS = [
-  { img: 'owner-lesson-deluxe.png', alt: 'Eine kleine Gruppe Surfer am Strand', title: 'Deluxe-Gruppenkurs', from: 'ab 44 €', p: 'Ein Kurs mit 2 bis max. 6 Personen pro Coach: die Formel zwischen Gruppe und Privat, um schneller Fortschritte zu machen. Mehr Zeit mit dem Coach.', chips: ['Kleine Gruppe · max. 6', '±2 Std. gesamt', 'Material inklusive'] },
-  { img: 'owner-lesson-group.png', alt: 'Schüler lernen surfen im Weißwasser', title: 'Gruppenkurs', from: 'ab 38 €', p: 'Ein hochwertiger Kurs mit 7 bis max. 8 Personen und einem Coach. Gute Stimmung und Spaß inklusive.', chips: ['Größte Gruppe · 7–8', '±2 Std. gesamt', 'Material inklusive'] },
+  { img: 'real-deluxe-group.jpg', alt: 'Eine kleine Gruppe Surfer am Strand', title: 'Deluxe-Gruppenkurs', from: 'ab 44 €', p: 'Ein Kurs mit 2 bis max. 6 Personen pro Coach: die Formel zwischen Gruppe und Privat, um schneller Fortschritte zu machen. Mehr Zeit mit dem Coach.', chips: ['Kleine Gruppe · max. 6', '±2 Std. gesamt', 'Material inklusive'] },
+  { img: 'real-lesson-kids.jpg', alt: 'Schüler lernen surfen im Weißwasser', title: 'Gruppenkurs', from: 'ab 38 €', p: 'Ein hochwertiger Kurs mit 7 bis max. 8 Personen und einem Coach. Gute Stimmung und Spaß inklusive.', chips: ['Größte Gruppe · 7–8', '±2 Std. gesamt', 'Material inklusive'] },
   { img: 'a29fce_449771ae1e2d4c52aa0fbe3159160d3b.jpg', alt: 'Eine Surferin auf einer schönen grünen Welle', title: 'Privatkurs', from: 'ab 130 €', p: 'Ein Kurs nur für dich, zu zweit, mit der Familie oder mit Freunden. Ein Coach, der sich voll auf deinen Fortschritt konzentriert.', chips: ['Deine eigene Gruppe · 1–7', '±2 Std. gesamt', 'Maßgeschneidert'] },
   { img: 'a29fce_9ddbf1309cf04bb189e246d843dfc188.jpg', alt: 'Kollegen gehen mit ihren Boards zum Ozean', title: 'Firmen &amp; Teambuilding', from: 'auf Anfrage', p: 'Ein sportlicher Ausflug mit den Kollegen! Teamgeist, Stressabbau, Lächeln und Spaß garantiert.', chips: ['Auf Anfrage', 'Zusammenhalt'] },
 ];
@@ -28,7 +28,7 @@ export default {
       cta: { h: 'Lust, mit uns zu surfen?', p: 'Kleine Gruppen, alle Niveaus, Board &amp; Neoprenanzug inklusive. Schreib uns — wir antworten dir gerne.', b1: 'Kurs buchen', b2: 'Schreib uns auf WhatsApp' },
     },
     lessons: {
-      title: 'Surfkurse &amp; Preise — Coco Surf School Hossegor &amp; Seignosse', desc: 'Surfkurse in den Landes: Deluxe-Gruppe (max. 6) ab 52 €, Gruppe ab 40 €, Privat ab 130 €. Board &amp; Neoprenanzug inklusive, 1,5 Std.', h1: 'Surfkurse', crumb: 'Kurse &amp; Preise',
+      title: 'Surfkurse &amp; Preise — Coco Surf School Hossegor &amp; Seignosse', desc: 'Surfkurse in den Landes: Deluxe-Gruppe (max. 6) ab 44 €, Gruppe ab 38 €, Privat ab 130 €. Board &amp; Neoprenanzug inklusive, 1,5 Std.', h1: 'Surfkurse', crumb: 'Kurse &amp; Preise',
       eyebrow: 'Die Formeln &amp; Preise', h1html: 'Wähle den Kurs, der zu dir <em>passt</em>', lead: 'Alle Kurse dauern 1,5 Std. im Wasser — rechne mit ±2 Std. gesamt (An-/Abfahrt und Umziehen). Board und Neoprenanzug inklusive. Die Kurszeiten hängen von den Gezeiten, den Ozeanbedingungen und deinem Niveau ab.', cta1: 'Kurs buchen', cta2: 'Schreib uns auf WhatsApp',
       cards: CARDS, note: '<strong>Gut zu wissen —</strong> Board und Neoprenanzug sind immer inklusive. Dauer: 1,5 Std. pro Session — rechne mit ±2 Std. gesamt (An-/Abfahrt und Umziehen).',
       rates: { eyebrow: 'Preise', title: 'Klare Preise, alles inklusive', lead: 'Board und Neoprenanzug inklusive · ±2 Std. pro Kurs (1,5 Std. im Wasser) · „p.P.“ = pro Person.', cards: [

@@ -1,7 +1,7 @@
 // Coco Surf School — design-06 multipage — FRENCH content
 const CARDS = [
-  { img: 'owner-lesson-deluxe.png', alt: 'Petit groupe de surfeurs sur la plage', title: 'Cours collectif deluxe', from: 'dès 44 €', p: 'Un cours de 2 à 6 personnes : la formule entre collectif et privé pour progresser plus vite. Plus de temps avec le coach.', chips: ['Petit groupe · max 6', '±2h total', 'Matériel inclus'] },
-  { img: 'owner-lesson-group.png', alt: 'Élèves qui apprennent à surfer dans la mousse', title: 'Cours collectif', from: 'dès 38 €', p: 'Un cours en groupe de qualité de 7 à 8 personnes avec un moniteur. L’ambiance et la bonne humeur en plus.', chips: ['Grand groupe · 7–8', '±2h total', 'Matériel inclus'] },
+  { img: 'real-deluxe-group.jpg', alt: 'Petit groupe de surfeurs sur la plage', title: 'Cours collectif deluxe', from: 'dès 44 €', p: 'Un cours de 2 à 6 personnes : la formule entre collectif et privé pour progresser plus vite. Plus de temps avec le coach.', chips: ['Petit groupe · max 6', '±2h total', 'Matériel inclus'] },
+  { img: 'real-lesson-kids.jpg', alt: 'Élèves qui apprennent à surfer dans la mousse', title: 'Cours collectif', from: 'dès 38 €', p: 'Un cours en groupe de qualité de 7 à 8 personnes avec un moniteur. L’ambiance et la bonne humeur en plus.', chips: ['Grand groupe · 7–8', '±2h total', 'Matériel inclus'] },
   { img: 'a29fce_449771ae1e2d4c52aa0fbe3159160d3b.jpg', alt: 'Une surfeuse sur une belle vague verte', title: 'Cours privé', from: 'dès 130 €', p: 'Un cours rien que pour vous, en couple, en famille ou entre amis. Un moniteur entièrement dédié à votre progression.', chips: ['Votre propre groupe · 1–7', '±2h total', 'Sur mesure'] },
   { img: 'a29fce_9ddbf1309cf04bb189e246d843dfc188.jpg', alt: 'Des collègues rejoignent l’océan avec leurs planches', title: 'Entreprises & team building', from: 'sur demande', p: 'Une sortie sportive entre collègues ! Esprit d’équipe, anti-stress, sourires et fun au rendez-vous.', chips: ['Sur demande', 'Cohésion'] },
 ];
@@ -29,7 +29,7 @@ export default {
       cta: { h: 'Envie de surfer avec nous ?', p: 'Petits groupes, tous niveaux, planche & combinaison incluses. Écrivez-nous — on vous répond avec plaisir.', b1: 'Réserver un cours', b2: 'Nous écrire sur WhatsApp' },
     },
     lessons: {
-      title: 'Cours de surf &amp; tarifs — Coco Surf School Hossegor &amp; Seignosse', desc: 'Cours de surf dans les Landes : collectif deluxe (max 6) dès 52 €, collectif dès 40 €, privé dès 130 €. Planche & combinaison incluses, 1h30.', h1: 'Cours de surf', crumb: 'Cours & tarifs',
+      title: 'Cours de surf &amp; tarifs — Coco Surf School Hossegor &amp; Seignosse', desc: 'Cours de surf dans les Landes : collectif deluxe (max 6) dès 44 €, collectif dès 38 €, privé dès 130 €. Planche & combinaison incluses, 1h30.', h1: 'Cours de surf', crumb: 'Cours & tarifs',
       eyebrow: 'Les formules &amp; tarifs', h1html: 'Choisissez le cours qui vous <em>ressemble</em>', lead: 'Tous les cours durent 1h30 dans l’eau — comptez ±2h au total (déplacement et change compris). Planche et combinaison incluses. Les horaires dépendent de la marée, des conditions de l’océan et de votre niveau.', cta1: 'Réserver un cours', cta2: 'Nous écrire sur WhatsApp',
       cards: CARDS, note: '<strong>Bon à savoir —</strong> planche et combinaison sont toujours incluses. Durée : 1h30 par session — comptez ±2h au total (déplacement et change compris).',
       rates: { eyebrow: 'Tarifs', title: 'Des prix clairs, tout inclus', lead: 'Planche et combinaison incluses · ±2h par cours (1h30 dans l’eau) · « pp » = par personne.', cards: [
