@@ -113,5 +113,13 @@ export default {
       body: '<p class="lead">Surfing is one of the finest feelings there is — and you don’t need experience to start. At Coco Surf School you learn in a small group of 6 maximum, so the coach is with you from your very first wave.</p><h2>Your first lesson, step by step</h2><p>A lesson lasts 1h30 in the water — allow ±2h in total. We start on the beach with a warm-up and the basics — lying on the board, paddling, standing up. Then we head into the white water (the already-broken waves, near the shore), the safest and easiest place for your first rides. Most beginners get to their feet within the first few lessons.</p><h2>What’s included</h2><ul class="ticks"><li>Board and wetsuit — always included.</li><li>A certified coach, in a group of 6 maximum (8 on request).</li><li>The most beginner-friendly beach, chosen for the conditions of the day.</li></ul><h2>What to bring</h2><p>A swimsuit under the wetsuit, a towel, sunscreen and water. We take care of the rest.</p><h2>How quickly do you progress?</h2><p>Small groups = more coaching and faster progression. A <strong>little surf trip (3 lessons)</strong> or a <strong>5-day camp</strong> helps you really take off.</p>',
       aside: { h: 'Your first lesson', p: 'Small groups · all levels · gear included · 1h30.', b1: 'Book a lesson', b2: 'WhatsApp' },
     },
+    book: {
+      title: 'Book a surf lesson — Coco Surf School', desc: 'Book your surf lesson online at Coco Surf School: pick a session, your party size and your formula.', h1: 'Book a lesson', crumb: 'Book',
+      eyebrow: 'Online booking', h1html: 'Book your <em>surf lesson</em>', lead: 'Choose a session below, then fill in your details. A 30% deposit is required to confirm your booking.',
+      fSessionH: 'Choose a session', fParty: 'Party size', fPack: 'Number of lessons', fName: 'Full name', fEmail: 'Email', fPhone: 'Phone', fLang: 'Preferred language',
+      fConsent: 'I’d like to receive information about my lessons and offers by email', fRemarks: 'Remarks (optional)', fSubmit: 'Book now', fSending: 'Sending…',
+      fOk: 'Thanks! Your booking is confirmed.', fErr: 'Something went wrong. Please try again or contact us directly.', fEmpty: 'No sessions available right now.',
+      deposit: 'A 30% deposit is required to confirm your booking. Payment by bank transfer or cash.',
+    },
   },
 };

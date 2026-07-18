@@ -106,5 +106,13 @@ export default {
       body: '<p class="lead">Surfear es una de las mejores sensaciones que existen — y no necesitas experiencia para empezar. En Coco Surf School aprendes en un grupo pequeño de 6 máximo, para que el coach te acompañe desde tu primera ola.</p><h2>Tu primera clase, paso a paso</h2><p>Una clase dura 1h30 en el agua — cuenta con ±2 h en total. Empezamos en la playa con un calentamiento y lo básico — tumbarse en la tabla, remar, ponerse de pie. Después entramos en la espuma (las olas ya rotas, cerca de la orilla), el lugar más seguro y fácil para tus primeros deslizamientos. La mayoría de los principiantes se ponen de pie durante las primeras clases.</p><h2>Qué está incluido</h2><ul class="ticks"><li>Tabla y neopreno — siempre incluidos.</li><li>Una coach diplomada, en un grupo de 6 máximo (8 a petición).</li><li>La playa más adecuada para principiantes, elegida según las condiciones del día.</li></ul><h2>Qué traer</h2><p>Un bañador bajo el neopreno, una toalla, crema solar y agua. Del resto nos ocupamos nosotros.</p><h2>¿A qué velocidad se progresa?</h2><p>Grupos pequeños = más coaching y una progresión más rápida. Un <strong>pequeño surf trip (3 clases)</strong> o un <strong>curso de 5 días</strong> te ayuda a despegar de verdad.</p>',
       aside: { h: 'Tu primera clase', p: 'Grupos pequeños · todos los niveles · material incluido · 1h30.', b1: 'Reservar una clase', b2: 'WhatsApp' },
     },
+    book: {
+      title: 'Reservar una clase de surf — Coco Surf School', desc: 'Reserva tu clase de surf online en Coco Surf School: elige una sesión, el número de personas y tu formula.', h1: 'Reservar una clase', crumb: 'Reservar',
+      eyebrow: 'Reserva online', h1html: 'Reserva tu <em>clase de surf</em>', lead: 'Elige una sesión a continuación y completa tus datos. Se requiere un depósito del 30 % para confirmar tu reserva.',
+      fSessionH: 'Elige una sesión', fParty: 'Número de personas', fPack: 'Número de clases', fName: 'Nombre completo', fEmail: 'Email', fPhone: 'Teléfono', fLang: 'Idioma preferido',
+      fConsent: 'Me gustaría recibir información sobre mis clases y ofertas por email', fRemarks: 'Comentarios (opcional)', fSubmit: 'Reservar ahora', fSending: 'Enviando…',
+      fOk: '¡Gracias! Tu reserva está confirmada.', fErr: 'Algo salió mal. Inténtalo de nuevo o contáctanos directamente.', fEmpty: 'No hay sesiones disponibles en este momento.',
+      deposit: 'Se requiere un depósito del 30 % para confirmar tu reserva. Pago por transferencia bancaria o en efectivo.',
+    },
   },
 };

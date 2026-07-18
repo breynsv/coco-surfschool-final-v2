@@ -113,5 +113,13 @@ export default {
       body: '<p class="lead">Le surf, c’est l’une des plus belles sensations qui soient — et pas besoin d’expérience pour commencer. Chez Coco Surf School, vous apprenez en petit groupe de 6 maximum, pour que le coach vous accompagne dès votre première vague.</p><h2>Votre premier cours, étape par étape</h2><p>Un cours dure 1h30 dans l’eau — comptez ±2h au total. On démarre sur la plage par un échauffement et les bases — s’allonger sur la planche, ramer, se redresser. Puis on entre dans la mousse (les vagues déjà cassées, près du bord), l’endroit le plus sûr et le plus facile pour vos premières glisses. La plupart des débutants se mettent debout dès les premiers cours.</p><h2>Ce qui est inclus</h2><ul class="ticks"><li>Planche et combinaison — toujours incluses.</li><li>Une coach diplômée, en groupe de 6 maximum (8 sur demande).</li><li>La plage la plus adaptée aux débutants, choisie selon les conditions du jour.</li></ul><h2>À prévoir</h2><p>Un maillot sous la combinaison, une serviette, de la crème solaire et de l’eau. On s’occupe du reste.</p><h2>À quelle vitesse progresse-t-on ?</h2><p>Les petits groupes = plus de coaching et une progression plus rapide. Un <strong>petit surf trip (3 cours)</strong> ou un <strong>stage 5 jours</strong> vous aide à vraiment décoller.</p>',
       aside: { h: 'Votre premier cours', p: 'Petits groupes · tous niveaux · matériel inclus · 1h30.', b1: 'Réserver un cours', b2: 'WhatsApp' },
     },
+    book: {
+      title: 'Réserver un cours de surf — Coco Surf School', desc: 'Réservez votre cours de surf en ligne chez Coco Surf School : choisissez une session, votre nombre de personnes et votre formule.', h1: 'Réserver un cours', crumb: 'Réserver',
+      eyebrow: 'Réservation en ligne', h1html: 'Réservez votre <em>cours de surf</em>', lead: 'Choisissez une session ci-dessous, puis complétez vos coordonnées. Un acompte de 30 % est demandé pour confirmer votre réservation.',
+      fSessionH: 'Choisissez une session', fParty: 'Nombre de personnes', fPack: 'Nombre de cours', fName: 'Nom complet', fEmail: 'Email', fPhone: 'Téléphone', fLang: 'Langue préférée',
+      fConsent: 'J’accepte de recevoir des informations sur mes cours et offres par email', fRemarks: 'Remarques (facultatif)', fSubmit: 'Réserver', fSending: 'Envoi…',
+      fOk: 'Merci ! Votre réservation est enregistrée.', fErr: 'Une erreur est survenue. Merci de réessayer ou de nous contacter directement.', fEmpty: 'Aucune session disponible pour le moment.',
+      deposit: 'Un acompte de 30 % est demandé à la réservation. Paiement par virement bancaire ou en espèces.',
+    },
   },
 };

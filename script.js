@@ -172,4 +172,174 @@
         });
     });
   }
+
+  // Surf booking page -> CRM booking API (draft page, coco.membrero.test)
+  var bookForm = document.querySelector(".surf-book-form");
+  if (bookForm) {
+    var sessionsBox = document.getElementById("surf-sessions");
+    var api = (sessionsBox && sessionsBox.getAttribute("data-api")) || bookForm.getAttribute("data-api") || "";
+    var emptyMsg = (sessionsBox && sessionsBox.getAttribute("data-empty")) || "No sessions available.";
+
+    var elSessionId = bookForm.querySelector('input[name="session_id"]');
+    var elFormula = bookForm.querySelector('input[name="formula"]');
+    var elSummary = bookForm.querySelector(".surf-book-summary");
+    var elParty = bookForm.querySelector('input[name="party_size"]');
+    var elPack = bookForm.querySelector('select[name="pack_size"]');
+    var elSubmitBtn = bookForm.querySelector('button[type="submit"]');
+    var elTs = bookForm.querySelector('input[name="_ts"]');
+    var elStatus = bookForm.querySelector(".form-status");
+
+    if (elTs) elTs.value = Math.floor(Date.now() / 1000);
+
+    var setBookStatus = function (msg, state) {
+      if (!elStatus) return;
+      elStatus.textContent = msg;
+      elStatus.hidden = !msg;
+      elStatus.className = "form-status" + (state ? " form-status--" + state : "");
+    };
+
+    var formulas = [];
+    var sessions = [];
+
+    function formulaByKey(key) {
+      for (var i = 0; i < formulas.length; i++) if (formulas[i].key === key) return formulas[i];
+      return null;
+    }
+
+    function fmtDate(s) {
+      try {
+        var d = new Date(s.local_date + "T00:00:00");
+        return d.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" });
+      } catch (e) { return s.local_date; }
+    }
+
+    function selectSession(session) {
+      var f = formulaByKey(session.formula);
+      if (elSessionId) elSessionId.value = session.id;
+      if (elFormula) elFormula.value = session.formula;
+      if (elSummary) {
+        elSummary.textContent =
+          fmtDate(session) + " · " + session.local_time + " · " + session.formula_label +
+          " · " + (session.spots_left) + " spot(s) left";
+      }
+      var maxParty = f ? Math.min(session.spots_left, f.max_party) : session.spots_left;
+      var minParty = f ? f.min_party : 1;
+      if (elParty) {
+        elParty.min = minParty;
+        elParty.max = Math.max(minParty, maxParty);
+        elParty.value = minParty;
+        elParty.disabled = false;
+      }
+      if (elPack) {
+        elPack.innerHTML = "";
+        var packs = (f && f.packs) || [1];
+        packs.forEach(function (p) {
+          var opt = document.createElement("option");
+          opt.value = p;
+          opt.textContent = p;
+          elPack.appendChild(opt);
+        });
+        elPack.disabled = false;
+      }
+      if (elSubmitBtn) elSubmitBtn.disabled = false;
+      bookForm.querySelectorAll(".surf-session-row").forEach(function (row) {
+        row.classList.toggle("is-selected", row.getAttribute("data-session-id") === String(session.id));
+      });
+    }
+
+    function renderSessions() {
+      if (!sessionsBox) return;
+      if (!sessions.length) {
+        sessionsBox.innerHTML = '<p class="surf-sessions-empty">' + emptyMsg + "</p>";
+        return;
+      }
+      sessionsBox.innerHTML = "";
+      sessions.forEach(function (s) {
+        var row = document.createElement("div");
+        row.className = "surf-session-row";
+        row.setAttribute("data-session-id", s.id);
+        var tide = s.tide ? (s.tide.type + " tide " + s.tide.time_local) : "";
+        row.innerHTML =
+          '<div class="ssr-info"><b>' + fmtDate(s) + " · " + s.local_time + '</b>' +
+          '<span>' + s.formula_label + " · from €" + s.price_from + '</span>' +
+          '<span>' + s.spots_left + ' spots left' + (tide ? " · " + tide : "") + '</span></div>' +
+          '<button type="button" class="btn btn--ghost btn--sm surf-session-choose">Choose</button>';
+        row.querySelector(".surf-session-choose").addEventListener("click", function () { selectSession(s); });
+        sessionsBox.appendChild(row);
+      });
+    }
+
+    if (api) {
+      Promise.all([
+        fetch(api + "/api/v1/surf/formulas").then(function (r) { return r.json(); }).catch(function () { return { data: [] }; }),
+        fetch(api + "/api/v1/surf/sessions").then(function (r) { return r.json(); }).catch(function () { return { data: [] }; }),
+      ]).then(function (results) {
+        formulas = (results[0] && results[0].data) || [];
+        sessions = (results[1] && results[1].data) || [];
+        renderSessions();
+      });
+    } else if (sessionsBox) {
+      sessionsBox.innerHTML = '<p class="surf-sessions-empty">' + emptyMsg + "</p>";
+    }
+
+    bookForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!elSessionId || !elSessionId.value) {
+        setBookStatus(bookForm.getAttribute("data-err") || "Please choose a session first.", "err");
+        return;
+      }
+      if (!bookForm.reportValidity()) return;
+
+      var fullName = (bookForm.querySelector('input[name="full_name"]') || {}).value || "";
+      var parts = fullName.trim().split(/\s+/);
+      var firstName = parts.shift() || fullName;
+      var lastName = parts.join(" ") || firstName;
+
+      var payload = {
+        session_id: Number(elSessionId.value),
+        formula: elFormula ? elFormula.value : "",
+        party_size: elParty ? Number(elParty.value) : 1,
+        pack_size: elPack ? Number(elPack.value) : 1,
+        contact: {
+          first_name: firstName,
+          last_name: lastName,
+          email: (bookForm.querySelector('input[name="email"]') || {}).value || "",
+          phone: (bookForm.querySelector('input[name="phone"]') || {}).value || "",
+          language: (bookForm.querySelector('select[name="language"]') || {}).value || "EN",
+        },
+        marketing_consent: !!(bookForm.querySelector('input[name="marketing_consent"]') || {}).checked,
+        remarks: (bookForm.querySelector('textarea[name="remarks"]') || {}).value || "",
+        _honey: (bookForm.querySelector('input[name="_honey"]') || {}).value || "",
+        _ts: elTs ? Number(elTs.value) : Math.floor(Date.now() / 1000),
+      };
+
+      if (elSubmitBtn) elSubmitBtn.disabled = true;
+      setBookStatus(bookForm.getAttribute("data-sending") || "Sending…", "pending");
+
+      fetch(api + "/api/v1/surf/bookings", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+        .then(function (r) { return r.json().then(function (json) { return { ok: r.ok, json: json }; }); })
+        .catch(function () { return { ok: false, json: null }; })
+        .then(function (res) {
+          if (res.ok && res.json && res.json.success) {
+            bookForm.reset();
+            if (elSessionId) elSessionId.value = "";
+            if (elFormula) elFormula.value = "";
+            if (elParty) elParty.disabled = true;
+            if (elPack) elPack.disabled = true;
+            if (elSubmitBtn) elSubmitBtn.disabled = true;
+            if (elSummary) elSummary.textContent = emptyMsg;
+            var okMsg = (res.json && res.json.deposit_note) || bookForm.getAttribute("data-ok") || "Thanks! Your booking is confirmed.";
+            setBookStatus(okMsg, "ok");
+          } else {
+            var errMsg = (res.json && res.json.message) || bookForm.getAttribute("data-err") || "Something went wrong.";
+            setBookStatus(errMsg, "err");
+            if (elSubmitBtn) elSubmitBtn.disabled = false;
+          }
+        });
+    });
+  }
 })();

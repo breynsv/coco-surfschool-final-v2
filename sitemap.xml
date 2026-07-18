@@ -400,4 +400,44 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.coco-surfschool.com/en/learn-to-surf/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.coco-surfschool.com/es/aprender-a-surfear/"/>
   </url>
+  <url>
+    <loc>https://www.coco-surfschool.com/fr/reserver/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.coco-surfschool.com/fr/reserver/"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.coco-surfschool.com/nl/reserveren/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.coco-surfschool.com/de/buchen/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.coco-surfschool.com/en/book/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.coco-surfschool.com/es/reservar/"/>
+  </url>
+  <url>
+    <loc>https://www.coco-surfschool.com/nl/reserveren/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.coco-surfschool.com/fr/reserver/"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.coco-surfschool.com/nl/reserveren/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.coco-surfschool.com/de/buchen/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.coco-surfschool.com/en/book/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.coco-surfschool.com/es/reservar/"/>
+  </url>
+  <url>
+    <loc>https://www.coco-surfschool.com/de/buchen/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.coco-surfschool.com/fr/reserver/"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.coco-surfschool.com/nl/reserveren/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.coco-surfschool.com/de/buchen/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.coco-surfschool.com/en/book/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.coco-surfschool.com/es/reservar/"/>
+  </url>
+  <url>
+    <loc>https://www.coco-surfschool.com/en/book/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.coco-surfschool.com/fr/reserver/"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.coco-surfschool.com/nl/reserveren/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.coco-surfschool.com/de/buchen/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.coco-surfschool.com/en/book/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.coco-surfschool.com/es/reservar/"/>
+  </url>
+  <url>
+    <loc>https://www.coco-surfschool.com/es/reservar/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.coco-surfschool.com/fr/reserver/"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.coco-surfschool.com/nl/reserveren/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.coco-surfschool.com/de/buchen/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.coco-surfschool.com/en/book/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.coco-surfschool.com/es/reservar/"/>
+  </url>
 </urlset>

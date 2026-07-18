@@ -106,5 +106,13 @@ export default {
       body: '<p class="lead">Surfen ist eines der schönsten Gefühle überhaupt — und du brauchst keine Erfahrung, um anzufangen. Bei Coco Surf School lernst du in einer kleinen Gruppe von maximal 6, damit dich der Coach ab deiner ersten Welle begleitet.</p><h2>Dein erster Kurs, Schritt für Schritt</h2><p>Ein Kurs dauert 1,5 Std. im Wasser — rechne mit ±2 Std. gesamt. Wir starten am Strand mit einem Aufwärmen und den Grundlagen — auf dem Board liegen, paddeln, aufstehen. Danach gehen wir ins Weißwasser (die bereits gebrochenen Wellen, nahe am Ufer), der sicherste und einfachste Ort für deine ersten Ritte. Die meisten Anfänger stehen schon in den ersten Kursen.</p><h2>Was inklusive ist</h2><ul class="ticks"><li>Board und Neoprenanzug — immer inklusive.</li><li>Eine diplomierte Coach, in einer Gruppe von maximal 6 (8 auf Anfrage).</li><li>Der für Anfänger am besten geeignete Strand, je nach den Bedingungen des Tages gewählt.</li></ul><h2>Was du mitbringst</h2><p>Eine Badehose/einen Badeanzug unter dem Neoprenanzug, ein Handtuch, Sonnencreme und Wasser. Um den Rest kümmern wir uns.</p><h2>Wie schnell macht man Fortschritte?</h2><p>Kleine Gruppen = mehr Coaching und schnellerer Fortschritt. Ein <strong>kleiner Surftrip (3 Kurse)</strong> oder ein <strong>5-Tage-Camp</strong> hilft dir wirklich, den Durchbruch zu schaffen.</p>',
       aside: { h: 'Dein erster Kurs', p: 'Kleine Gruppen · alle Niveaus · Material inklusive · 1,5 Std.', b1: 'Kurs buchen', b2: 'WhatsApp' },
     },
+    book: {
+      title: 'Surfkurs buchen — Coco Surf School', desc: 'Buchen Sie Ihren Surfkurs online bei Coco Surf School: Session, Teilnehmerzahl und Formel auswählen.', h1: 'Kurs buchen', crumb: 'Buchen',
+      eyebrow: 'Online buchen', h1html: 'Buchen Sie Ihren <em>Surfkurs</em>', lead: 'Wählen Sie unten eine Session aus und geben Sie Ihre Daten ein. Zur Bestätigung ist eine Anzahlung von 30 % erforderlich.',
+      fSessionH: 'Session auswählen', fParty: 'Teilnehmerzahl', fPack: 'Anzahl der Kurse', fName: 'Vollständiger Name', fEmail: 'E-Mail', fPhone: 'Telefon', fLang: 'Bevorzugte Sprache',
+      fConsent: 'Ich möchte Informationen zu meinen Kursen und Angeboten per E-Mail erhalten', fRemarks: 'Anmerkungen (optional)', fSubmit: 'Jetzt buchen', fSending: 'Wird gesendet…',
+      fOk: 'Danke! Ihre Buchung ist bestätigt.', fErr: 'Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.', fEmpty: 'Derzeit keine Sessions verfügbar.',
+      deposit: 'Zur Bestätigung ist eine Anzahlung von 30 % erforderlich. Zahlung per Überweisung oder bar.',
+    },
   },
 };

@@ -113,5 +113,13 @@ export default {
       body: '<p class="lead">Surfen is een van de heerlijkste sensaties die er zijn — en je hebt geen ervaring nodig om te beginnen. Bij Coco Surf School leer je in een klein groepje van maximum 6, zodat de coach je vanaf je eerste golf begeleidt.</p><h2>Je eerste les, stap voor stap</h2><p>Een les duurt 1u30 in het water — reken ±2u in totaal. We starten op het strand met een opwarming en de basis — op de plank liggen, peddelen, rechtstaan. Daarna gaan we het witwater in (de golven die al gebroken zijn, dicht bij de kant), de veiligste en makkelijkste plek voor je eerste glijpartijen. De meeste beginners staan al recht tijdens de eerste lessen.</p><h2>Wat is inbegrepen</h2><ul class="ticks"><li>Board en wetsuit — altijd inbegrepen.</li><li>Een gediplomeerde coach, in een groepje van maximum 6 (8 op aanvraag).</li><li>Het strand dat het best geschikt is voor beginners, gekozen volgens de condities van de dag.</li></ul><h2>Wat je meebrengt</h2><p>Een zwempak onder de wetsuit, een handdoek, zonnecrème en water. Wij zorgen voor de rest.</p><h2>Hoe snel vorder je?</h2><p>Kleine groepjes = meer coaching en snellere progressie. Een <strong>kleine surftrip (3 lessen)</strong> of een <strong>5-daagse stage</strong> helpt je echt om door te breken.</p>',
       aside: { h: 'Je eerste les', p: 'Kleine groepjes · alle niveaus · materiaal inbegrepen · 1u30.', b1: 'Boek een les', b2: 'WhatsApp' },
     },
+    book: {
+      title: 'Boek een surfles — Coco Surf School', desc: 'Boek je surfles online bij Coco Surf School: kies een sessie, je groepsgrootte en je formule.', h1: 'Boek een les', crumb: 'Boeken',
+      eyebrow: 'Online boeken', h1html: 'Boek je <em>surfles</em>', lead: 'Kies hieronder een sessie en vul je gegevens in. Een voorschot van 30% is vereist om je boeking te bevestigen.',
+      fSessionH: 'Kies een sessie', fParty: 'Aantal personen', fPack: 'Aantal lessen', fName: 'Volledige naam', fEmail: 'Email', fPhone: 'Telefoon', fLang: 'Voorkeurstaal',
+      fConsent: 'Ik ontvang graag informatie over mijn lessen en aanbiedingen per email', fRemarks: 'Opmerkingen (optioneel)', fSubmit: 'Boek nu', fSending: 'Bezig met verzenden…',
+      fOk: 'Bedankt! Je boeking is bevestigd.', fErr: 'Er ging iets mis. Probeer het opnieuw of neem rechtstreeks contact met ons op.', fEmpty: 'Momenteel geen sessies beschikbaar.',
+      deposit: 'Een voorschot van 30% is vereist om je boeking te bevestigen. Betaling per overschrijving of contant.',
+    },
   },
 };

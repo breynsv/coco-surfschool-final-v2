@@ -10,6 +10,9 @@ import es from './content/es.mjs';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const SITE = 'https://www.coco-surfschool.com';
+// Draft surf-booking page — points at the CRM booking API. Configurable via
+// COCO_API for other environments; defaults to the local dev tenant server.
+const API_BASE = process.env.COCO_API || 'http://coco.membrero.test:8090';
 const LANGS = ['fr', 'nl', 'de', 'en', 'es'];
 const XDEFAULT = 'fr';
 const C = { fr, en, nl, de, es };
@@ -37,6 +40,7 @@ const PAGES = {
   seignosse: { fr: 'cours-de-surf-seignosse', en: 'surf-lessons-seignosse', nl: 'surflessen-seignosse', de: 'surfkurse-seignosse',  es: 'clases-de-surf-seignosse' },
   team:      { fr: 'team-building-surf',      en: 'team-building',          nl: 'surf-teambuilding',    de: 'surf-teambuilding',    es: 'surf-team-building' },
   learn:     { fr: 'apprendre-a-surfer',      en: 'learn-to-surf',          nl: 'leren-surfen',         de: 'surfen-lernen',        es: 'aprender-a-surfear' },
+  book:      { fr: 'reserver',                en: 'book',                   nl: 'reserveren',           de: 'buchen',               es: 'reservar' },
 };
 const KEYS = Object.keys(PAGES);
 const NAV = ['lessons', 'coach', 'stay', 'rental', 'contact'];
@@ -260,7 +264,7 @@ const R = {
       <a class="rating-badge" href="${GOOGLE_REVIEWS_URL}" target="_blank" rel="noopener"><span class="rb-stars" aria-hidden="true">★★★★★</span><b>5,0</b><span class="rb-count">150+ ${REVIEWS_WORD[lang]}</span></a>
       <h1>${h.h1}</h1>
       <p class="lead">${h.lead}</p>
-      <div class="hero-cta"><a class="btn btn--primary" href="${u.contact}">${h.cta1}</a><a class="btn btn--ghost" href="${u.lessons}">${h.cta2}</a>${h.cta3 ? `<a class="btn btn--coral" href="${u.lessons}#tarieven">${h.cta3}</a>` : ''}</div>
+      <div class="hero-cta"><a class="btn btn--primary" href="${u.book}">${h.cta1}</a><a class="btn btn--ghost" href="${u.lessons}">${h.cta2}</a>${h.cta3 ? `<a class="btn btn--coral" href="${u.lessons}#tarieven">${h.cta3}</a>` : ''}</div>
       <div class="hero-facts">${h.facts.map(f => `<div class="hero-fact"><b>${f.b}</b><span>${f.s}</span></div>`).join('')}</div>
       <p class="we-speak">We speak <span aria-hidden="true">🇫🇷 🇳🇱 🇩🇪 🇬🇧 🇪🇸</span></p>
     </div>
@@ -455,8 +459,50 @@ ${reviewsSection(t, lang)}
   <aside class="aside-card reveal"><h3>${t.aside.h}</h3><p>${t.aside.p}</p><div class="mini"><a href="tel:+33647454265">06 47 45 42 65</a><a href="mailto:cocobosurfschool@gmail.com">cocobosurfschool@gmail.com</a></div><a class="btn btn--primary" href="${u.contact}">${t.aside.b1}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.aside.b2}</a></aside>
 </div></section>`;
   },
+
+  book(u, t, ui, lang) {
+    return `
+<section class="page-hero"><div class="wrap"><div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p></div></div></section>
+<section class="section" id="surf-sessions-wrap"><div class="wrap">
+  <div class="section-head reveal"><h2 class="section-title">${t.fSessionH}</h2></div>
+  <section id="surf-sessions" class="surf-sessions-list reveal" data-api="${API_BASE}" data-lang="${lang}" data-empty="${t.fEmpty}"><p class="surf-sessions-loading">…</p></section>
+</div></section>
+<section class="section section--tint" id="surf-book"><div class="wrap">
+  <form class="surf-book-form reveal" data-api="${API_BASE}" data-ok="${t.fOk}" data-err="${t.fErr}" data-sending="${t.fSending}" novalidate>
+    <input type="hidden" name="session_id" value="">
+    <input type="hidden" name="formula" value="">
+    <p class="surf-book-summary" data-empty="${t.fEmpty}">${t.fEmpty}</p>
+
+    <div class="field surf-field-party">
+      <label for="sb-party">${t.fParty}</label>
+      <input id="sb-party" name="party_size" type="number" min="1" max="1" value="1" required disabled>
+    </div>
+    <div class="field surf-field-pack">
+      <label for="sb-pack">${t.fPack}</label>
+      <select id="sb-pack" name="pack_size" required disabled><option value="1">1</option></select>
+    </div>
+    <div class="field"><label for="sb-name">${t.fName}</label><input id="sb-name" name="full_name" type="text" autocomplete="name" required></div>
+    <div class="field"><label for="sb-email">${t.fEmail}</label><input id="sb-email" name="email" type="email" autocomplete="email" required></div>
+    <div class="field"><label for="sb-phone">${t.fPhone}</label><input id="sb-phone" name="phone" type="tel" autocomplete="tel"></div>
+    <div class="field">
+      <label for="sb-lang">${t.fLang}</label>
+      <select id="sb-lang" name="language">
+        <option value="EN"${lang === 'en' ? ' selected' : ''}>English</option>
+        <option value="FR"${lang === 'fr' ? ' selected' : ''}>Français</option>
+        <option value="NL"${lang === 'nl' ? ' selected' : ''}>Nederlands</option>
+      </select>
+    </div>
+    <div class="field"><label for="sb-remarks">${t.fRemarks}</label><textarea id="sb-remarks" name="remarks"></textarea></div>
+    <div class="field surf-field-consent"><label><input type="checkbox" name="marketing_consent" value="1"> ${t.fConsent}</label></div>
+    <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden"><label for="sb-company">Company</label><input id="sb-company" name="_honey" type="text" tabindex="-1" autocomplete="off"><input type="hidden" name="_ts" value=""></div>
+    <p class="deposit-note">${t.deposit}</p>
+    <button type="submit" class="btn btn--coral" disabled>${t.fSubmit}</button>
+    <p class="form-status" role="status" aria-live="polite" hidden></p>
+  </form>
+</div></section>`;
+  },
 };
-const RENDER = { home: R.home, lessons: R.lessons, coach: R.coach, stay: R.stay, rental: R.rental, srilanka: R.srilanka, contact: R.contact, hossegor: R.article, seignosse: R.article, team: R.article, learn: R.article };
+const RENDER = { home: R.home, lessons: R.lessons, coach: R.coach, stay: R.stay, rental: R.rental, srilanka: R.srilanka, contact: R.contact, hossegor: R.article, seignosse: R.article, team: R.article, learn: R.article, book: R.book };
 
 async function build() {
   let n = 0;
