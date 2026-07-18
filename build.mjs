@@ -125,7 +125,7 @@ ${alt}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Petrona:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${u.css}?v=9">
+<link rel="stylesheet" href="${u.css}?v=10">
 <link rel="icon" href="${u.logo}" type="image/png">${ld}
 </head>`;
 }
@@ -206,7 +206,7 @@ function footer(lang, key, c) {
   </div>
 </footer>
 <a class="wa-fab" href="${u.wa}" target="_blank" rel="noopener" aria-label="WhatsApp">${WA_SVG}</a>
-<script src="${u.js}?v=2" defer></script>
+<script src="${u.js}?v=4" defer></script>
 </body>
 </html>`;
 }

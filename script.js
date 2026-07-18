@@ -181,6 +181,8 @@
     var emptyMsg = (sessionsBox && sessionsBox.getAttribute("data-empty")) || "No sessions available.";
     var chooseLabel = (sessionsBox && sessionsBox.getAttribute("data-choose")) || "Choose";
     var selectedLabel = (sessionsBox && sessionsBox.getAttribute("data-selected")) || "Selected ✓";
+    var weekLabel = (sessionsBox && sessionsBox.getAttribute("data-week")) || "Week of";
+    var spotsWord = (sessionsBox && sessionsBox.getAttribute("data-spots")) || "left";
 
     var elSessionId = bookForm.querySelector('input[name="session_id"]');
     var elFormula = bookForm.querySelector('input[name="formula"]');
@@ -244,15 +246,31 @@
         elPack.disabled = false;
       }
       if (elSubmitBtn) elSubmitBtn.disabled = false;
-      var rows = (sessionsBox || document).querySelectorAll(".surf-session-row");
-      rows.forEach(function (row) {
-        var isSel = row.getAttribute("data-session-id") === String(session.id);
-        row.classList.toggle("is-selected", isSel);
-        var b = row.querySelector(".surf-session-choose");
-        if (b) b.textContent = isSel ? selectedLabel : chooseLabel;
+      var slots = (sessionsBox || document).querySelectorAll(".surf-slot");
+      slots.forEach(function (slot) {
+        slot.classList.toggle("is-selected", slot.getAttribute("data-session-id") === String(session.id));
       });
       // bring the form into view so the customer sees their next step
       if (bookForm.scrollIntoView) bookForm.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // --- calendar helpers ---
+    function pad2(n) { return (n < 10 ? "0" : "") + n; }
+    function ymd(d) { return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); }
+    function mondayOf(dateStr) {
+      var d = new Date(dateStr + "T00:00:00");
+      var wd = (d.getDay() + 6) % 7; // 0 = Monday … 6 = Sunday
+      d.setDate(d.getDate() - wd);
+      return d;
+    }
+    function weekRange(monday) {
+      var sun = new Date(monday); sun.setDate(sun.getDate() + 6);
+      var mMon = monday.toLocaleDateString(undefined, { month: "short" });
+      var mSun = sun.toLocaleDateString(undefined, { month: "short" });
+      if (monday.getMonth() === sun.getMonth()) {
+        return monday.getDate() + "–" + sun.getDate() + " " + mMon;
+      }
+      return monday.getDate() + " " + mMon + " – " + sun.getDate() + " " + mSun;
     }
 
     function renderSessions() {
@@ -261,28 +279,54 @@
         sessionsBox.innerHTML = '<p class="surf-sessions-empty">' + emptyMsg + "</p>";
         return;
       }
-      sessionsBox.innerHTML = "";
+
+      // Group sessions: week (Monday) -> day (local_date) -> [sessions]
+      var weeks = {}, order = [], byId = {};
       sessions.forEach(function (s) {
-        var row = document.createElement("div");
-        row.className = "surf-session-row";
-        row.setAttribute("data-session-id", s.id);
-        var tide = s.tide && s.tide.type ? (s.tide.type + " tide · " + s.tide.time_local) : "";
-        var low = s.spots_left <= 2;
-        row.innerHTML =
-          '<div class="ssr-top">' +
-            '<div class="ssr-when"><span class="ssr-day">' + fmtDate(s) + '</span><span class="ssr-time">' + s.local_time + '</span></div>' +
-            (tide ? '<span class="ssr-tide">🌊 ' + tide + '</span>' : '') +
-          '</div>' +
-          '<div class="ssr-body">' +
-            '<span class="ssr-formula">' + s.formula_label + '</span>' +
-            '<span class="ssr-price">from <b>€' + s.price_from + '</b> <small>pp</small></span>' +
-          '</div>' +
-          '<div class="ssr-foot">' +
-            '<span class="ssr-spots' + (low ? ' is-low' : '') + '">' + s.spots_left + ' spots left</span>' +
-            '<button type="button" class="btn btn--primary btn--sm surf-session-choose">' + (chooseLabel) + '</button>' +
-          '</div>';
-        row.querySelector(".surf-session-choose").addEventListener("click", function () { selectSession(s); });
-        sessionsBox.appendChild(row);
+        byId[s.id] = s;
+        var mon = mondayOf(s.local_date), key = ymd(mon);
+        if (!weeks[key]) { weeks[key] = { monday: mon, byDay: {} }; order.push(key); }
+        (weeks[key].byDay[s.local_date] = weeks[key].byDay[s.local_date] || []).push(s);
+      });
+      order.sort();
+
+      var html = '<div class="surf-cal">';
+      order.forEach(function (key) {
+        var wk = weeks[key];
+        html += '<div class="surf-week">' +
+          '<div class="surf-week-head"><span class="sw-tag">' + weekLabel + '</span> ' + weekRange(wk.monday) + '</div>' +
+          '<div class="surf-week-grid">';
+        for (var i = 0; i < 7; i++) {
+          var day = new Date(wk.monday); day.setDate(day.getDate() + i);
+          var dk = ymd(day);
+          var wdName = day.toLocaleDateString(undefined, { weekday: "short" });
+          var list = wk.byDay[dk] || [];
+          html += '<div class="surf-day' + (list.length ? " has-slots" : " is-empty") + '">' +
+            '<div class="surf-day-head"><span class="sd-wd">' + wdName + '</span><span class="sd-num">' + day.getDate() + '</span></div>' +
+            '<div class="surf-day-body">';
+          if (list.length) {
+            list.forEach(function (s) {
+              var low = s.spots_left <= 2;
+              html += '<button type="button" class="surf-slot' + (low ? " is-low" : "") + '" data-session-id="' + s.id + '">' +
+                '<span class="slot-time">' + s.local_time + '</span>' +
+                '<span class="slot-spots">' + s.spots_left + " " + spotsWord + '</span>' +
+                '</button>';
+            });
+          } else {
+            html += '<span class="surf-day-none" aria-hidden="true">·</span>';
+          }
+          html += '</div></div>';
+        }
+        html += '</div></div>';
+      });
+      html += '</div>';
+      sessionsBox.innerHTML = html;
+
+      sessionsBox.querySelectorAll(".surf-slot").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var s = byId[btn.getAttribute("data-session-id")];
+          if (s) selectSession(s);
+        });
       });
     }
 
