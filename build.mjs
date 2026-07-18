@@ -125,7 +125,7 @@ ${alt}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Petrona:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${u.css}?v=8">
+<link rel="stylesheet" href="${u.css}?v=9">
 <link rel="icon" href="${u.logo}" type="image/png">${ld}
 </head>`;
 }
@@ -206,7 +206,7 @@ function footer(lang, key, c) {
   </div>
 </footer>
 <a class="wa-fab" href="${u.wa}" target="_blank" rel="noopener" aria-label="WhatsApp">${WA_SVG}</a>
-<script src="${u.js}" defer></script>
+<script src="${u.js}?v=2" defer></script>
 </body>
 </html>`;
 }
@@ -464,26 +464,32 @@ ${reviewsSection(t, lang)}
     return `
 <section class="page-hero"><div class="wrap"><div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p></div></div></section>
 <section class="section" id="surf-sessions-wrap"><div class="wrap">
-  <div class="section-head reveal"><h2 class="section-title">${t.fSessionH}</h2></div>
-  <section id="surf-sessions" class="surf-sessions-list reveal" data-api="${API_BASE}" data-lang="${lang}" data-empty="${t.fEmpty}"><p class="surf-sessions-loading">…</p></section>
+  <div class="section-head reveal"><p class="eyebrow">${t.crumb}</p><h2 class="section-title">${t.fSessionH}</h2></div>
+  <section id="surf-sessions" class="surf-sessions-list reveal" data-api="${API_BASE}" data-lang="${lang}" data-empty="${t.fEmpty}" data-choose="${t.fChoose || 'Choose'}" data-selected="${t.fSelected || 'Selected ✓'}"><p class="surf-sessions-loading">${t.fLoading || 'Loading available sessions…'}</p></section>
 </div></section>
-<section class="section section--tint" id="surf-book"><div class="wrap">
+<section class="section section--tint" id="surf-book"><div class="wrap surf-book-wrap">
   <form class="surf-book-form reveal" data-api="${API_BASE}" data-ok="${t.fOk}" data-err="${t.fErr}" data-sending="${t.fSending}" novalidate>
+    <p class="surf-form-eyebrow eyebrow">${t.fDetailsEyebrow || t.eyebrow}</p>
+    <h3 class="surf-form-title">${t.fDetailsTitle || t.fSessionH}</h3>
     <input type="hidden" name="session_id" value="">
     <input type="hidden" name="formula" value="">
-    <p class="surf-book-summary" data-empty="${t.fEmpty}">${t.fEmpty}</p>
+    <p class="surf-book-summary" data-empty="${t.fSummaryEmpty || 'Choose a session above to continue.'}">${t.fSummaryEmpty || 'Choose a session above to continue.'}</p>
 
-    <div class="field surf-field-party">
-      <label for="sb-party">${t.fParty}</label>
-      <input id="sb-party" name="party_size" type="number" min="1" max="1" value="1" required disabled>
-    </div>
-    <div class="field surf-field-pack">
-      <label for="sb-pack">${t.fPack}</label>
-      <select id="sb-pack" name="pack_size" required disabled><option value="1">1</option></select>
+    <div class="surf-field-row">
+      <div class="field surf-field-party">
+        <label for="sb-party">${t.fParty}</label>
+        <input id="sb-party" name="party_size" type="number" min="1" max="1" value="1" required disabled>
+      </div>
+      <div class="field surf-field-pack">
+        <label for="sb-pack">${t.fPack}</label>
+        <select id="sb-pack" name="pack_size" required disabled><option value="1">1</option></select>
+      </div>
     </div>
     <div class="field"><label for="sb-name">${t.fName}</label><input id="sb-name" name="full_name" type="text" autocomplete="name" required></div>
-    <div class="field"><label for="sb-email">${t.fEmail}</label><input id="sb-email" name="email" type="email" autocomplete="email" required></div>
-    <div class="field"><label for="sb-phone">${t.fPhone}</label><input id="sb-phone" name="phone" type="tel" autocomplete="tel"></div>
+    <div class="surf-field-row">
+      <div class="field"><label for="sb-email">${t.fEmail}</label><input id="sb-email" name="email" type="email" autocomplete="email" required></div>
+      <div class="field"><label for="sb-phone">${t.fPhone}</label><input id="sb-phone" name="phone" type="tel" autocomplete="tel"></div>
+    </div>
     <div class="field">
       <label for="sb-lang">${t.fLang}</label>
       <select id="sb-lang" name="language">
@@ -493,10 +499,10 @@ ${reviewsSection(t, lang)}
       </select>
     </div>
     <div class="field"><label for="sb-remarks">${t.fRemarks}</label><textarea id="sb-remarks" name="remarks"></textarea></div>
-    <div class="field surf-field-consent"><label><input type="checkbox" name="marketing_consent" value="1"> ${t.fConsent}</label></div>
+    <label class="surf-consent"><input type="checkbox" name="marketing_consent" value="1"> <span>${t.fConsent}</span></label>
     <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden"><label for="sb-company">Company</label><input id="sb-company" name="_honey" type="text" tabindex="-1" autocomplete="off"><input type="hidden" name="_ts" value=""></div>
     <p class="deposit-note">${t.deposit}</p>
-    <button type="submit" class="btn btn--coral" disabled>${t.fSubmit}</button>
+    <button type="submit" class="btn btn--coral surf-submit" disabled>${t.fSubmit}</button>
     <p class="form-status" role="status" aria-live="polite" hidden></p>
   </form>
 </div></section>`;

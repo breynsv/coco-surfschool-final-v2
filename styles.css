@@ -720,3 +720,191 @@ body.menu-open .wa-fab{opacity:0;visibility:hidden;transition:.2s}
   .hero-media{ width:100%; }
   .hero-slides{ width:100%; }
 }
+
+/* ============================================================
+   Online surf booking page (.surf-*) — matches Seafoam & Coral
+   ============================================================ */
+
+/* Session cards ------------------------------------------------ */
+.surf-sessions-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+  gap: 1.1rem;
+}
+.surf-sessions-loading,
+.surf-sessions-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--ink-soft);
+  padding: 2.4rem 0;
+  font-size: 1rem;
+}
+.surf-session-row {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  background: var(--white);
+  border: 1px solid rgba(180, 211, 196, .5);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.35rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform .28s var(--ease), box-shadow .28s var(--ease), border-color .28s var(--ease);
+}
+.surf-session-row:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--mint-2);
+}
+.surf-session-row.is-selected {
+  border-color: var(--coral-deep);
+  background: linear-gradient(175deg, var(--coral-soft) -30%, #fff 55%);
+  box-shadow: var(--shadow-md);
+}
+.ssr-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .6rem;
+}
+.ssr-when { display: flex; flex-direction: column; line-height: 1.1; }
+.ssr-day {
+  font-family: var(--font-display);
+  font-size: .92rem;
+  font-weight: 600;
+  letter-spacing: .03em;
+  color: var(--coral-deep);
+  text-transform: capitalize;
+}
+.ssr-time {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.ssr-tide {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  color: var(--seafoam-deep);
+  background: var(--mint);
+  padding: .32rem .6rem;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.ssr-body {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .6rem;
+  padding-top: .15rem;
+  border-top: 1px solid var(--mint-line);
+}
+.ssr-formula { font-size: .95rem; color: var(--ink-soft); font-weight: 600; }
+.ssr-price {
+  font-size: .9rem;
+  color: var(--ink-soft);
+  font-family: var(--font-display);
+  white-space: nowrap;
+}
+.ssr-price b { font-size: 1.15rem; color: var(--ink); font-weight: 600; }
+.ssr-price small { font-family: var(--font-body); font-size: .72rem; color: var(--seafoam-deep); }
+.ssr-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .6rem;
+  margin-top: auto;
+}
+.ssr-spots { font-size: .84rem; font-weight: 600; color: var(--seafoam-deep); }
+.ssr-spots.is-low { color: var(--coral-deep); }
+.surf-session-choose { flex-shrink: 0; }
+
+/* Booking form panel ------------------------------------------- */
+.surf-book-wrap { max-width: 680px; }
+.surf-book-form {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.6rem, 3.5vw, 2.6rem);
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(180, 211, 196, .4);
+}
+.surf-form-eyebrow { margin-bottom: .5rem; }
+.surf-form-title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin: 0 0 1.3rem;
+}
+.surf-book-summary {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  background: var(--mint);
+  border: 1px solid var(--mint-2);
+  border-radius: 14px;
+  padding: .85rem 1.1rem;
+  margin: 0 0 1.4rem;
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  color: var(--ink);
+  min-height: 52px;
+}
+.surf-book-summary::before { content: "🏄"; font-size: 1.1rem; }
+.surf-book-summary:empty::before,
+.surf-book-summary.is-empty { color: var(--ink-soft); font-family: var(--font-body); font-size: .95rem; }
+
+.surf-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1rem;
+}
+
+/* Selects were unstyled in the base sheet — match .field inputs. */
+.field select {
+  width: 100%;
+  padding: .85rem 2.4rem .85rem 1rem;
+  border: 1.5px solid var(--mint-line);
+  border-radius: 14px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--ink);
+  background-color: var(--cream);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%233F6957' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .95rem center;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color .2s;
+}
+.field select:focus {
+  outline: 2px solid var(--coral-deep);
+  outline-offset: 2px;
+  border-color: var(--seafoam-deep);
+  background-color: #fff;
+}
+.field input:disabled,
+.field select:disabled { opacity: .55; cursor: not-allowed; }
+
+.surf-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  font-size: .9rem;
+  color: var(--ink-soft);
+  margin: .2rem 0 1.2rem;
+  cursor: pointer;
+}
+.surf-consent input[type="checkbox"] {
+  width: 20px; height: 20px;
+  flex-shrink: 0;
+  margin-top: .1rem;
+  accent-color: var(--coral-deep);
+  cursor: pointer;
+}
+.surf-submit { width: 100%; margin-top: .3rem; }
+.surf-book-form .deposit-note { margin-bottom: 1.2rem; }
+.surf-book-form .btn:disabled { opacity: .55; cursor: not-allowed; }
+
+@media (max-width: 560px) {
+  .surf-field-row { grid-template-columns: 1fr; gap: 0; }
+}

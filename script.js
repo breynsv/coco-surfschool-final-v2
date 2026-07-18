@@ -179,6 +179,8 @@
     var sessionsBox = document.getElementById("surf-sessions");
     var api = (sessionsBox && sessionsBox.getAttribute("data-api")) || bookForm.getAttribute("data-api") || "";
     var emptyMsg = (sessionsBox && sessionsBox.getAttribute("data-empty")) || "No sessions available.";
+    var chooseLabel = (sessionsBox && sessionsBox.getAttribute("data-choose")) || "Choose";
+    var selectedLabel = (sessionsBox && sessionsBox.getAttribute("data-selected")) || "Selected ✓";
 
     var elSessionId = bookForm.querySelector('input[name="session_id"]');
     var elFormula = bookForm.querySelector('input[name="formula"]');
@@ -242,9 +244,15 @@
         elPack.disabled = false;
       }
       if (elSubmitBtn) elSubmitBtn.disabled = false;
-      bookForm.querySelectorAll(".surf-session-row").forEach(function (row) {
-        row.classList.toggle("is-selected", row.getAttribute("data-session-id") === String(session.id));
+      var rows = (sessionsBox || document).querySelectorAll(".surf-session-row");
+      rows.forEach(function (row) {
+        var isSel = row.getAttribute("data-session-id") === String(session.id);
+        row.classList.toggle("is-selected", isSel);
+        var b = row.querySelector(".surf-session-choose");
+        if (b) b.textContent = isSel ? selectedLabel : chooseLabel;
       });
+      // bring the form into view so the customer sees their next step
+      if (bookForm.scrollIntoView) bookForm.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function renderSessions() {
@@ -258,12 +266,21 @@
         var row = document.createElement("div");
         row.className = "surf-session-row";
         row.setAttribute("data-session-id", s.id);
-        var tide = s.tide ? (s.tide.type + " tide " + s.tide.time_local) : "";
+        var tide = s.tide && s.tide.type ? (s.tide.type + " tide · " + s.tide.time_local) : "";
+        var low = s.spots_left <= 2;
         row.innerHTML =
-          '<div class="ssr-info"><b>' + fmtDate(s) + " · " + s.local_time + '</b>' +
-          '<span>' + s.formula_label + " · from €" + s.price_from + '</span>' +
-          '<span>' + s.spots_left + ' spots left' + (tide ? " · " + tide : "") + '</span></div>' +
-          '<button type="button" class="btn btn--ghost btn--sm surf-session-choose">Choose</button>';
+          '<div class="ssr-top">' +
+            '<div class="ssr-when"><span class="ssr-day">' + fmtDate(s) + '</span><span class="ssr-time">' + s.local_time + '</span></div>' +
+            (tide ? '<span class="ssr-tide">🌊 ' + tide + '</span>' : '') +
+          '</div>' +
+          '<div class="ssr-body">' +
+            '<span class="ssr-formula">' + s.formula_label + '</span>' +
+            '<span class="ssr-price">from <b>€' + s.price_from + '</b> <small>pp</small></span>' +
+          '</div>' +
+          '<div class="ssr-foot">' +
+            '<span class="ssr-spots' + (low ? ' is-low' : '') + '">' + s.spots_left + ' spots left</span>' +
+            '<button type="button" class="btn btn--primary btn--sm surf-session-choose">' + (chooseLabel) + '</button>' +
+          '</div>';
         row.querySelector(".surf-session-choose").addEventListener("click", function () { selectSession(s); });
         sessionsBox.appendChild(row);
       });
