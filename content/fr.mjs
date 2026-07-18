@@ -2,8 +2,8 @@
 const CARDS = [
   { img: 'real-deluxe-group.jpg', alt: 'Petit groupe de surfeurs sur la plage', title: 'Cours collectif deluxe', from: 'dès 44 €', p: 'Un cours de 2 à 6 personnes : la formule entre collectif et privé pour progresser plus vite. Plus de temps avec le coach.', chips: ['Petit groupe · max 6', '±2h total', 'Matériel inclus'] },
   { img: 'real-lesson-kids.jpg', alt: 'Élèves qui apprennent à surfer dans la mousse', title: 'Cours collectif', from: 'dès 38 €', p: 'Un cours en groupe de qualité de 7 à 8 personnes avec un moniteur. L’ambiance et la bonne humeur en plus.', chips: ['Grand groupe · 7–8', '±2h total', 'Matériel inclus'] },
-  { img: 'a29fce_449771ae1e2d4c52aa0fbe3159160d3b.jpg', alt: 'Une surfeuse sur une belle vague verte', title: 'Cours privé', from: 'dès 130 €', p: 'Un cours rien que pour vous, en couple, en famille ou entre amis. Un moniteur entièrement dédié à votre progression.', chips: ['Votre propre groupe · 1–7', '±2h total', 'Sur mesure'] },
-  { img: 'a29fce_9ddbf1309cf04bb189e246d843dfc188.jpg', alt: 'Des collègues rejoignent l’océan avec leurs planches', title: 'Entreprises & team building', from: 'sur demande', p: 'Une sortie sportive entre collègues ! Esprit d’équipe, anti-stress, sourires et fun au rendez-vous.', chips: ['Sur demande', 'Cohésion'] },
+  { img: 'lesson-prive.jpg', alt: 'Une surfeuse sur une belle vague verte', title: 'Cours privé', from: 'dès 130 €', p: 'Un cours rien que pour vous, en couple, en famille ou entre amis. Un moniteur entièrement dédié à votre progression.', chips: ['Votre propre groupe · 1–7', '±2h total', 'Sur mesure'] },
+  { img: 'lesson-team.jpg', alt: 'Des collègues rejoignent l’océan avec leurs planches', title: 'Entreprises & team building', from: 'sur demande', p: 'Une sortie sportive entre collègues ! Esprit d’équipe, anti-stress, sourires et fun au rendez-vous.', chips: ['Sur demande', 'Cohésion'] },
 ];
 export default {
   waText: 'Bonjour Coco Surf School, j’aimerais réserver un cours de surf.',

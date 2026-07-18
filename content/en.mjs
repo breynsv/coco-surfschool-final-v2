@@ -2,8 +2,8 @@
 const CARDS = [
   { img: 'real-deluxe-group.jpg', alt: 'A small group of surfers on the beach', title: 'Deluxe group lesson', from: 'from €44', p: 'A lesson with 2 to max 6 people per instructor: the formula between group and private to progress faster. More one-on-one time with the coach.', chips: ['Small group · max 6', '±2h total', 'Gear included'] },
   { img: 'real-lesson-kids.jpg', alt: 'Students learning to surf in the white water', title: 'Group lesson', from: 'from €38', p: 'A quality lesson of 7 to 8 people with one instructor. Good vibes and great company included.', chips: ['Largest group · 7–8', '±2h total', 'Gear included'] },
-  { img: 'a29fce_449771ae1e2d4c52aa0fbe3159160d3b.jpg', alt: 'A surfer riding a beautiful green wave', title: 'Private lesson', from: 'from €130', p: 'A lesson just for you, as a couple, with family or friends. An instructor fully dedicated to your progression.', chips: ['Your own group · 1–7', '±2h total', 'Tailor-made'] },
-  { img: 'a29fce_9ddbf1309cf04bb189e246d843dfc188.jpg', alt: 'Colleagues heading to the ocean with their boards', title: 'Companies &amp; team building', from: 'on request', p: 'A sporty day out with your colleagues! Team spirit, stress relief, smiles and fun all round.', chips: ['On request', 'Team bonding'] },
+  { img: 'lesson-prive.jpg', alt: 'A surfer riding a beautiful green wave', title: 'Private lesson', from: 'from €130', p: 'A lesson just for you, as a couple, with family or friends. An instructor fully dedicated to your progression.', chips: ['Your own group · 1–7', '±2h total', 'Tailor-made'] },
+  { img: 'lesson-team.jpg', alt: 'Colleagues heading to the ocean with their boards', title: 'Companies &amp; team building', from: 'on request', p: 'A sporty day out with your colleagues! Team spirit, stress relief, smiles and fun all round.', chips: ['On request', 'Team bonding'] },
 ];
 export default {
   waText: 'Hello Coco Surf School, I’d love to book a surf lesson.',

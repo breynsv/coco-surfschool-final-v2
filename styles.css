@@ -315,10 +315,11 @@ h1, h2, h3, h4 {
 
 /* Hero image carousel (3 photos, CSS crossfade) */
 .hero-slides { position: relative; width: 100%; aspect-ratio: 4/5; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); }
-.hero-slides img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 0; box-shadow: none; opacity: 0; animation: heroFade 18s infinite; }
+.hero-slides img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 0; box-shadow: none; opacity: 0; animation: heroFade 24s infinite; }
 .hero-slides img:nth-child(2) { animation-delay: -6s; }
 .hero-slides img:nth-child(3) { animation-delay: -12s; }
-@keyframes heroFade { 0% { opacity: 0 } 2% { opacity: 1 } 30% { opacity: 1 } 35% { opacity: 0 } 100% { opacity: 0 } }
+.hero-slides img:nth-child(4) { animation-delay: -18s; }
+@keyframes heroFade { 0% { opacity: 0 } 1.5% { opacity: 1 } 22% { opacity: 1 } 26% { opacity: 0 } 100% { opacity: 0 } }
 @media (prefers-reduced-motion: reduce) { .hero-slides img { animation: none; opacity: 0 } .hero-slides img:first-child { opacity: 1 } }
 @media (max-width: 960px) { .hero-slides { aspect-ratio: 5/4; } }
 

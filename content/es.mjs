@@ -2,8 +2,8 @@
 const CARDS = [
   { img: 'real-deluxe-group.jpg', alt: 'Un pequeño grupo de surfistas en la playa', title: 'Clase de grupo deluxe', from: 'desde 44 €', p: 'Una clase de 2 a 6 personas máx. por monitor: la fórmula entre grupo y privado para progresar más rápido. Más tiempo con el coach.', chips: ['Grupo pequeño · máx. 6', '±2 h en total', 'Material incluido'] },
   { img: 'real-lesson-kids.jpg', alt: 'Alumnos aprendiendo a surfear en la espuma', title: 'Clase de grupo', from: 'desde 38 €', p: 'Una clase de calidad de 7 a 8 personas con un monitor. Buen ambiente y buen rollo incluidos.', chips: ['Grupo más grande · 7–8', '±2 h en total', 'Material incluido'] },
-  { img: 'a29fce_449771ae1e2d4c52aa0fbe3159160d3b.jpg', alt: 'Una surfista en una bonita ola verde', title: 'Clase privada', from: 'desde 130 €', p: 'Una clase solo para ti, en pareja, en familia o con amigos. Un monitor totalmente dedicado a tu progresión.', chips: ['Tu propio grupo · 1–7', '±2 h en total', 'A medida'] },
-  { img: 'a29fce_9ddbf1309cf04bb189e246d843dfc188.jpg', alt: 'Compañeros de trabajo van al océano con sus tablas', title: 'Empresas &amp; team building', from: 'a petición', p: '¡Una salida deportiva entre compañeros! Espíritu de equipo, antiestrés, sonrisas y diversión garantizadas.', chips: ['A petición', 'Cohesión'] },
+  { img: 'lesson-prive.jpg', alt: 'Una surfista en una bonita ola verde', title: 'Clase privada', from: 'desde 130 €', p: 'Una clase solo para ti, en pareja, en familia o con amigos. Un monitor totalmente dedicado a tu progresión.', chips: ['Tu propio grupo · 1–7', '±2 h en total', 'A medida'] },
+  { img: 'lesson-team.jpg', alt: 'Compañeros de trabajo van al océano con sus tablas', title: 'Empresas &amp; team building', from: 'a petición', p: '¡Una salida deportiva entre compañeros! Espíritu de equipo, antiestrés, sonrisas y diversión garantizadas.', chips: ['A petición', 'Cohesión'] },
 ];
 export default {
   waText: 'Hola Coco Surf School, me gustaría reservar una clase de surf.',

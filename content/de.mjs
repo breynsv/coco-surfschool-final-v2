@@ -2,8 +2,8 @@
 const CARDS = [
   { img: 'real-deluxe-group.jpg', alt: 'Eine kleine Gruppe Surfer am Strand', title: 'Deluxe-Gruppenkurs', from: 'ab 44 €', p: 'Ein Kurs mit 2 bis max. 6 Personen pro Coach: die Formel zwischen Gruppe und Privat, um schneller Fortschritte zu machen. Mehr Zeit mit dem Coach.', chips: ['Kleine Gruppe · max. 6', '±2 Std. gesamt', 'Material inklusive'] },
   { img: 'real-lesson-kids.jpg', alt: 'Schüler lernen surfen im Weißwasser', title: 'Gruppenkurs', from: 'ab 38 €', p: 'Ein hochwertiger Kurs mit 7 bis max. 8 Personen und einem Coach. Gute Stimmung und Spaß inklusive.', chips: ['Größte Gruppe · 7–8', '±2 Std. gesamt', 'Material inklusive'] },
-  { img: 'a29fce_449771ae1e2d4c52aa0fbe3159160d3b.jpg', alt: 'Eine Surferin auf einer schönen grünen Welle', title: 'Privatkurs', from: 'ab 130 €', p: 'Ein Kurs nur für dich, zu zweit, mit der Familie oder mit Freunden. Ein Coach, der sich voll auf deinen Fortschritt konzentriert.', chips: ['Deine eigene Gruppe · 1–7', '±2 Std. gesamt', 'Maßgeschneidert'] },
-  { img: 'a29fce_9ddbf1309cf04bb189e246d843dfc188.jpg', alt: 'Kollegen gehen mit ihren Boards zum Ozean', title: 'Firmen &amp; Teambuilding', from: 'auf Anfrage', p: 'Ein sportlicher Ausflug mit den Kollegen! Teamgeist, Stressabbau, Lächeln und Spaß garantiert.', chips: ['Auf Anfrage', 'Zusammenhalt'] },
+  { img: 'lesson-prive.jpg', alt: 'Eine Surferin auf einer schönen grünen Welle', title: 'Privatkurs', from: 'ab 130 €', p: 'Ein Kurs nur für dich, zu zweit, mit der Familie oder mit Freunden. Ein Coach, der sich voll auf deinen Fortschritt konzentriert.', chips: ['Deine eigene Gruppe · 1–7', '±2 Std. gesamt', 'Maßgeschneidert'] },
+  { img: 'lesson-team.jpg', alt: 'Kollegen gehen mit ihren Boards zum Ozean', title: 'Firmen &amp; Teambuilding', from: 'auf Anfrage', p: 'Ein sportlicher Ausflug mit den Kollegen! Teamgeist, Stressabbau, Lächeln und Spaß garantiert.', chips: ['Auf Anfrage', 'Zusammenhalt'] },
 ];
 export default {
   waText: 'Hallo Coco Surf School, ich möchte gerne einen Surfkurs buchen.',
