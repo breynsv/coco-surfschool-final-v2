@@ -180,7 +180,8 @@
 .sum-total .sub .rest{color:#fff; font-weight:600}
 .sum-foot{padding:14px 24px 20px; font-size:12.5px; color:var(--ink-soft); display:flex; gap:9px; align-items:flex-start}
 .sum-foot svg{width:15px; height:15px; color:var(--seafoam-deep); flex:none; margin-top:2px}
-@media(max-width:959px){ .summary{position:static; order:-1} }
+/* mobile: keep the wizard on top and let the summary follow below it */
+@media(max-width:959px){ .summary{position:static; order:0} }
 
 /* confirmation */
 .done-wrap{text-align:center; padding:20px 10px 8px}
