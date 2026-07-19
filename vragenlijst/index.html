@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Coco Surf School — Vragen over de reservatietool</title>
+<style>
+  :root{
+    --bg:#F5F9F7; --surface:#FFFFFF;
+    --ink:#23413A; --ink-soft:#4C635C;
+    --seafoam:#8FBBAA; --seafoam-deep:#3F6957; --seafoam-tint:#E3EFE9;
+    --coral:#E9A899; --coral-soft:#F5D3CA; --coral-deep:#B0543F;
+    --gold:#E4B24C;
+    --line:rgba(63,105,87,.16);
+    --shadow-sm:0 4px 18px rgba(45,80,71,.06);
+    --shadow-md:0 18px 50px rgba(45,80,71,.10);
+    --serif:Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink-soft);
+    font-family:var(--sans);font-size:17px;line-height:1.65;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .wrap{max-width:940px;margin:0 auto;padding:0 24px}
+  h1,h2,h3{font-family:var(--serif);color:var(--ink);font-weight:600;
+    text-wrap:balance;letter-spacing:-.01em;margin:0}
+  a{color:var(--coral-deep)}
+  .eyebrow{font-family:var(--sans);text-transform:uppercase;letter-spacing:.16em;
+    font-size:.72rem;font-weight:700;color:var(--coral-deep);margin:0}
+
+  /* ---- hero ---- */
+  .hero{position:relative;overflow:hidden;
+    background:linear-gradient(165deg,#EAF3EE 0%,var(--seafoam-tint) 48%,#DCEBE3 100%);
+    padding:60px 0 0}
+  .hero .wrap{position:relative;z-index:2;padding-bottom:96px}
+  .hero-badge{display:inline-flex;align-items:center;gap:.5rem;
+    background:rgba(255,255,255,.72);border:1px solid var(--line);
+    border-radius:999px;padding:.32rem .8rem;font-size:.8rem;font-weight:600;
+    color:var(--seafoam-deep);margin-bottom:1.3rem}
+  .hero-badge .dot{width:.5rem;height:.5rem;border-radius:50%;background:var(--seafoam-deep);
+    box-shadow:0 0 0 4px rgba(63,105,87,.16)}
+  .hero h1{font-size:clamp(2.05rem,5.2vw,3.15rem);line-height:1.08;margin:.2rem 0 .9rem}
+  .hero h1 em{font-style:normal;color:var(--coral-deep)}
+  .hero p.lead{font-size:1.1rem;max-width:38em;margin:0 0 1.2rem;color:var(--ink-soft)}
+  .hero p.lead strong{color:var(--ink)}
+  .cta-row{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;border-radius:999px;
+    padding:.72rem 1.35rem;font-weight:700;font-size:.95rem;text-decoration:none;
+    border:none;cursor:pointer;font-family:var(--sans);
+    transition:transform .15s ease,box-shadow .15s ease}
+  .btn--primary{background:var(--coral-deep);color:#fff;box-shadow:var(--shadow-sm)}
+  .btn--primary:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+  .btn--ghost{color:var(--seafoam-deep);border:1px solid var(--line);background:rgba(255,255,255,.5)}
+  .btn--ghost:hover{background:#fff}
+  .wave{position:absolute;left:0;right:0;bottom:-1px;width:100%;display:block;z-index:1}
+
+  /* ---- sections ---- */
+  section.block{padding:44px 0 8px}
+  .sec-head{display:flex;align-items:baseline;gap:.9rem;margin-bottom:1.3rem;flex-wrap:wrap}
+  .sec-head h2{font-size:clamp(1.45rem,3.2vw,1.95rem)}
+  .sec-head .count{font-family:var(--sans);font-size:.78rem;font-weight:700;color:var(--seafoam-deep);
+    background:var(--seafoam-tint);border-radius:999px;padding:.2rem .7rem}
+
+  /* ---- question card ---- */
+  .q{background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:18px 20px;box-shadow:var(--shadow-sm);margin-bottom:14px}
+  .q-label{font-family:var(--sans);font-weight:700;color:var(--ink);font-size:1.02rem;
+    margin:0;display:flex;gap:.6rem;align-items:baseline}
+  .q-num{flex:none;font-family:var(--serif);font-weight:700;color:var(--coral-deep);
+    font-size:.95rem;min-width:2.3rem}
+  .q-help{margin:.35rem 0 .1rem 2.9rem;font-size:.9rem;color:var(--ink-soft)}
+  .q-body{margin:.85rem 0 0 2.9rem;display:flex;flex-direction:column;gap:.55rem}
+  @media(max-width:560px){.q-help,.q-body{margin-left:0}}
+
+  .choices{display:flex;flex-direction:column;gap:.45rem}
+  .choices.inline{flex-flow:row wrap}
+  .choice{display:flex;gap:.6rem;align-items:flex-start;padding:.58rem .8rem;
+    border:1px solid var(--line);border-radius:12px;background:var(--bg);cursor:pointer;
+    transition:border-color .15s ease,background .15s ease,box-shadow .15s ease;font-size:.96rem}
+  .choice:hover{border-color:var(--seafoam);background:#fff}
+  .choice input{margin-top:.12rem;accent-color:var(--coral-deep);width:1.15rem;height:1.15rem;flex:none}
+  .choice:has(input:checked){border-color:var(--coral-deep);background:#fff;box-shadow:0 4px 14px rgba(176,84,63,.09)}
+  .choice span b{color:var(--ink)}
+  .choice em{font-style:italic;color:var(--ink-soft)}
+
+  input[type=text],input[type=number],input[type=email],textarea,select{
+    width:100%;font-family:var(--sans);font-size:.98rem;color:var(--ink);
+    background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:.64rem .8rem}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--seafoam);
+    background:#fff;box-shadow:0 0 0 3px rgba(143,187,170,.25)}
+  textarea{resize:vertical;min-height:68px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.55rem}
+  @media(max-width:560px){.grid2{grid-template-columns:1fr}}
+  .row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+  .row label.tag{font-size:.92rem;color:var(--ink-soft);font-weight:600;min-width:9.5rem}
+  .row input{max-width:9rem}
+  .unit{font-size:.9rem;color:var(--ink-soft)}
+
+  .scenario{background:var(--coral-soft);border:1px solid var(--coral);border-radius:14px;
+    padding:13px 16px;font-size:.95rem;color:var(--ink);line-height:1.55}
+  .scenario b{color:var(--coral-deep)}
+
+  .note{background:var(--seafoam-tint);border-radius:20px;padding:20px 22px;
+    display:flex;gap:.9rem;align-items:flex-start;margin:8px 0}
+  .note .ic{font-size:1.3rem;line-height:1}
+  .note p{margin:0;font-size:.95rem;color:var(--seafoam-deep)}
+  .note strong{color:var(--ink)}
+
+  /* ---- submit ---- */
+  .submit{background:var(--surface);border:1px solid var(--line);border-radius:22px;
+    padding:28px 26px;box-shadow:var(--shadow-md);text-align:center}
+  .submit h2{font-size:1.5rem;margin-bottom:.4rem}
+  .submit p{margin:.2rem auto 1.1rem;max-width:40em;font-size:.98rem}
+  .submit .cta-row{justify-content:center}
+  #out{width:100%;min-height:150px;margin-top:16px;font-family:var(--sans);
+    font-size:.85rem;line-height:1.5;display:none}
+  #out.show{display:block}
+  .saved-flag{font-size:.82rem;color:var(--seafoam-deep);margin-top:.9rem}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;padding:.7rem 1.2rem;border-radius:999px;
+    font-size:.9rem;font-weight:600;box-shadow:var(--shadow-md);opacity:0;pointer-events:none;
+    transition:opacity .2s ease,transform .2s ease;z-index:80}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  footer{padding:38px 0 60px;text-align:center;color:var(--seafoam-deep);font-size:.86rem}
+  footer .sign{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--ink);margin-bottom:.3rem}
+
+  @media(prefers-reduced-motion:no-preference){
+    .hero .wrap>*{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+    .hero .wrap>*:nth-child(2){animation-delay:.06s}
+    .hero .wrap>*:nth-child(3){animation-delay:.12s}
+    .hero .wrap>*:nth-child(4){animation-delay:.18s}
+    @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Coco Surf School · online reservatietool</p>
+    <div class="hero-badge"><span class="dot"></span> Voor Annelies · duurt ± 10 minuten</div>
+    <h1>Dag Annelies, een paar vragen over hoe <em>jij werkt</em></h1>
+    <p class="lead">We willen de online reservatie bouwen zoals het bij Coco écht loopt, en niet omgekeerd.
+      Beantwoord wat je kan (kort mag altijd). Waar we een voorstel doen, mag je gewoon een vakje aankruisen.
+      <strong>Je antwoorden worden automatisch bewaard</strong> in deze browser terwijl je invult, en onderaan
+      klik je op <strong>“Kopieer mijn antwoorden”</strong> om ze door te sturen.</p>
+    <div class="cta-row">
+      <a class="btn btn--primary" href="#s1">Start met de vragen ↓</a>
+      <a class="btn btn--ghost" href="#klaar">Meteen doorsturen ↓</a>
+    </div>
+  </div>
+  <svg class="wave" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,48 C240,88 480,88 720,58 C960,28 1200,28 1440,54 L1440,90 L0,90 Z" fill="#F5F9F7"/>
+  </svg>
+</header>
+
+<main id="form">
+
+  <!-- ===== 1. Lestypes ===== -->
+  <section class="block wrap" id="s1">
+    <div class="sec-head"><h2>1 · Lestypes &amp; aanbod</h2><span class="count">jouw aanbod</span></div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">1.1</span> Welke soorten lessen bied je aan?</p>
+      <div class="q-body">
+        <div class="choices">
+          <label class="choice"><input type="checkbox"><span>Groepsles (normaal)</span></label>
+          <label class="choice"><input type="checkbox"><span>Groepsles <b>“deluxe”</b> <em>(wat is precies het verschil met een normale groepsles?)</em></span></label>
+          <label class="choice"><input type="checkbox"><span>Privéles (1-op-1)</span></label>
+          <label class="choice"><input type="checkbox"><span>Ontdekking / “discovery” (eerste keer)</span></label>
+          <label class="choice"><input type="checkbox"><span>Kids club</span></label>
+          <label class="choice"><input type="checkbox"><span>Stage / meerdaagse (surfkamp)</span></label>
+          <label class="choice"><input type="checkbox"><span>Surf &amp; yoga</span></label>
+          <label class="choice"><input type="checkbox"><span>Longboard</span></label>
+        </div>
+        <input type="text" placeholder="Nog een ander lestype? Schrijf het hier…">
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">1.2</span> Wat is verreweg je <b>meest geboekte</b> les?</p>
+      <p class="q-help">Bv. normale groepsles, deluxe, privé…</p>
+      <div class="q-body"><input type="text" placeholder="Je meest gevraagde les…"></div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">1.3</span> Wat is het verschil tussen “deluxe” en een normale groepsles?</p>
+      <div class="q-body"><textarea placeholder="Kleinere groep? Betere coach-ratio? Ander materiaal? Andere prijs?"></textarea></div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">1.4</span> Hoeveel surfers zitten er <b>maximum</b> in elk type, en hoe lang duurt een les?</p>
+      <div class="q-body">
+        <div class="row"><label class="tag">Normale groepsles</label><input type="text" placeholder="bv. max 8 · 1u30"></div>
+        <div class="row"><label class="tag">Deluxe groepsles</label><input type="text" placeholder="bv. max 5 · 1u30"></div>
+        <div class="row"><label class="tag">Privéles</label><input type="text" placeholder="bv. 1 pers · 1u"></div>
+        <div class="row"><label class="tag">Kids club</label><input type="text" placeholder="bv. max 8 · 1u"></div>
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">1.5</span> Werk je met <b>niveaus</b> (beginner / gemiddeld / gevorderd)?</p>
+      <div class="q-body">
+        <div class="choices inline">
+          <label class="choice"><input type="radio" name="q15"><span>Nee, alles samen</span></label>
+          <label class="choice"><input type="radio" name="q15"><span>Ja, aparte sessies per niveau</span></label>
+          <label class="choice"><input type="radio" name="q15"><span>Ja, maar gemengd in dezelfde sessie</span></label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 2. Privé vs groep ===== -->
+  <section class="block wrap">
+    <div class="sec-head"><h2>2 · Privé vs groep: de belangrijkste vraag</h2><span class="count">planning</span></div>
+    <div class="note"><span class="ic">🧭</span><p>Dit stuk moet de tool goed krijgen. Alles draait rond één ding:
+      <strong>hoeveel lessen kunnen er tegelijk doorgaan?</strong></p></div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">2.1</span> Hoeveel lesgevers/coaches zijn er <b>tegelijk</b> beschikbaar per tijdslot?</p>
+      <div class="q-body">
+        <div class="choices">
+          <label class="choice"><input type="radio" name="q21"><span>Alleen ik (Annelies) → <b>1 les tegelijk</b></span></label>
+          <label class="choice"><input type="radio" name="q21"><span>Meestal ik + 1 extra coach → 2 lessen tegelijk</span></label>
+          <label class="choice"><input type="radio" name="q21"><span>Wisselt per dag/seizoen (leg uit hieronder)</span></label>
+        </div>
+        <input type="text" placeholder="Toelichting (optioneel)…">
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">2.2</span> Scenario: iemand wil morgen om 9u een <b>privéles</b>, maar 4 anderen willen om 9u een <b>groepsles</b>. Wat moet er gebeuren?</p>
+      <div class="scenario">Als er maar één coach is, kan er per uur maar één les doorgaan, dus privé en groep botsen. Kies wat voor jou juist voelt:</div>
+      <div class="q-body">
+        <div class="choices">
+          <label class="choice"><input type="radio" name="q22"><span><b>A.</b> Wie eerst boekt, krijgt het slot. Zodra 9u privé geboekt is, verdwijnt 9u als groepsslot (en omgekeerd).</span></label>
+          <label class="choice"><input type="radio" name="q22"><span><b>B.</b> Groepsles heeft altijd voorrang; privé mag enkel op uren waar zeker geen groep komt.</span></label>
+          <label class="choice"><input type="radio" name="q22"><span><b>C.</b> Privé heeft voorrang.</span></label>
+          <label class="choice"><input type="radio" name="q22"><span><b>D.</b> Ik beslis dit liever manueel per geval (de tool stuurt me de aanvraag, ik bevestig).</span></label>
+        </div>
+        <input type="text" placeholder="Of een andere aanpak? Schrijf het hier…">
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">2.3</span> Klopt dit gedrag in de tool?</p>
+      <p class="q-help">Bij <b>privéles</b> → toon enkel uren waar nog geen groep geboekt is. Bij <b>groepsles</b> → verberg de uren waar al een privé geboekt is.</p>
+      <div class="q-body">
+        <div class="choices inline">
+          <label class="choice"><input type="radio" name="q23"><span>Ja, precies zo</span></label>
+          <label class="choice"><input type="radio" name="q23"><span>Nee (leg uit)</span></label>
+        </div>
+        <input type="text" placeholder="Wat moet er anders?">
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">2.4</span> Als er tóch 2 coaches zijn: mogen een privé- en een groepsles dan <b>wél tegelijk</b> doorgaan op hetzelfde uur?</p>
+      <div class="q-body">
+        <div class="choices inline">
+          <label class="choice"><input type="radio" name="q24"><span>Ja</span></label>
+          <label class="choice"><input type="radio" name="q24"><span>Nee</span></label>
+          <label class="choice"><input type="radio" name="q24"><span>Hangt af van…</span></label>
+        </div>
+        <input type="text" placeholder="Waarvan hangt het af?">
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">2.5</span> <b>Minimum</b> aantal boekingen om een groepsles te laten doorgaan (quorum)?</p>
+      <div class="q-body">
+        <div class="row"><label class="tag">Minimum</label><input type="number" min="1" placeholder="bv. 2"><span class="unit">personen</span></div>
+        <textarea placeholder="Wat doe je nu als er te weinig zijn? (afbellen / verzetten / toch aan privé-tarief / samenvoegen met andere groep)"></textarea>
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">2.6</span> Wat als een groepsles <b>vol</b> zit?</p>
+      <div class="q-body">
+        <div class="choices inline">
+          <label class="choice"><input type="radio" name="q26"><span>Wachtlijst</span></label>
+          <label class="choice"><input type="radio" name="q26"><span>Mag lichtjes overboekt worden</span></label>
+          <label class="choice"><input type="radio" name="q26"><span>Gewoon “volzet” tonen</span></label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 3. Prijzen ===== -->
+  <section class="block wrap">
+    <div class="sec-head"><h2>3 · Prijzen &amp; kortingen</h2><span class="count">tarieven</span></div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">3.1</span> Wat kost elk lestype? <span class="unit">(per persoon, tenzij anders)</span></p>
+      <div class="q-body">
+        <div class="row"><label class="tag">Normale groepsles</label><input type="text" placeholder="€ …"></div>
+        <div class="row"><label class="tag">Deluxe groepsles</label><input type="text" placeholder="€ …"></div>
+        <div class="row"><label class="tag">Privéles</label><input type="text" placeholder="€ …"></div>
+        <div class="row"><label class="tag">Ontdekking / discovery</label><input type="text" placeholder="€ …"></div>
+        <div class="row"><label class="tag">Kids club</label><input type="text" placeholder="€ …"></div>
+        <div class="row"><label class="tag">Stage / meerdaagse</label><input type="text" placeholder="€ …"></div>
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">3.2</span> Meerdere lessen = korting: hoe werkt dat <b>precies</b>?</p>
+      <p class="q-help">We hadden voorlopig “vanaf 3 lessen 10%” gezet, maar we willen jouw echte regels.</p>
+      <div class="q-body">
+        <div class="row"><label class="tag">Korting vanaf</label><input type="number" min="1" placeholder="bv. 3"><span class="unit">lessen</span></div>
+        <div class="choices inline">
+          <label class="choice"><input type="radio" name="q32type"><span>Percentage (bv. −10%)</span></label>
+          <label class="choice"><input type="radio" name="q32type"><span>Vaste pakketprijs (bv. 5-lessenkaart = € …)</span></label>
+        </div>
+        <div class="choices inline">
+          <label class="choice"><input type="radio" name="q32per"><span>Korting geldt per persoon</span></label>
+          <label class="choice"><input type="radio" name="q32per"><span>Korting geldt per boeking (bv. 4 vrienden samen)</span></label>
+        </div>
+        <textarea placeholder="Bestaan er vaste lessenkaarten / pakketten? Welke en aan welke prijs?"></textarea>
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">3.3</span> Is er een <b>groepskorting</b> als meerdere mensen samen boeken? Zit <b>materiaal</b> (board + wetsuit) altijd in de prijs?</p>
+      <div class="q-body"><textarea placeholder="Groepskorting: … · Materiaal inbegrepen: ja/nee, uitzonderingen…"></textarea></div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">3.4</span> Privéles: strikt 1 persoon, of mag een <b>koppel/duo</b> samen een “privé” nemen? Bestaan er <b>cadeaubonnen</b>?</p>
+      <div class="q-body"><textarea placeholder="Duo-privé: ja/nee + prijs · Cadeaubonnen: ja/nee…"></textarea></div>
+    </div>
+  </section>
+
+  <!-- ===== 4. Betaling ===== -->
+  <section class="block wrap">
+    <div class="sec-head"><h2>4 · Voorschot &amp; betaling</h2><span class="count">geld</span></div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">4.1</span> We gingen uit van een <b>voorschot van 30%</b> om te bevestigen. Klopt dat?</p>
+      <div class="q-body">
+        <div class="row"><label class="tag">Voorschot</label><input type="text" placeholder="bv. 30%"></div>
+        <div class="choices inline">
+          <label class="choice"><input type="radio" name="q41"><span>Voor alle lestypes hetzelfde</span></label>
+          <label class="choice"><input type="radio" name="q41"><span>Verschilt per type (leg uit)</span></label>
+        </div>
+        <input type="text" placeholder="Toelichting…">
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">4.2</span> Hoe betaalt de klant het <b>voorschot</b> het liefst?</p>
+      <div class="q-body">
+        <div class="choices">
+          <label class="choice"><input type="checkbox"><span>Online (kaart / Payconiq / Bancontact) <em>(aanrader voor een echte bevestiging)</em></span></label>
+          <label class="choice"><input type="checkbox"><span>Overschrijving</span></label>
+          <label class="choice"><input type="checkbox"><span>Cash ter plaatse</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">4.3</span> Hoe wordt het <b>saldo</b> (de rest) op de dag zelf betaald?</p>
+      <div class="q-body">
+        <div class="row"><label class="tag">Betaalwijze</label><input type="text" placeholder="cash / kaart"></div>
+        <div class="choices inline">
+          <label class="choice"><input type="radio" name="q43"><span>Ik heb een kaartlezer/betaalterminal</span></label>
+          <label class="choice"><input type="radio" name="q43"><span>Enkel cash</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">4.4</span> <b>Annulatie- en terugbetaalbeleid</b>: tot wanneer mag een klant gratis annuleren of verzetten? En wat bij een <b>no-show</b>?</p>
+      <div class="q-body"><textarea placeholder="Bv. gratis annuleren tot 48u ervoor; voorschot blijft bij latere annulatie; no-show = …"></textarea></div>
+    </div>
+  </section>
+
+  <!-- ===== 5. Getijden ===== -->
+  <section class="block wrap">
+    <div class="sec-head"><h2>5 · Getijden, tijdsloten &amp; seizoen</h2><span class="count">planning</span></div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">5.1</span> De uren hangen af van het <b>getij</b>. Zet je ze liever zelf vast, of mag de tool ze automatisch berekenen?</p>
+      <div class="q-body">
+        <div class="choices inline">
+          <label class="choice"><input type="radio" name="q51"><span>Automatisch uit het getij</span></label>
+          <label class="choice"><input type="radio" name="q51"><span>Ik zet ze zelf vast</span></label>
+          <label class="choice"><input type="radio" name="q51"><span>Automatisch, maar ik wil kunnen aanpassen</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">5.2</span> Hoeveel sessies doe je typisch <b>per dag</b>, en in welke <b>maanden</b> ben je open?</p>
+      <div class="q-body">
+        <div class="row"><label class="tag">Sessies/dag hoogseizoen</label><input type="text" placeholder="bv. 4"></div>
+        <div class="row"><label class="tag">Sessies/dag laagseizoen</label><input type="text" placeholder="bv. 1-2"></div>
+        <div class="row"><label class="tag">Open van/tot</label><input type="text" placeholder="bv. april → oktober"></div>
+        <div class="row"><label class="tag">Vaste sluitingsdag(en)</label><input type="text" placeholder="bv. zondag, of geen"></div>
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">5.3</span> Op welke <b>stranden</b> geef je les, en wisselt dat per sessie?</p>
+      <div class="q-body"><input type="text" placeholder="bv. Les Bourdaines, Les Estagnots, La Gravière…"></div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">5.4</span> Mogen mensen <b>last-minute</b> boeken (zelfde dag)? En wat doe je bij <b>slecht weer / te grote swell</b>?</p>
+      <div class="q-body">
+        <div class="row"><label class="tag">Last-minute tot</label><input type="text" placeholder="bv. tot 2u voor de les / niet"></div>
+        <textarea placeholder="Slecht weer: annuleren of verzetten? Hoe verwittig je klanten nu?"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 6. Klantgegevens ===== -->
+  <section class="block wrap">
+    <div class="sec-head"><h2>6 · Klantgegevens &amp; communicatie</h2><span class="count">contact</span></div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">6.1</span> Welke gegevens heb je <b>nodig</b> bij een boeking?</p>
+      <div class="q-body">
+        <div class="choices">
+          <label class="choice"><input type="checkbox"><span>Naam</span></label>
+          <label class="choice"><input type="checkbox"><span>E-mail</span></label>
+          <label class="choice"><input type="checkbox"><span>Telefoon</span></label>
+          <label class="choice"><input type="checkbox"><span>Taal</span></label>
+          <label class="choice"><input type="checkbox"><span>Niveau</span></label>
+          <label class="choice"><input type="checkbox"><span>Leeftijd</span></label>
+          <label class="choice"><input type="checkbox"><span>Lengte / gewicht <em>(voor de juiste board- en wetsuitmaat?)</em></span></label>
+        </div>
+        <input type="text" placeholder="Nog iets anders nodig?">
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">6.2</span> Moet de klant een <b>waiver / aansprakelijkheidsverklaring</b> tekenen of medische vragen beantwoorden (kan zwemmen, gezondheid)?</p>
+      <div class="q-body">
+        <div class="choices inline">
+          <label class="choice"><input type="radio" name="q62"><span>Ja, doe ik nu op papier</span></label>
+          <label class="choice"><input type="radio" name="q62"><span>Ja, graag digitaal in de tool</span></label>
+          <label class="choice"><input type="radio" name="q62"><span>Nee</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">6.3</span> Welke automatische e-mails wil je, en in welke <b>talen</b>?</p>
+      <div class="q-body">
+        <div class="choices">
+          <label class="choice"><input type="checkbox"><span>Bevestiging na boeking</span></label>
+          <label class="choice"><input type="checkbox"><span>Herinnering vóór de les (bv. dag ervoor)</span></label>
+          <label class="choice"><input type="checkbox"><span>Bedankt / review-vraag na de les</span></label>
+        </div>
+        <div class="row"><label class="tag">Talen</label><input type="text" placeholder="bv. FR · NL · DE · EN · ES"></div>
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">6.4</span> Kan een <b>ouder voor een kind</b> boeken? Is er een <b>minimumleeftijd</b>?</p>
+      <div class="q-body"><input type="text" placeholder="bv. ja, ouder boekt · minimumleeftijd 6 jaar"></div>
+    </div>
+  </section>
+
+  <!-- ===== 7. Beheer ===== -->
+  <section class="block wrap">
+    <div class="sec-head"><h2>7 · Jouw manier van werken</h2><span class="count">beheer</span></div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">7.1</span> Hoe beheer je <b>nu</b> je boekingen?</p>
+      <div class="q-body">
+        <div class="choices inline">
+          <label class="choice"><input type="checkbox"><span>WhatsApp</span></label>
+          <label class="choice"><input type="checkbox"><span>Telefoon</span></label>
+          <label class="choice"><input type="checkbox"><span>E-mail</span></label>
+          <label class="choice"><input type="checkbox"><span>Instagram DM</span></label>
+          <label class="choice"><input type="checkbox"><span>Papieren agenda</span></label>
+        </div>
+        <input type="text" placeholder="Iets anders?">
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">7.2</span> Wil je sessies zelf <b>aanmaken</b>, of automatisch laten <b>genereren</b> uit een getij-regel en enkel goedkeuren?</p>
+      <div class="q-body">
+        <div class="choices inline">
+          <label class="choice"><input type="radio" name="q72"><span>Zelf aanmaken</span></label>
+          <label class="choice"><input type="radio" name="q72"><span>Automatisch genereren + ik keur goed</span></label>
+          <label class="choice"><input type="radio" name="q72"><span>Volledig automatisch</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">7.3</span> Hoe ver op voorhand wil je sessies <b>openzetten</b> voor boeking? Wil je elke boeking eerst zelf <b>bevestigen</b>, of automatisch zodra het voorschot betaald is?</p>
+      <div class="q-body">
+        <div class="row"><label class="tag">Openzetten</label><input type="text" placeholder="bv. 1-2 maanden vooruit"></div>
+        <div class="choices inline">
+          <label class="choice"><input type="radio" name="q73"><span>Ik bevestig elke boeking zelf</span></label>
+          <label class="choice"><input type="radio" name="q73"><span>Automatisch bevestigd bij betaald voorschot</span></label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 8. Extra ===== -->
+  <section class="block wrap">
+    <div class="sec-head"><h2>8 · Extra &amp; edge cases</h2><span class="count">bijna klaar</span></div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">8.1</span> <b>Stages / meerdaagse</b>: boekt iemand per dag of als één pakket (bv. 5 dagen)? Kan iemand een hele sessie <b>privatiseren</b> (bv. vrijgezellenweekend van 8)?</p>
+      <div class="q-body"><textarea placeholder="Stage: per dag / als pakket… · Volledige sessie afhuren: ja/nee + prijs…"></textarea></div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">8.2</span> Zie je graag dat <b>terugkerende klanten</b> herkend worden (historiek, sneller boeken)?</p>
+      <div class="q-body">
+        <div class="choices inline">
+          <label class="choice"><input type="radio" name="q82"><span>Ja, graag</span></label>
+          <label class="choice"><input type="radio" name="q82"><span>Niet nodig</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">8.3</span> Wat gaat er <b>nu vaak mis</b> met reserveren, dat de tool zou moeten oplossen?</p>
+      <div class="q-body"><textarea placeholder="Dubbele boekingen? No-shows? Veel heen-en-weer via WhatsApp? …"></textarea></div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">8.4</span> Wat is voor jou het <b>belangrijkste</b> dat deze tool moet kunnen: waaraan merk je dat hij écht werkt?</p>
+      <div class="q-body"><textarea placeholder="Het allerbelangrijkste voor jou…"></textarea></div>
+    </div>
+  </section>
+
+  <!-- ===== Klaar ===== -->
+  <section class="block wrap" id="klaar">
+    <div class="submit">
+      <h2>Klaar? Stuur je antwoorden door 🤙</h2>
+      <p>Klik hieronder: je antwoorden worden samengevat in één tekst. Kopieer ze en plak ze in een
+        e-mail of WhatsApp naar Sven, of gebruik de e-mailknop.</p>
+      <div class="cta-row">
+        <button type="button" class="btn btn--primary" id="btnCopy">📋 Kopieer mijn antwoorden</button>
+        <button type="button" class="btn btn--ghost" id="btnMail">✉️ Mail naar Sven</button>
+        <button type="button" class="btn btn--ghost" id="btnPrint">🖨️ Print / PDF</button>
+      </div>
+      <textarea id="out" readonly aria-label="Samenvatting van je antwoorden"></textarea>
+      <p class="saved-flag" id="savedFlag">✓ Je antwoorden worden automatisch bewaard in deze browser.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p class="sign">Tot op het water 🌊</p>
+  <p>Coco Surf School · Seignosse · Hossegor · Capbreton</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var MAIL = "admin@be-tango.com";
+  var KEY  = "coco-vragen-annelies-v1";
+  var form = document.getElementById('form');
+  var inputs = [].slice.call(form.querySelectorAll('input, textarea, select'));
+
+  // ---- autosave / restore (index-based, stable for this markup) ----
+  function save(){
+    var d = {};
+    inputs.forEach(function(el, i){
+      d[i] = (el.type === 'checkbox' || el.type === 'radio') ? el.checked : el.value;
+    });
+    try { localStorage.setItem(KEY, JSON.stringify(d)); } catch(e){}
+  }
+  function restore(){
+    var raw; try { raw = localStorage.getItem(KEY); } catch(e){ return; }
+    if(!raw) return;
+    var d; try { d = JSON.parse(raw); } catch(e){ return; }
+    inputs.forEach(function(el, i){
+      if(!(i in d)) return;
+      if(el.type === 'checkbox' || el.type === 'radio') el.checked = !!d[i];
+      else el.value = d[i];
+    });
+  }
+  restore();
+  form.addEventListener('input', save);
+  form.addEventListener('change', save);
+
+  // ---- compile answers into readable text ----
+  function choiceText(el){
+    var lbl = el.closest('label');
+    if(lbl){ var sp = lbl.querySelector('span'); if(sp) return sp.textContent.replace(/\s+/g,' ').trim(); }
+    return el.value || '✓';
+  }
+  function compile(){
+    var lines = ["COCO SURF SCHOOL — antwoorden Annelies (reservatietool)", ""];
+    // walk section headings and question cards in document order
+    var nodes = form.querySelectorAll('.sec-head h2, .q');
+    nodes.forEach(function(node){
+      if(node.tagName === 'H2'){ lines.push("", "=== " + node.textContent.trim() + " ==="); return; }
+      var label = node.querySelector('.q-label').textContent.replace(/\s+/g,' ').trim();
+      var ans = [];
+      node.querySelectorAll('input, textarea, select').forEach(function(el){
+        if(el.type === 'checkbox' || el.type === 'radio'){
+          if(el.checked) ans.push(choiceText(el));
+        } else if(el.value && el.value.trim()){
+          ans.push(el.value.trim());
+        }
+      });
+      lines.push("• " + label);
+      lines.push("   → " + (ans.length ? ans.join("  |  ") : "(niet beantwoord)"));
+    });
+    return lines.join("\n");
+  }
+
+  // ---- toast ----
+  var toastEl = document.getElementById('toast'), toastT;
+  function toast(msg){
+    toastEl.textContent = msg; toastEl.classList.add('on');
+    clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove('on'); }, 2200);
+  }
+
+  var out = document.getElementById('out');
+  function showOut(){ out.value = compile(); out.classList.add('show'); }
+
+  document.getElementById('btnCopy').addEventListener('click', function(){
+    showOut();
+    var text = out.value;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(
+        function(){ toast('Gekopieerd! Plak het nu in een mail of WhatsApp 🤙'); },
+        function(){ out.select(); document.execCommand('copy'); toast('Gekopieerd!'); }
+      );
+    } else {
+      out.select(); document.execCommand('copy'); toast('Gekopieerd!');
+    }
+  });
+
+  document.getElementById('btnMail').addEventListener('click', function(){
+    showOut();
+    var body = out.value;
+    var href = "mailto:" + MAIL +
+      "?subject=" + encodeURIComponent("Coco reservatietool — antwoorden Annelies") +
+      "&body=" + encodeURIComponent(body);
+    window.location.href = href;
+  });
+
+  document.getElementById('btnPrint').addEventListener('click', function(){ window.print(); });
+})();
+</script>
+</body>
+</html>
