@@ -38,6 +38,11 @@ em{font-style:normal; color:var(--coral-deep)}
 .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
 :focus-visible{outline:2px solid var(--coral-deep); outline-offset:2px; border-radius:8px}
 
+/* preview ribbon */
+.preview-bar{background:var(--ink);color:var(--mint);font-size:13px;text-align:center;padding:8px 16px;letter-spacing:.01em}
+.preview-bar b{color:#fff}
+.preview-bar a{color:#fff;text-decoration:underline}
+
 /* ---- top bar ---- */
 .topbar{background:var(--ink); color:var(--mint); font-size:13.5px; letter-spacing:.02em}
 .topbar .wrap{display:flex; gap:18px; justify-content:center; align-items:center; padding:9px 24px; flex-wrap:wrap}
@@ -59,7 +64,7 @@ nav.main a:hover{color:var(--coral-deep)}
 @media(max-width:820px){nav.main{display:none}}
 
 /* ---- hero strip ---- */
-.hero{padding:44px 0 8px}
+.hero{padding:40px 0 8px}
 .eyebrow{display:inline-flex; align-items:center; gap:10px; font-size:12.5px; text-transform:uppercase; letter-spacing:.18em; font-weight:600; color:var(--seafoam-deep)}
 .eyebrow::before{content:""; width:26px; height:2px; background:var(--coral); border-radius:2px}
 .hero h1{font-size:clamp(34px,5vw,52px); margin:14px 0 10px; max-width:15ch}
@@ -68,7 +73,6 @@ nav.main a:hover{color:var(--coral-deep)}
 /* ---- layout ---- */
 .booking{display:grid; grid-template-columns:1fr; gap:26px; padding:30px 0 70px; align-items:start}
 @media(min-width:960px){ .booking{grid-template-columns:1fr 344px; gap:34px} }
-
 .panel{background:var(--white); border:1px solid var(--mint-line); border-radius:var(--radius-lg); box-shadow:var(--shadow-md); overflow:hidden}
 
 /* ---- progress ---- */
@@ -77,8 +81,8 @@ nav.main a:hover{color:var(--coral-deep)}
 .step{flex:1; display:flex; flex-direction:column; align-items:center; gap:9px; position:relative; text-align:center}
 .step .bead{width:38px; height:38px; border-radius:50%; display:grid; place-items:center; font-family:var(--font-display); font-weight:600; font-size:17px; background:var(--cream-2); color:var(--seafoam-deep); border:1.5px solid var(--mint-line); transition:.3s; z-index:2}
 .step .bead svg{width:18px; height:18px; display:none}
-.step .lbl{font-size:13px; font-weight:600; letter-spacing:.03em; color:var(--ink-soft); max-width:12ch; line-height:1.25}
-.step .lbl small{display:block; font-weight:500; color:var(--seafoam-deep); text-transform:uppercase; letter-spacing:.14em; font-size:10.5px; margin-bottom:2px}
+.step .lbl{font-size:12.5px; font-weight:600; letter-spacing:.03em; color:var(--ink-soft); max-width:12ch; line-height:1.25}
+.step .lbl small{display:block; font-weight:500; color:var(--seafoam-deep); text-transform:uppercase; letter-spacing:.14em; font-size:10px; margin-bottom:2px}
 .step::before,.step::after{content:""; position:absolute; top:18px; height:2px; background:var(--mint-line); width:50%; z-index:1}
 .step::before{left:0} .step::after{right:0}
 .step:first-child::before,.step:last-child::after{display:none}
@@ -97,7 +101,27 @@ nav.main a:hover{color:var(--coral-deep)}
 .screen.is-active{display:block}
 @keyframes rise{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
 
-/* ---- session cards ---- */
+/* ---- lesson (formula) cards — STEP 1 ---- */
+.lessons{display:grid; grid-template-columns:1fr; gap:14px}
+@media(min-width:640px){.lessons{grid-template-columns:1fr 1fr 1fr}}
+.lesson{position:relative; border:1.5px solid var(--mint-line); border-radius:var(--radius); padding:18px; background:var(--cream); cursor:pointer; transition:.2s; display:flex; flex-direction:column; gap:8px}
+.lesson:hover{border-color:var(--seafoam); background:#fff; box-shadow:var(--shadow-sm)}
+.lesson input{position:absolute; opacity:0}
+.lesson.sel{border-color:var(--coral-deep); background:#fff; box-shadow:0 10px 30px rgba(176,84,63,.12)}
+.lesson .lt{font-family:var(--font-display); font-size:19px; font-weight:600; color:var(--ink)}
+.lesson .lp{color:var(--coral-deep); font-weight:600; font-size:15px}
+.lesson .lp small{color:var(--ink-soft); font-weight:500}
+.lesson .ld{font-size:13.5px; line-height:1.5}
+.lesson .lchips{display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; padding-top:4px}
+.lesson .lchips span{font-size:11.5px; font-weight:600; color:var(--seafoam-deep); background:var(--mint); border-radius:100px; padding:3px 9px}
+.badge-pop{position:absolute; top:-10px; right:14px; background:var(--coral-deep); color:#fff; font-size:10.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:3px 10px; border-radius:100px; box-shadow:var(--shadow-sm)}
+.lcheck{position:absolute; top:12px; right:12px; width:22px; height:22px; border-radius:50%; background:var(--coral-deep); display:none; place-items:center}
+.lcheck svg{width:13px; height:13px; color:#fff}
+.lesson.sel .lcheck{display:grid}
+.incl-note{font-size:13px; color:var(--seafoam-deep); margin-top:14px; display:flex; align-items:center; gap:8px}
+.incl-note svg{width:16px;height:16px}
+
+/* ---- session cards — STEP 2 ---- */
 .sessions{display:flex; flex-direction:column; gap:14px}
 .session{position:relative; display:grid; grid-template-columns:auto 1fr auto; gap:18px; align-items:center; padding:18px 20px; border:1.5px solid var(--mint-line); border-radius:var(--radius); background:var(--cream); cursor:pointer; transition:.2s}
 .session:hover{border-color:var(--seafoam); background:var(--white); box-shadow:var(--shadow-sm); transform:translateY(-1px)}
@@ -115,8 +139,6 @@ nav.main a:hover{color:var(--coral-deep)}
 .s-side{text-align:right; flex:none}
 .spots{font-size:12.5px; font-weight:600; color:var(--seafoam-deep)}
 .spots.low{color:var(--coral-deep)}
-.s-side .from{font-size:12px; color:var(--ink-soft); margin-top:6px}
-.s-side .price{font-family:var(--font-display); font-size:21px; font-weight:600; color:var(--ink)}
 .check{position:absolute; top:14px; right:16px; width:22px; height:22px; border-radius:50%; background:var(--coral-deep); display:none; place-items:center}
 .check svg{width:13px; height:13px; color:#fff}
 .session.sel .check{display:grid}
@@ -125,33 +147,33 @@ nav.main a:hover{color:var(--coral-deep)}
   .s-side{grid-column:2; text-align:left; display:flex; justify-content:space-between; align-items:baseline; margin-top:4px}
 }
 
-/* ---- formula / party (step 2) ---- */
+/* ---- group & package — STEP 3 ---- */
 .field{margin-bottom:22px}
 .field > label, .flabel{display:block; font-weight:600; color:var(--ink); font-size:14.5px; margin-bottom:9px; letter-spacing:.01em}
 .hint{font-weight:500; color:var(--seafoam-deep); font-size:12.5px}
-.formulas{display:grid; grid-template-columns:1fr; gap:12px}
-@media(min-width:560px){.formulas{grid-template-columns:1fr 1fr 1fr}}
-.formula{position:relative; border:1.5px solid var(--mint-line); border-radius:var(--radius); padding:16px; background:var(--cream); cursor:pointer; transition:.2s}
-.formula:hover{border-color:var(--seafoam); background:var(--white)}
-.formula input{position:absolute; opacity:0}
-.formula.sel{border-color:var(--coral-deep); background:var(--white); box-shadow:0 8px 22px rgba(176,84,63,.1)}
-.formula .ft{font-family:var(--font-display); font-size:17px; font-weight:600; color:var(--ink)}
-.formula .fp{color:var(--coral-deep); font-weight:600; font-size:14px; margin-top:2px}
-.formula .fd{font-size:13px; margin-top:7px; line-height:1.45}
-.formula .fcheck{position:absolute; top:12px; right:12px; width:20px;height:20px;border-radius:50%;border:1.5px solid var(--mint-line); display:grid;place-items:center}
-.formula.sel .fcheck{background:var(--coral-deep); border-color:var(--coral-deep)}
-.formula .fcheck svg{width:11px;height:11px;color:#fff;opacity:0}
-.formula.sel .fcheck svg{opacity:1}
+.packs{display:grid; grid-template-columns:1fr; gap:12px}
+@media(min-width:560px){.packs{grid-template-columns:1fr 1fr 1fr}}
+.pack{position:relative; border:1.5px solid var(--mint-line); border-radius:var(--radius); padding:16px; background:var(--cream); cursor:pointer; transition:.2s}
+.pack:hover{border-color:var(--seafoam); background:var(--white)}
+.pack input{position:absolute; opacity:0}
+.pack.sel{border-color:var(--coral-deep); background:var(--white); box-shadow:0 8px 22px rgba(176,84,63,.1)}
+.pack .pt{font-family:var(--font-display); font-size:17px; font-weight:600; color:var(--ink)}
+.pack .pp{color:var(--coral-deep); font-weight:600; font-size:14px; margin-top:2px}
+.pack .pd{font-size:12.5px; margin-top:6px; line-height:1.45}
+.pack .pcheck{position:absolute; top:12px; right:12px; width:20px;height:20px;border-radius:50%;border:1.5px solid var(--mint-line); display:grid;place-items:center}
+.pack.sel .pcheck{background:var(--coral-deep); border-color:var(--coral-deep)}
+.pack .pcheck svg{width:11px;height:11px;color:#fff;opacity:0}
+.pack.sel .pcheck svg{opacity:1}
 
-.stepper-row{display:flex; gap:16px; flex-wrap:wrap}
-.stepper-row .field{flex:1; min-width:180px; margin-bottom:0}
-.counter{display:inline-flex; align-items:center; gap:2px; border:1.5px solid var(--mint-line); border-radius:100px; background:var(--cream); padding:5px; width:100%; max-width:210px; justify-content:space-between}
+.counter{display:inline-flex; align-items:center; gap:2px; border:1.5px solid var(--mint-line); border-radius:100px; background:var(--cream); padding:5px; width:100%; max-width:230px; justify-content:space-between}
 .counter button{width:40px; height:40px; border-radius:50%; border:none; background:var(--white); color:var(--ink); font-size:22px; line-height:1; cursor:pointer; box-shadow:var(--shadow-sm); display:grid; place-items:center; transition:.15s}
 .counter button:hover{background:var(--mint-2)}
 .counter button:disabled{opacity:.35; cursor:not-allowed}
 .counter .val{font-family:var(--font-display); font-size:22px; font-weight:600; color:var(--ink); min-width:44px; text-align:center}
+.run-note{font-size:12.5px; color:var(--seafoam-deep); margin-top:10px; background:var(--mint); border-radius:12px; padding:9px 12px; display:inline-flex; gap:7px; align-items:flex-start}
+.private-note{background:linear-gradient(140deg,var(--cream-2),var(--white)); border:1px solid var(--mint-line); border-radius:16px; padding:14px 16px; font-size:14px}
 
-/* ---- details form (step 3) ---- */
+/* ---- details form — STEP 4 ---- */
 .form-grid{display:grid; grid-template-columns:1fr; gap:18px}
 @media(min-width:560px){.form-grid{grid-template-columns:1fr 1fr}}
 .form-grid .full{grid-column:1/-1}
@@ -165,8 +187,6 @@ select{appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='h
 .consent{grid-column:1/-1; display:flex; gap:12px; align-items:flex-start; background:var(--mint); border:1px solid var(--mint-line); border-radius:16px; padding:14px 16px}
 .consent input{margin-top:3px; width:18px; height:18px; accent-color:var(--coral-deep); flex:none}
 .consent label{font-size:14px; color:var(--ink-soft); font-weight:500; margin:0}
-
-/* ---- deposit reassurance ---- */
 .deposit-note{grid-column:1/-1; display:flex; gap:14px; align-items:flex-start; background:linear-gradient(140deg,var(--cream-2),var(--white)); border:1px solid var(--mint-line); border-radius:18px; padding:16px 18px; margin-top:4px}
 .deposit-note .ic{width:38px;height:38px;border-radius:12px;background:var(--mint-2);display:grid;place-items:center;flex:none;color:var(--seafoam-deep)}
 .deposit-note .ic svg{width:20px;height:20px}
@@ -206,8 +226,6 @@ select{appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='h
 .sum-total .sub .rest{color:#fff; font-weight:600}
 .sum-foot{padding:14px 24px 20px; font-size:12.5px; color:var(--ink-soft); display:flex; gap:9px; align-items:flex-start}
 .sum-foot svg{width:15px; height:15px; color:var(--seafoam-deep); flex:none; margin-top:2px}
-
-/* mobile summary becomes a card above/below */
 @media(max-width:959px){ .summary{position:static; order:-1} }
 
 /* ---- confirmation ---- */
@@ -230,24 +248,22 @@ footer .fine{width:100%; border-top:1px solid rgba(255,255,255,.12); padding-top
 </head>
 <body>
 <!-- DESIGN NOTES
-  Concept: "Guided 3-step wizard" for Coco Surf School's public booking page.
-  Structural ideas being pitched:
-  1. A calm coastal STEPPER (Session -> Party & formula -> Your details) with a bead-and-line
-     progress indicator, so the long form is broken into three low-anxiety screens instead of a wall.
-  2. A persistent STICKY BOOKING SUMMARY (right rail / mobile card) that fills in live as you choose:
-     session date/time, formula, party size, computed 30% deposit and remaining balance, so you always
-     know what you've selected and what you'll pay now.
-  3. Session cards read like an editorial tide table (big serif date, tide window pill, spots-left,
-     from-price) rather than a flat radio list; the whole card is the selectable target.
+  Booking-page preview for Coco Surf School. Flow: (1) pick a LESSON TYPE, then
+  (2) a DATE, then (3) group size & package, then (4) details. Data mirrors her
+  website: Deluxe group (€44pp, 2–6, min 2), Group (€38pp, 7–8, min 3), Private
+  (flat €130–310 by party 1–7, Jul–Aug surcharge). All 1h30, gear included,
+  30% deposit. Sample sessions only — the live version shows her real tide slots.
 -->
+
+<div class="preview-bar">🌊 <b>Preview</b> — a design of the online booking page. Sample sessions &amp; English copy; the live version will be multilingual with real tide slots. <a href="../vragenlijst/">Back to the questions</a></div>
 
 <div class="topbar">
   <div class="wrap">
-    <span><b>Seignosse · Hossegor</b>, French Basque coast</span>
+    <span><b>Seignosse · Hossegor · Capbreton</b>, French Basque coast</span>
     <span class="dot" aria-hidden="true"></span>
     <span>Small groups, all levels</span>
     <span class="dot" aria-hidden="true"></span>
-    <span>Free reschedule up to 48h before</span>
+    <span>Board &amp; wetsuit included</span>
   </div>
 </div>
 
@@ -263,10 +279,10 @@ footer .fine{width:100%; border-top:1px solid rgba(255,255,255,.12); padding-top
       </span>
     </a>
     <nav class="main">
-      <a href="#">Lessons</a>
-      <a href="#">Surf camps</a>
-      <a href="#">The spot</a>
-      <a href="#">About</a>
+      <a href="#">Lessons &amp; rates</a>
+      <a href="#">Coach</a>
+      <a href="#">Stay</a>
+      <a href="#">Rental</a>
       <a class="nav-cta" href="#book">Book a lesson</a>
     </nav>
   </div>
@@ -276,7 +292,7 @@ footer .fine{width:100%; border-top:1px solid rgba(255,255,255,.12); padding-top
   <div class="wrap">
     <span class="eyebrow">Book your session</span>
     <h1>Catch your first <em>green wave</em> on the Landes coast.</h1>
-    <p class="lead">Three calm steps: pick a tide-timed session, choose your formula, tell us who's coming. Reserve your spot with a 30% deposit and pay the rest on the beach.</p>
+    <p class="lead">Pick your lesson, then a tide-timed session, and tell us who's coming. Board and wetsuit included. Reserve with a 30% deposit and settle the rest on the beach.</p>
   </div>
 </section>
 
@@ -285,290 +301,258 @@ footer .fine{width:100%; border-top:1px solid rgba(255,255,255,.12); padding-top
 
     <!-- ============ WIZARD PANEL ============ -->
     <form class="panel" id="wizard" novalidate>
-      <!-- progress -->
       <div class="progress">
         <ol class="steps" id="steps">
-          <li class="step is-active" data-step="1">
-            <span class="bead"><span>1</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
-            <span class="lbl"><small>Step 1</small>Choose a session</span>
-          </li>
-          <li class="step" data-step="2">
-            <span class="bead"><span>2</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
-            <span class="lbl"><small>Step 2</small>Party &amp; formula</span>
-          </li>
-          <li class="step" data-step="3">
-            <span class="bead"><span>3</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
-            <span class="lbl"><small>Step 3</small>Your details</span>
-          </li>
+          <li class="step is-active" data-step="1"><span class="bead"><span>1</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span class="lbl"><small>Step 1</small>Lesson</span></li>
+          <li class="step" data-step="2"><span class="bead"><span>2</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span class="lbl"><small>Step 2</small>Date</span></li>
+          <li class="step" data-step="3"><span class="bead"><span>3</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span class="lbl"><small>Step 3</small>Group</span></li>
+          <li class="step" data-step="4"><span class="bead"><span>4</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span class="lbl"><small>Step 4</small>Details</span></li>
         </ol>
       </div>
 
       <div class="panel-body">
 
-        <!-- ---- STEP 1 ---- -->
-        <section class="screen is-active" data-screen="1" aria-label="Choose a session">
+        <!-- ---- STEP 1 · LESSON TYPE ---- -->
+        <section class="screen is-active" data-screen="1" aria-label="Choose a lesson">
+          <div class="step-head">
+            <h2>Which lesson suits you?</h2>
+            <p>All lessons are 1h30 in the water (about 2h total), board and wetsuit included.</p>
+          </div>
+          <div class="lessons" role="radiogroup" aria-label="Lesson type">
+
+            <label class="lesson sel" data-formula="deluxe">
+              <span class="badge-pop">Most popular</span>
+              <input type="radio" name="formula" value="deluxe" checked>
+              <span class="lcheck" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <span class="lt">Deluxe group lesson</span>
+              <span class="lp">from €44 <small>/ person</small></span>
+              <span class="ld">One coach for 2 to 6 surfers: the sweet spot between group and private, for faster progress.</span>
+              <span class="lchips"><span>Small group · max 6</span><span>Gear included</span></span>
+            </label>
+
+            <label class="lesson" data-formula="group">
+              <input type="radio" name="formula" value="group">
+              <span class="lcheck" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <span class="lt">Group lesson</span>
+              <span class="lp">from €38 <small>/ person</small></span>
+              <span class="ld">A quality lesson with 7 to 8 surfers and one coach. Good vibes guaranteed.</span>
+              <span class="lchips"><span>Larger group · 7–8</span><span>Gear included</span></span>
+            </label>
+
+            <label class="lesson" data-formula="prive">
+              <input type="radio" name="formula" value="prive">
+              <span class="lcheck" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+              <span class="lt">Private lesson</span>
+              <span class="lp">from €130</span>
+              <span class="ld">A lesson just for you, as a couple, family or friends (1 to 7). The coach focuses fully on you.</span>
+              <span class="lchips"><span>Your own group · 1–7</span><span>Tailored</span></span>
+            </label>
+          </div>
+          <p class="incl-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Mobile school between Seignosse (Les Bourdaines), Hossegor and Capbreton — we pick the best spot for your level and the day's conditions.</p>
+        </section>
+
+        <!-- ---- STEP 2 · DATE ---- -->
+        <section class="screen" data-screen="2" aria-label="Choose a date">
           <div class="step-head">
             <h2>When do you want to surf?</h2>
-            <p>Sessions are timed to the tide for the cleanest, safest conditions. Pick the day that suits you.</p>
+            <p id="dateSub">Showing sessions for your chosen lesson. Times follow the tide for the cleanest, safest conditions.</p>
           </div>
           <div class="sessions" role="radiogroup" aria-label="Available sessions">
 
-            <label class="session sel" data-price="45">
-              <input type="radio" name="session" value="sat-am" checked data-spots="3"
-                     data-date="Sat 26 Jul" data-time="09:30 – 11:30" data-short="Sat 26 Jul · 09:30">
-              <span class="date"><span class="d">26</span><span class="m">Jul</span><span class="w">Sat</span></span>
+            <label class="session" data-spots="4" data-high="1">
+              <input type="radio" name="session" data-date="Wed 22 Jul" data-time="09:00 – 10:30" data-short="Wed 22 Jul · 09:00">
+              <span class="date"><span class="d">22</span><span class="m">Jul</span><span class="w">Wed</span></span>
               <span class="s-main">
                 <span class="s-title">Morning glass-off</span>
-                <span class="s-meta">
-                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>09:30 – 11:30</span>
-                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Les Bourdaines</span>
-                </span>
-                <span class="tide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M3 17c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/></svg>Low tide 10:12 · clean 0.8m</span>
+                <span class="s-meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>09:00 – 10:30</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Les Bourdaines · Seignosse</span></span>
+                <span class="tide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M3 17c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/></svg>Low tide 09:40 · clean 0.8m</span>
               </span>
-              <span class="s-side">
-                <span class="spots low">3 spots left</span>
-                <span class="from">from</span>
-                <span class="price">€45</span>
-              </span>
+              <span class="s-side"><span class="spots">4 spots left</span></span>
               <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
             </label>
 
-            <label class="session" data-price="45">
-              <input type="radio" name="session" value="sat-pm" data-spots="6"
-                     data-date="Sat 26 Jul" data-time="16:00 – 18:00" data-short="Sat 26 Jul · 16:00">
-              <span class="date"><span class="d">26</span><span class="m">Jul</span><span class="w">Sat</span></span>
+            <label class="session" data-spots="6" data-high="1">
+              <input type="radio" name="session" data-date="Fri 24 Jul" data-time="10:15 – 11:45" data-short="Fri 24 Jul · 10:15">
+              <span class="date"><span class="d">24</span><span class="m">Jul</span><span class="w">Fri</span></span>
               <span class="s-main">
-                <span class="s-title">Golden-hour session</span>
-                <span class="s-meta">
-                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>16:00 – 18:00</span>
-                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Les Estagnots</span>
-                </span>
-                <span class="tide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M3 17c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/></svg>Mid tide push · 1.1m</span>
+                <span class="s-title">Late-morning session</span>
+                <span class="s-meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>10:15 – 11:45</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Hossegor</span></span>
+                <span class="tide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M3 17c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/></svg>Low tide 11:02 · 1.0m</span>
               </span>
-              <span class="s-side">
-                <span class="spots">6 spots left</span>
-                <span class="from">from</span>
-                <span class="price">€45</span>
-              </span>
+              <span class="s-side"><span class="spots">6 spots left</span></span>
               <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
             </label>
 
-            <label class="session" data-price="45">
-              <input type="radio" name="session" value="sun-am" data-spots="8"
-                     data-date="Sun 27 Jul" data-time="10:15 – 12:15" data-short="Sun 27 Jul · 10:15">
-              <span class="date"><span class="d">27</span><span class="m">Jul</span><span class="w">Sun</span></span>
-              <span class="s-main">
-                <span class="s-title">Beginner-friendly rollers</span>
-                <span class="s-meta">
-                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>10:15 – 12:15</span>
-                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Les Bourdaines</span>
-                </span>
-                <span class="tide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M3 17c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/></svg>Low tide 11:03 · gentle 0.6m</span>
-              </span>
-              <span class="s-side">
-                <span class="spots">8 spots left</span>
-                <span class="from">from</span>
-                <span class="price">€45</span>
-              </span>
-              <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
-            </label>
-
-            <label class="session" data-price="45">
-              <input type="radio" name="session" value="tue-am" data-spots="2"
-                     data-date="Tue 29 Jul" data-time="08:45 – 10:45" data-short="Tue 29 Jul · 08:45">
-              <span class="date"><span class="d">29</span><span class="m">Jul</span><span class="w">Tue</span></span>
+            <label class="session" data-spots="2" data-high="1">
+              <input type="radio" name="session" data-date="Sat 25 Jul" data-time="08:30 – 10:00" data-short="Sat 25 Jul · 08:30">
+              <span class="date"><span class="d">25</span><span class="m">Jul</span><span class="w">Sat</span></span>
               <span class="s-main">
                 <span class="s-title">Sunrise dawn patrol</span>
-                <span class="s-meta">
-                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>08:45 – 10:45</span>
-                  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>La Gravière</span>
-                </span>
-                <span class="tide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M3 17c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/></svg>Rising tide · offshore wind</span>
+                <span class="s-meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>08:30 – 10:00</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Les Bourdaines · Seignosse</span></span>
+                <span class="tide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M3 17c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/></svg>Low tide 08:50 · gentle 0.6m</span>
               </span>
-              <span class="s-side">
-                <span class="spots low">2 spots left</span>
-                <span class="from">from</span>
-                <span class="price">€45</span>
+              <span class="s-side"><span class="spots low">2 spots left</span></span>
+              <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+            </label>
+
+            <label class="session" data-spots="5" data-high="1">
+              <input type="radio" name="session" data-date="Sun 26 Jul" data-time="16:00 – 17:30" data-short="Sun 26 Jul · 16:00">
+              <span class="date"><span class="d">26</span><span class="m">Jul</span><span class="w">Sun</span></span>
+              <span class="s-main">
+                <span class="s-title">Golden-hour session</span>
+                <span class="s-meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>16:00 – 17:30</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Capbreton</span></span>
+                <span class="tide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M3 17c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/></svg>Mid tide · 1.1m</span>
               </span>
+              <span class="s-side"><span class="spots">5 spots left</span></span>
+              <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+            </label>
+
+            <label class="session" data-spots="8" data-high="1">
+              <input type="radio" name="session" data-date="Tue 28 Jul" data-time="09:15 – 10:45" data-short="Tue 28 Jul · 09:15">
+              <span class="date"><span class="d">28</span><span class="m">Jul</span><span class="w">Tue</span></span>
+              <span class="s-main">
+                <span class="s-title">Beginner-friendly rollers</span>
+                <span class="s-meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>09:15 – 10:45</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Les Bourdaines · Seignosse</span></span>
+                <span class="tide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M3 17c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/></svg>Low tide 10:20 · gentle 0.7m</span>
+              </span>
+              <span class="s-side"><span class="spots">8 spots left</span></span>
+              <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+            </label>
+
+            <label class="session" data-spots="3" data-high="1">
+              <input type="radio" name="session" data-date="Sat 1 Aug" data-time="10:00 – 11:30" data-short="Sat 1 Aug · 10:00">
+              <span class="date"><span class="d">1</span><span class="m">Aug</span><span class="w">Sat</span></span>
+              <span class="s-main">
+                <span class="s-title">Weekend session</span>
+                <span class="s-meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>10:00 – 11:30</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Hossegor</span></span>
+                <span class="tide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/><path d="M3 17c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2"/></svg>Low tide 10:35 · 0.9m</span>
+              </span>
+              <span class="s-side"><span class="spots low">3 spots left</span></span>
               <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
             </label>
 
           </div>
         </section>
 
-        <!-- ---- STEP 2 ---- -->
-        <section class="screen" data-screen="2" aria-label="Party and formula">
+        <!-- ---- STEP 3 · GROUP & PACKAGE ---- -->
+        <section class="screen" data-screen="3" aria-label="Group and package">
           <div class="step-head">
-            <h2>Who's coming, and how?</h2>
-            <p>Choose a formula and tell us your party size. The deposit updates on the right as you go.</p>
+            <h2>Who's coming?</h2>
+            <p id="groupSub">Choose your group size. The price updates on the right as you go.</p>
           </div>
 
           <div class="field">
-            <span class="flabel">Pick a formula</span>
-            <div class="formulas" role="radiogroup" aria-label="Formula">
-              <label class="formula sel" data-price="45" data-name="Group lesson">
-                <input type="radio" name="formula" value="group" checked>
-                <span class="fcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
-                <span class="ft">Group lesson</span>
-                <span class="fp">€45 / person</span>
-                <span class="fd">Max 6 surfers per coach. Board &amp; wetsuit included.</span>
-              </label>
-              <label class="formula" data-price="85" data-name="Private lesson">
-                <input type="radio" name="formula" value="private">
-                <span class="fcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
-                <span class="ft">Private lesson</span>
-                <span class="fp">€85 / person</span>
-                <span class="fd">One-to-one coaching, fastest progression. Gear included.</span>
-              </label>
-              <label class="formula" data-price="30" data-name="Discovery">
-                <input type="radio" name="formula" value="discovery">
-                <span class="fcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
-                <span class="ft">Discovery</span>
-                <span class="fp">€30 / person</span>
-                <span class="fd">90-min first-timer taster. Foamie boards, calm inside bank.</span>
-              </label>
+            <span class="flabel" id="partyLabel">How many surfers?</span>
+            <div class="counter">
+              <button type="button" id="partyMinus" aria-label="Fewer">−</button>
+              <span class="val" id="partyVal" aria-live="polite">1</span>
+              <button type="button" id="partyPlus" aria-label="More">+</button>
             </div>
+            <div class="run-note" id="runNote"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none;margin-top:1px"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16h.01"/></svg><span id="runNoteText">This deluxe lesson runs from 2 bookings.</span></div>
           </div>
 
-          <div class="stepper-row">
-            <div class="field">
-              <span class="flabel">Party size <span class="hint" id="partyHint">(how many surfers)</span></span>
-              <div class="counter">
-                <button type="button" id="partyMinus" aria-label="Fewer surfers">−</button>
-                <span class="val" id="partyVal" aria-live="polite">1</span>
-                <button type="button" id="partyPlus" aria-label="More surfers">+</button>
-              </div>
+          <div class="field" id="packField">
+            <span class="flabel">Package <span class="hint">(save with multiple lessons)</span></span>
+            <div class="packs" role="radiogroup" aria-label="Package">
+              <label class="pack sel" data-pack="1">
+                <input type="radio" name="pack" value="1" checked>
+                <span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+                <span class="pt">1 lesson</span>
+                <span class="pp" data-pp-deluxe="€44 pp" data-pp-group="€38 pp">€44 pp</span>
+                <span class="pd">A single session to get started.</span>
+              </label>
+              <label class="pack" data-pack="3">
+                <input type="radio" name="pack" value="3">
+                <span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+                <span class="pt">Little surf trip</span>
+                <span class="pp" data-pp-deluxe="€138 pp" data-pp-group="€115 pp">€138 pp</span>
+                <span class="pd">3 lessons to really progress.</span>
+              </label>
+              <label class="pack" data-pack="5">
+                <input type="radio" name="pack" value="5">
+                <span class="pcheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+                <span class="pt">5-day course</span>
+                <span class="pp" data-pp-deluxe="€220 pp" data-pp-group="€180 pp">€220 pp</span>
+                <span class="pd">5 lessons across the week.</span>
+              </label>
             </div>
-            <div class="field">
-              <span class="flabel">Number of lessons <span class="hint" id="lessHint">(3+ lessons save 10%)</span></span>
-              <div class="counter">
-                <button type="button" id="lessMinus" aria-label="Fewer lessons">−</button>
-                <span class="val" id="lessVal" aria-live="polite">1</span>
-                <button type="button" id="lessPlus" aria-label="More lessons">+</button>
-              </div>
-            </div>
+            <p class="hint" id="packStartNote" style="margin-top:10px">Your package starts on the date you picked; we plan the other lessons with you.</p>
+          </div>
+
+          <div class="private-note" id="privateNote" style="display:none">
+            🏄 A private lesson is a single session, entirely for your group (1 to 7). Want several private lessons? Just mention it in the remarks and we'll arrange it.
           </div>
         </section>
 
-        <!-- ---- STEP 3 ---- -->
-        <section class="screen" data-screen="3" aria-label="Your details">
+        <!-- ---- STEP 4 · DETAILS ---- -->
+        <section class="screen" data-screen="4" aria-label="Your details">
           <div class="step-head">
             <h2>Almost in the water.</h2>
             <p>Just your contact details, then reserve your spot with a 30% deposit.</p>
           </div>
           <div class="form-grid">
-            <div class="full">
-              <label for="fullname">Full name</label>
-              <input type="text" id="fullname" name="fullname" autocomplete="name" placeholder="Camille Laurent" required>
-            </div>
-            <div>
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" autocomplete="email" placeholder="you@email.com" required>
-            </div>
-            <div>
-              <label for="phone">Phone</label>
-              <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="+33 6 12 34 56 78" required>
-            </div>
+            <div class="full"><label for="fullname">Full name</label><input type="text" id="fullname" name="fullname" autocomplete="name" placeholder="Camille Laurent" required></div>
+            <div><label for="email">Email</label><input type="email" id="email" name="email" autocomplete="email" placeholder="you@email.com" required></div>
+            <div><label for="phone">Phone</label><input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="+33 6 12 34 56 78" required></div>
             <div>
               <label for="lang">Preferred language</label>
-              <select id="lang" name="lang">
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-                <option value="nl">Nederlands</option>
-              </select>
+              <select id="lang" name="lang"><option value="en">English</option><option value="fr">Français</option><option value="nl">Nederlands</option><option value="de">Deutsch</option><option value="es">Español</option></select>
             </div>
-            <div class="full">
-              <label for="remarks">Remarks <span class="hint">(optional: level, injuries, anything we should know)</span></label>
-              <textarea id="remarks" name="remarks" placeholder="Total beginner, a bit nervous in the water!"></textarea>
+            <div>
+              <label for="level">Your level</label>
+              <select id="level" name="level"><option value="beginner">First time / beginner</option><option value="improver">Improver</option><option value="advanced">Advanced</option></select>
             </div>
+            <div class="full"><label for="remarks">Remarks <span class="hint">(optional: injuries, kids' ages, anything we should know)</span></label><textarea id="remarks" name="remarks" placeholder="Total beginner, a bit nervous in the water!"></textarea></div>
 
             <div class="deposit-note">
               <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg></span>
               <div>
                 <h4>Reserve with a 30% deposit</h4>
-                <p>Pay only <strong id="depInline">€13.50</strong> now to lock your spot. The remaining balance is settled at the school on the day (cash or card). Free reschedule up to 48h before.</p>
+                <p>Pay only <strong id="depInline">€13.20</strong> now to lock your spot. The balance is settled at the school on the day, by bank transfer or cash.</p>
               </div>
             </div>
 
             <div class="consent">
               <input type="checkbox" id="consent" name="consent">
-              <label for="consent">Keep me posted on tide-timed sessions, surf camps and Coco news. No spam, unsubscribe anytime. (Optional)</label>
+              <label for="consent">Keep me posted on tide-timed sessions, surf trips and Coco news. No spam, unsubscribe anytime. (Optional)</label>
             </div>
           </div>
         </section>
 
         <!-- ---- CONFIRMATION ---- -->
-        <section class="screen" data-screen="4" aria-label="Booking confirmed">
+        <section class="screen" data-screen="5" aria-label="Booking confirmed">
           <div class="done-wrap">
             <div class="done-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
             <h2>You're on the list! 🌊</h2>
-            <p>We've sent a confirmation to your email with the deposit link and everything you need to bring. See you on the beach!</p>
+            <p>We've sent a confirmation to your email with the deposit details and everything you need to bring. See you on the beach!</p>
             <p style="font-size:14px"><a href="#book" class="btn btn--ghost" onclick="event.preventDefault();location.reload()">Book another session</a></p>
           </div>
         </section>
 
       </div>
 
-      <!-- panel footer nav -->
       <div class="panel-foot" id="panelFoot">
-        <button type="button" class="btn btn--ghost hidden" id="backBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          Back
-        </button>
-        <button type="button" class="btn btn--primary" id="nextBtn">
-          Continue
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
-        <button type="submit" class="btn btn--coral" id="bookBtn" style="display:none">
-          Book now
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12l4-4m0 0l4 4M6 8v9M18 8l4 4m0 0l-4 4m4-4H10"/></svg>
-        </button>
+        <button type="button" class="btn btn--ghost hidden" id="backBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back</button>
+        <button type="button" class="btn btn--primary" id="nextBtn">Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+        <button type="submit" class="btn btn--coral" id="bookBtn" style="display:none">Book now<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12l4-4m0 0l4 4M6 8v9M18 8l4 4m0 0l-4 4m4-4H10"/></svg></button>
       </div>
     </form>
 
     <!-- ============ STICKY SUMMARY ============ -->
     <aside class="summary" aria-label="Your booking summary">
       <div class="panel">
-        <div class="sum-head">
-          <span class="eyebrow">Your booking</span>
-          <h3>Session summary</h3>
-        </div>
+        <div class="sum-head"><span class="eyebrow">Your booking</span><h3>Session summary</h3></div>
         <div class="sum-body">
-          <div class="sum-row">
-            <span class="k">Session</span>
-            <span class="v" id="sumSession">Sat 26 Jul · 09:30</span>
-          </div>
-          <div class="sum-row">
-            <span class="k">Formula</span>
-            <span class="v" id="sumFormula">Group lesson</span>
-          </div>
-          <div class="sum-row">
-            <span class="k">Party</span>
-            <span class="v" id="sumParty">1 surfer</span>
-          </div>
-          <div class="sum-row">
-            <span class="k">Lessons</span>
-            <span class="v" id="sumLessons">1 lesson</span>
-          </div>
-          <div class="sum-row" id="sumSaveRow" style="display:none">
-            <span class="k">Pack saving</span>
-            <span class="v" id="sumSave" style="color:var(--coral-deep)">−€0.00</span>
-          </div>
+          <div class="sum-row"><span class="k">Lesson</span><span class="v" id="sumFormula">Deluxe group lesson</span></div>
+          <div class="sum-row"><span class="k">Session</span><span class="v empty" id="sumSession">Pick a date</span></div>
+          <div class="sum-row"><span class="k">Group</span><span class="v" id="sumParty">1 surfer</span></div>
+          <div class="sum-row" id="sumPackRow"><span class="k">Package</span><span class="v" id="sumPack">1 lesson</span></div>
         </div>
         <div class="sum-total">
-          <div class="tt">
-            <span class="k">Deposit now (30%)</span>
-            <span class="v" id="sumDeposit">€13.50</span>
-          </div>
-          <div class="sub">
-            <span>Total <span id="sumTotal">€45.00</span></span>
-            <span>Balance on the day <span class="rest" id="sumBalance">€31.50</span></span>
-          </div>
+          <div class="tt"><span class="k">Deposit now (30%)</span><span class="v" id="sumDeposit">€13.20</span></div>
+          <div class="sub"><span>Total <span id="sumTotal">€44.00</span></span><span>Balance on the day <span class="rest" id="sumBalance">€30.80</span></span></div>
         </div>
-        <div class="sum-foot">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span>Secure deposit · Free reschedule up to 48h before your session.</span>
-        </div>
+        <div class="sum-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Board &amp; wetsuit included · 30% deposit reserves your spot.</span></div>
       </div>
     </aside>
 
@@ -578,168 +562,222 @@ footer .fine{width:100%; border-top:1px solid rgba(255,255,255,.12); padding-top
 <footer class="site">
   <div class="wrap">
     <a class="brand" href="#" aria-label="Coco Surf School home">
-      <span class="mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#23413A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17c2.5 0 2.5 2 5 2s2.5-2 5-2 2.5 2 5 2 2.5-2 5-2"/><path d="M2 12c2.5 0 2.5 2 5 2s2.5-2 5-2 2.5 2 5 2 2.5-2 5-2"/><path d="M15 4c-4 1-7 4-7 9"/></svg>
-      </span>
-      <span>
-        <span class="name">Coco Surf School</span>
-        <span class="sub">Seignosse · Hossegor</span>
-      </span>
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#23413A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17c2.5 0 2.5 2 5 2s2.5-2 5-2 2.5 2 5 2 2.5-2 5-2"/><path d="M2 12c2.5 0 2.5 2 5 2s2.5-2 5-2 2.5 2 5 2 2.5-2 5-2"/><path d="M15 4c-4 1-7 4-7 9"/></svg></span>
+      <span><span class="name">Coco Surf School</span><span class="sub">Seignosse · Hossegor · Capbreton</span></span>
     </a>
-    <nav class="fnav">
-      <a href="#">Lessons</a>
-      <a href="#">Surf camps</a>
-      <a href="#">Rentals</a>
-      <a href="#">Contact</a>
-      <a href="#">Instagram</a>
-    </nav>
-    <div class="fine">© 2026 Coco Surf School · Plage des Bourdaines, 40510 Seignosse, France · +33 5 58 00 00 00 · Book online, pay a 30% deposit, settle the rest on the beach.</div>
+    <nav class="fnav"><a href="#">Lessons &amp; rates</a><a href="#">Coach</a><a href="#">Stay</a><a href="#">Rental</a><a href="#">Contact</a></nav>
+    <div class="fine">© 2026 Coco Surf School · Les Bourdaines, 40510 Seignosse, France · Board &amp; wetsuit included · Book online, pay a 30% deposit, settle the rest on the beach.</div>
   </div>
 </footer>
 
 <script>
 (function(){
-  const money = n => "€" + n.toFixed(2);
-  // partyMax is capped to the selected session's spots-left (default = preselected Sat AM session).
-  const state = { step:1, sessionPrice:45, formulaPrice:45, party:1, lessons:1, partyMax:3 };
+  var money = function(n){ return "€" + n.toFixed(2); };
 
-  // Multi-lesson pack discount: 3–4 lessons save 10%, 5+ save 15%.
-  const packRate = n => n>=5 ? 0.15 : (n>=3 ? 0.10 : 0);
+  // ---- rate card mirrored from coco-surfschool.com ----
+  var FORMULAS = {
+    deluxe: { label:"Deluxe group lesson", kind:"group", min:2, max:6, pp:{1:44,3:138,5:220} },
+    group:  { label:"Group lesson",        kind:"group", min:3, max:8, pp:{1:38,3:115,5:180} },
+    // Private: flat price for the whole booking by party size (Jul–Aug surcharge on 1–3).
+    prive:  { label:"Private lesson", kind:"private", min:1, max:7,
+              flat:{ low:{1:130,2:170,3:240,4:290,5:310,6:310,7:310},
+                     high:{1:180,2:220,3:260,4:290,5:310,6:310,7:310} } }
+  };
+  var PACK_LABEL = {1:"1 lesson", 3:"3 lessons (Little surf trip)", 5:"5-day course (5 lessons)"};
 
-  // ---- element refs
-  const screens = [...document.querySelectorAll('.screen')];
-  const stepEls = [...document.querySelectorAll('.step')];
-  const backBtn = document.getElementById('backBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const bookBtn = document.getElementById('bookBtn');
-  const panelFoot = document.getElementById('panelFoot');
-  const partyHint = document.getElementById('partyHint');
-  const lessHint  = document.getElementById('lessHint');
+  var state = { step:1, formula:"deluxe", party:1, partyMax:6, pack:1, season:"high", sessionShort:null };
 
-  // ---- summary refs
-  const S = {
-    session:  document.getElementById('sumSession'),
+  var screens = [].slice.call(document.querySelectorAll('.screen'));
+  var stepEls = [].slice.call(document.querySelectorAll('.step'));
+  var backBtn = document.getElementById('backBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var bookBtn = document.getElementById('bookBtn');
+  var panelFoot = document.getElementById('panelFoot');
+
+  var S = {
     formula:  document.getElementById('sumFormula'),
+    session:  document.getElementById('sumSession'),
     party:    document.getElementById('sumParty'),
-    lessons:  document.getElementById('sumLessons'),
+    pack:     document.getElementById('sumPack'),
+    packRow:  document.getElementById('sumPackRow'),
     deposit:  document.getElementById('sumDeposit'),
     total:    document.getElementById('sumTotal'),
     balance:  document.getElementById('sumBalance'),
-    depInline:document.getElementById('depInline'),
-    saveRow:  document.getElementById('sumSaveRow'),
-    save:     document.getElementById('sumSave')
+    depInline:document.getElementById('depInline')
   };
 
+  var partyVal = document.getElementById('partyVal');
+  var partyMinus = document.getElementById('partyMinus');
+  var partyPlus = document.getElementById('partyPlus');
+  var partyLabel = document.getElementById('partyLabel');
+  var runNote = document.getElementById('runNote');
+  var runNoteText = document.getElementById('runNoteText');
+  var packField = document.getElementById('packField');
+  var privateNote = document.getElementById('privateNote');
+  var groupSub = document.getElementById('groupSub');
+
+  function selectedSpots(){
+    var el = document.querySelector('input[name="session"]:checked');
+    return el ? +el.closest('.session').getAttribute('data-spots') : null;
+  }
+
+  function price(){
+    var f = FORMULAS[state.formula];
+    if(f.kind === "group"){ return f.pp[state.pack] * state.party; }
+    return f.flat[state.season][state.party]; // private: flat, single session
+  }
+
   function recompute(){
-    const gross   = state.formulaPrice * state.party * state.lessons;
-    const rate    = packRate(state.lessons);
-    const total   = gross * (1 - rate);
-    const saving  = gross - total;
-    const deposit = total * 0.30;
+    var f = FORMULAS[state.formula];
+    var total = price();
+    var deposit = total * 0.30;
     S.total.textContent   = money(total);
     S.deposit.textContent = money(deposit);
     S.balance.textContent = money(total - deposit);
-    if (S.depInline) S.depInline.textContent = money(deposit);
-    S.party.textContent   = state.party + (state.party===1 ? " surfer" : " surfers");
-    S.lessons.textContent = state.lessons + (state.lessons===1 ? " lesson" : " lessons");
-    if (saving > 0.005){
-      S.saveRow.style.display = '';
-      S.save.textContent = "−" + money(saving) + " (" + Math.round(rate*100) + "%)";
+    if(S.depInline) S.depInline.textContent = money(deposit);
+    S.formula.textContent = f.label;
+    // group label
+    if(f.kind === "private"){
+      S.party.textContent = "Group of " + state.party;
+      S.pack.textContent  = "Private session";
     } else {
-      S.saveRow.style.display = 'none';
+      S.party.textContent = state.party + (state.party===1 ? " surfer" : " surfers");
+      S.pack.textContent  = PACK_LABEL[state.pack];
     }
-    if (lessHint) lessHint.textContent = rate>0
-      ? "(−" + Math.round(rate*100) + "% pack discount applied)"
-      : "(3+ lessons save 10%)";
   }
 
-  // ---- party counter (max bound to selected session's spots-left)
-  const partyMinus=document.getElementById('partyMinus'),
-        partyPlus =document.getElementById('partyPlus'),
-        partyVal  =document.getElementById('partyVal');
+  // update package prices shown per formula (deluxe vs group)
+  function refreshPackPrices(){
+    var key = state.formula === "group" ? "group" : "deluxe";
+    document.querySelectorAll('.pack .pp').forEach(function(el){
+      var v = el.getAttribute('data-pp-' + key);
+      if(v) el.textContent = v;
+    });
+  }
+
   function syncParty(){
     partyVal.textContent = state.party;
-    partyMinus.disabled = state.party<=1;
-    partyPlus.disabled  = state.party>=state.partyMax;
-    if (partyHint) partyHint.textContent =
-      "(" + state.partyMax + " spot" + (state.partyMax===1?"":"s") + " left in this session)";
+    partyMinus.disabled = state.party <= 1;
+    partyPlus.disabled  = state.party >= state.partyMax;
     recompute();
   }
-  partyMinus.addEventListener('click', ()=>{ if(state.party>1){ state.party--; syncParty(); } });
-  partyPlus .addEventListener('click', ()=>{ if(state.party<state.partyMax){ state.party++; syncParty(); } });
 
-  // ---- lessons counter (fixed 1–10)
-  const lessMinus=document.getElementById('lessMinus'),
-        lessPlus =document.getElementById('lessPlus'),
-        lessVal  =document.getElementById('lessVal');
-  function syncLess(){
-    lessVal.textContent = state.lessons;
-    lessMinus.disabled = state.lessons<=1;
-    lessPlus.disabled  = state.lessons>=10;
-    recompute();
+  // ---- react to formula choice ----
+  function applyFormula(){
+    var f = FORMULAS[state.formula];
+    var isPrivate = f.kind === "private";
+    // party bounds: private 1–7; group formulas capped to min(formula max, spots left)
+    var cap = isPrivate ? f.max : Math.min(f.max, selectedSpots() || f.max);
+    state.partyMax = cap;
+    if(state.party > state.partyMax) state.party = state.partyMax;
+    if(state.party < 1) state.party = 1;
+    // labels + visibility
+    partyLabel.textContent = isPrivate ? "How big is your group?" : "How many surfers?";
+    packField.style.display = isPrivate ? "none" : "";
+    privateNote.style.display = isPrivate ? "" : "none";
+    runNote.style.display = isPrivate ? "none" : "";
+    if(!isPrivate){
+      runNoteText.textContent = "This " + (state.formula==="deluxe"?"deluxe":"group") +
+        " lesson runs from " + f.min + " bookings (max " + f.max + " per coach).";
+    }
+    if(isPrivate){ state.pack = 1; }
+    // session spots labelling per formula
+    document.querySelectorAll('.session').forEach(function(card){
+      var spotsEl = card.querySelector('.spots');
+      var spots = +card.getAttribute('data-spots');
+      if(isPrivate){
+        spotsEl.classList.remove('low');
+        spotsEl.textContent = "Private slot";
+      } else {
+        spotsEl.textContent = spots + (spots===1 ? " spot left" : " spots left");
+        spotsEl.classList.toggle('low', spots <= 3);
+      }
+    });
+    if(groupSub){
+      groupSub.textContent = isPrivate
+        ? "Tell us your group size (1 to 7). The price is for the whole session."
+        : "Choose your group size and package. The price updates on the right.";
+    }
+    refreshPackPrices();
+    syncParty();
   }
-  lessMinus.addEventListener('click', ()=>{ if(state.lessons>1){ state.lessons--; syncLess(); } });
-  lessPlus .addEventListener('click', ()=>{ if(state.lessons<10){ state.lessons++; syncLess(); } });
 
-  // ---- STEP 1: session cards
-  document.querySelectorAll('.session').forEach(card=>{
-    const input = card.querySelector('input');
-    card.addEventListener('click', ()=>{
-      document.querySelectorAll('.session').forEach(c=>c.classList.remove('sel'));
+  // formula cards
+  document.querySelectorAll('.lesson').forEach(function(card){
+    card.addEventListener('click', function(){
+      document.querySelectorAll('.lesson').forEach(function(c){ c.classList.remove('sel'); });
       card.classList.add('sel');
-      input.checked = true;
-      state.sessionPrice = +card.dataset.price;
-      state.partyMax = +input.dataset.spots || 8;
-      if (state.party > state.partyMax) state.party = state.partyMax;
-      S.session.textContent = input.dataset.short;
-      syncParty();
+      card.querySelector('input').checked = true;
+      state.formula = card.getAttribute('data-formula');
+      applyFormula();
     });
   });
 
-  // ---- STEP 2: formulas
-  document.querySelectorAll('.formula').forEach(f=>{
-    f.addEventListener('click', ()=>{
-      document.querySelectorAll('.formula').forEach(x=>x.classList.remove('sel'));
-      f.classList.add('sel');
-      f.querySelector('input').checked = true;
-      state.formulaPrice = +f.dataset.price;
-      S.formula.textContent = f.dataset.name;
+  // session cards
+  document.querySelectorAll('.session').forEach(function(card){
+    card.addEventListener('click', function(){
+      document.querySelectorAll('.session').forEach(function(c){ c.classList.remove('sel'); });
+      card.classList.add('sel');
+      var input = card.querySelector('input');
+      input.checked = true;
+      state.season = card.getAttribute('data-high') === "1" ? "high" : "low";
+      state.sessionShort = input.getAttribute('data-short');
+      S.session.textContent = state.sessionShort;
+      S.session.classList.remove('empty');
+      // re-cap party to this session's spots for group formulas
+      applyFormula();
+    });
+  });
+
+  // package cards
+  document.querySelectorAll('.pack').forEach(function(card){
+    card.addEventListener('click', function(){
+      document.querySelectorAll('.pack').forEach(function(c){ c.classList.remove('sel'); });
+      card.classList.add('sel');
+      card.querySelector('input').checked = true;
+      state.pack = +card.getAttribute('data-pack');
       recompute();
     });
   });
 
-  syncParty();
-  syncLess();
+  // counter
+  partyMinus.addEventListener('click', function(){ if(state.party>1){ state.party--; syncParty(); } });
+  partyPlus .addEventListener('click', function(){ if(state.party<state.partyMax){ state.party++; syncParty(); } });
 
-  // ---- navigation
+  // ---- navigation ----
   function render(){
-    screens.forEach(s=> s.classList.toggle('is-active', +s.dataset.screen===state.step));
-    stepEls.forEach(el=>{
-      const n=+el.dataset.step;
+    screens.forEach(function(s){ s.classList.toggle('is-active', +s.getAttribute('data-screen')===state.step); });
+    stepEls.forEach(function(el){
+      var n = +el.getAttribute('data-step');
       el.classList.toggle('is-active', n===state.step);
       el.classList.toggle('is-done', n<state.step);
     });
-    const confirmed = state.step===4;
+    var confirmed = state.step===5;
     backBtn.classList.toggle('hidden', state.step===1 || confirmed);
     if(confirmed){ nextBtn.style.display='none'; bookBtn.style.display='none'; panelFoot.style.display='none'; return; }
-    nextBtn.style.display = state.step<3 ? 'inline-flex' : 'none';
-    bookBtn.style.display = state.step===3 ? 'inline-flex' : 'none';
+    nextBtn.style.display = state.step<4 ? 'inline-flex' : 'none';
+    bookBtn.style.display = state.step===4 ? 'inline-flex' : 'none';
     window.scrollTo({top:document.getElementById('book').offsetTop-70, behavior:'smooth'});
   }
 
-  nextBtn.addEventListener('click', ()=>{ if(state.step<3){ state.step++; render(); } });
-  backBtn.addEventListener('click', ()=>{ if(state.step>1){ state.step--; render(); } });
+  nextBtn.addEventListener('click', function(){
+    // require a session on step 2 before continuing
+    if(state.step===2 && !document.querySelector('input[name="session"]:checked')){
+      var first = document.querySelector('.session'); if(first){ first.classList.add('sel'); first.querySelector('input').checked=true; first.click(); }
+    }
+    if(state.step<4){ state.step++; render(); }
+  });
+  backBtn.addEventListener('click', function(){ if(state.step>1){ state.step--; render(); } });
 
-  document.getElementById('wizard').addEventListener('submit', e=>{
+  document.getElementById('wizard').addEventListener('submit', function(e){
     e.preventDefault();
-    // minimal validation on step 3 required fields
-    const req = ['fullname','email','phone'];
-    let ok=true;
-    req.forEach(id=>{ const el=document.getElementById(id); if(!el.value.trim()){ el.style.borderColor='var(--coral-deep)'; ok=false; } else { el.style.borderColor=''; } });
+    var ok = true, req = ['fullname','email','phone'];
+    req.forEach(function(id){ var el=document.getElementById(id); if(!el.value.trim()){ el.style.borderColor='var(--coral-deep)'; ok=false; } else { el.style.borderColor=''; } });
     if(!ok) return;
-    state.step=4; render();
+    state.step=5; render();
   });
 
+  applyFormula();
   recompute();
 })();
 </script>
