@@ -65,13 +65,15 @@
   /* ---- question card ---- */
   .q{background:var(--surface);border:1px solid var(--line);border-radius:16px;
     padding:18px 20px;box-shadow:var(--shadow-sm);margin-bottom:14px}
+  /* label is a normal text block; the number sits in a left gutter so long
+     questions and inline <b> words wrap naturally (no flex-gap artefacts). */
   .q-label{font-family:var(--sans);font-weight:700;color:var(--ink);font-size:1.02rem;
-    margin:0;display:flex;gap:.6rem;align-items:baseline}
-  .q-num{flex:none;font-family:var(--serif);font-weight:700;color:var(--coral-deep);
-    font-size:.95rem;min-width:2.3rem}
+    margin:0;position:relative;padding-left:2.9rem;line-height:1.5}
+  .q-num{position:absolute;left:0;top:0;font-family:var(--serif);font-weight:700;
+    color:var(--coral-deep);font-size:.98rem}
   .q-help{margin:.35rem 0 .1rem 2.9rem;font-size:.9rem;color:var(--ink-soft)}
   .q-body{margin:.85rem 0 0 2.9rem;display:flex;flex-direction:column;gap:.55rem}
-  @media(max-width:560px){.q-help,.q-body{margin-left:0}}
+  @media(max-width:560px){.q-label{padding-left:2.3rem}.q-help,.q-body{margin-left:0}}
 
   .choices{display:flex;flex-direction:column;gap:.45rem}
   .choices.inline{flex-flow:row wrap}
@@ -90,11 +92,9 @@
   input:focus,textarea:focus,select:focus{outline:none;border-color:var(--seafoam);
     background:#fff;box-shadow:0 0 0 3px rgba(143,187,170,.25)}
   textarea{resize:vertical;min-height:68px}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.55rem}
-  @media(max-width:560px){.grid2{grid-template-columns:1fr}}
   .row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
-  .row label.tag{font-size:.92rem;color:var(--ink-soft);font-weight:600;min-width:9.5rem}
-  .row input{max-width:9rem}
+  .row label.tag{font-size:.92rem;color:var(--ink-soft);font-weight:600;min-width:11rem}
+  .row input{max-width:11rem}
   .unit{font-size:.9rem;color:var(--ink-soft)}
 
   .scenario{background:var(--coral-soft);border:1px solid var(--coral);border-radius:14px;
@@ -141,12 +141,13 @@
 <header class="hero">
   <div class="wrap">
     <p class="eyebrow">Coco Surf School · online reservatietool</p>
-    <div class="hero-badge"><span class="dot"></span> Voor Annelies · duurt ± 10 minuten</div>
+    <div class="hero-badge"><span class="dot"></span> Voor Annelies · duurt ± 5 minuten</div>
     <h1>Dag Annelies, een paar vragen over hoe <em>jij werkt</em></h1>
-    <p class="lead">We willen de online reservatie bouwen zoals het bij Coco écht loopt, en niet omgekeerd.
-      Beantwoord wat je kan (kort mag altijd). Waar we een voorstel doen, mag je gewoon een vakje aankruisen.
-      <strong>Je antwoorden worden automatisch bewaard</strong> in deze browser terwijl je invult, en onderaan
-      klik je op <strong>“Kopieer mijn antwoorden”</strong> om ze door te sturen.</p>
+    <p class="lead">Wat al op je website staat (lestypes, prijzen, groepsgroottes, talen) kennen we al,
+      dus daar vragen we niets meer over. Hieronder enkel de dingen die we écht van jou nodig hebben om
+      de reservatie goed te bouwen. Kort antwoorden mag altijd. <strong>Je antwoorden worden automatisch
+      bewaard</strong> in deze browser, en onderaan klik je op <strong>“Kopieer mijn antwoorden”</strong>
+      om ze door te sturen.</p>
     <div class="cta-row">
       <a class="btn btn--primary" href="#s1">Start met de vragen ↓</a>
       <a class="btn btn--ghost" href="#klaar">Meteen doorsturen ↓</a>
@@ -159,57 +160,26 @@
 
 <main id="form">
 
-  <!-- ===== 1. Lestypes ===== -->
+  <!-- ===== 1. Sessies & niveaus ===== -->
   <section class="block wrap" id="s1">
-    <div class="sec-head"><h2>1 · Lestypes &amp; aanbod</h2><span class="count">jouw aanbod</span></div>
+    <div class="sec-head"><h2>1 · Sessies &amp; niveaus</h2><span class="count">opzet</span></div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">1.1</span> Welke soorten lessen bied je aan?</p>
-      <div class="q-body">
-        <div class="choices">
-          <label class="choice"><input type="checkbox"><span>Groepsles (normaal)</span></label>
-          <label class="choice"><input type="checkbox"><span>Groepsles <b>“deluxe”</b> <em>(wat is precies het verschil met een normale groepsles?)</em></span></label>
-          <label class="choice"><input type="checkbox"><span>Privéles (1-op-1)</span></label>
-          <label class="choice"><input type="checkbox"><span>Ontdekking / “discovery” (eerste keer)</span></label>
-          <label class="choice"><input type="checkbox"><span>Kids club</span></label>
-          <label class="choice"><input type="checkbox"><span>Stage / meerdaagse (surfkamp)</span></label>
-          <label class="choice"><input type="checkbox"><span>Surf &amp; yoga</span></label>
-          <label class="choice"><input type="checkbox"><span>Longboard</span></label>
-        </div>
-        <input type="text" placeholder="Nog een ander lestype? Schrijf het hier…">
-      </div>
-    </div>
-
-    <div class="q">
-      <p class="q-label"><span class="q-num">1.2</span> Wat is verreweg je <b>meest geboekte</b> les?</p>
-      <p class="q-help">Bv. normale groepsles, deluxe, privé…</p>
-      <div class="q-body"><input type="text" placeholder="Je meest gevraagde les…"></div>
-    </div>
-
-    <div class="q">
-      <p class="q-label"><span class="q-num">1.3</span> Wat is het verschil tussen “deluxe” en een normale groepsles?</p>
-      <div class="q-body"><textarea placeholder="Kleinere groep? Betere coach-ratio? Ander materiaal? Andere prijs?"></textarea></div>
-    </div>
-
-    <div class="q">
-      <p class="q-label"><span class="q-num">1.4</span> Hoeveel surfers zitten er <b>maximum</b> in elk type, en hoe lang duurt een les?</p>
-      <div class="q-body">
-        <div class="row"><label class="tag">Normale groepsles</label><input type="text" placeholder="bv. max 8 · 1u30"></div>
-        <div class="row"><label class="tag">Deluxe groepsles</label><input type="text" placeholder="bv. max 5 · 1u30"></div>
-        <div class="row"><label class="tag">Privéles</label><input type="text" placeholder="bv. 1 pers · 1u"></div>
-        <div class="row"><label class="tag">Kids club</label><input type="text" placeholder="bv. max 8 · 1u"></div>
-      </div>
-    </div>
-
-    <div class="q">
-      <p class="q-label"><span class="q-num">1.5</span> Werk je met <b>niveaus</b> (beginner / gemiddeld / gevorderd)?</p>
+      <p class="q-label"><span class="q-num">1.1</span> Werk je met niveaus, en moeten sessies daarop opgesplitst worden?</p>
+      <p class="q-help">Bv. een aparte sessie voor beginners en een voor gevorderden, of gewoon gemengd binnen dezelfde les.</p>
       <div class="q-body">
         <div class="choices inline">
-          <label class="choice"><input type="radio" name="q15"><span>Nee, alles samen</span></label>
-          <label class="choice"><input type="radio" name="q15"><span>Ja, aparte sessies per niveau</span></label>
-          <label class="choice"><input type="radio" name="q15"><span>Ja, maar gemengd in dezelfde sessie</span></label>
+          <label class="choice"><input type="radio" name="q11"><span>Alles gemengd in dezelfde les</span></label>
+          <label class="choice"><input type="radio" name="q11"><span>Aparte sessies per niveau</span></label>
+          <label class="choice"><input type="radio" name="q11"><span>Hangt af (leg uit)</span></label>
         </div>
+        <input type="text" placeholder="Toelichting (optioneel)…">
       </div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">1.2</span> Kinderen: apart aanbod of samen met volwassenen? En vanaf welke leeftijd?</p>
+      <div class="q-body"><input type="text" placeholder="Bv. kinderen in de gewone les vanaf 8 jaar, of aparte kids-sessies…"></div>
     </div>
   </section>
 
@@ -220,20 +190,20 @@
       <strong>hoeveel lessen kunnen er tegelijk doorgaan?</strong></p></div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">2.1</span> Hoeveel lesgevers/coaches zijn er <b>tegelijk</b> beschikbaar per tijdslot?</p>
+      <p class="q-label"><span class="q-num">2.1</span> Hoeveel lesgevers zijn er <b>tegelijk</b> beschikbaar per tijdslot?</p>
       <div class="q-body">
         <div class="choices">
-          <label class="choice"><input type="radio" name="q21"><span>Alleen ik (Annelies) → <b>1 les tegelijk</b></span></label>
-          <label class="choice"><input type="radio" name="q21"><span>Meestal ik + 1 extra coach → 2 lessen tegelijk</span></label>
-          <label class="choice"><input type="radio" name="q21"><span>Wisselt per dag/seizoen (leg uit hieronder)</span></label>
+          <label class="choice"><input type="radio" name="q21"><span>Alleen ik (Annelies), dus 1 les tegelijk</span></label>
+          <label class="choice"><input type="radio" name="q21"><span>Meestal ik + 1 extra coach, dus 2 lessen tegelijk</span></label>
+          <label class="choice"><input type="radio" name="q21"><span>Wisselt per dag of seizoen (leg uit hieronder)</span></label>
         </div>
         <input type="text" placeholder="Toelichting (optioneel)…">
       </div>
     </div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">2.2</span> Scenario: iemand wil morgen om 9u een <b>privéles</b>, maar 4 anderen willen om 9u een <b>groepsles</b>. Wat moet er gebeuren?</p>
-      <div class="scenario">Als er maar één coach is, kan er per uur maar één les doorgaan, dus privé en groep botsen. Kies wat voor jou juist voelt:</div>
+      <p class="q-label"><span class="q-num">2.2</span> Iemand wil morgen om 9u een privéles, maar 4 anderen willen om 9u een groepsles. Wat moet er gebeuren?</p>
+      <div class="scenario">Als er maar één lesgever is, kan er per uur maar één les doorgaan, dus privé en groep botsen. Kies wat voor jou juist voelt:</div>
       <div class="q-body">
         <div class="choices">
           <label class="choice"><input type="radio" name="q22"><span><b>A.</b> Wie eerst boekt, krijgt het slot. Zodra 9u privé geboekt is, verdwijnt 9u als groepsslot (en omgekeerd).</span></label>
@@ -247,7 +217,7 @@
 
     <div class="q">
       <p class="q-label"><span class="q-num">2.3</span> Klopt dit gedrag in de tool?</p>
-      <p class="q-help">Bij <b>privéles</b> → toon enkel uren waar nog geen groep geboekt is. Bij <b>groepsles</b> → verberg de uren waar al een privé geboekt is.</p>
+      <p class="q-help">Bij een privéles tonen we enkel uren waar nog geen groep geboekt is. Bij een groepsles verbergen we de uren waar al een privé geboekt is.</p>
       <div class="q-body">
         <div class="choices inline">
           <label class="choice"><input type="radio" name="q23"><span>Ja, precies zo</span></label>
@@ -258,7 +228,7 @@
     </div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">2.4</span> Als er tóch 2 coaches zijn: mogen een privé- en een groepsles dan <b>wél tegelijk</b> doorgaan op hetzelfde uur?</p>
+      <p class="q-label"><span class="q-num">2.4</span> Als er tóch 2 lesgevers zijn: mogen een privé- en een groepsles dan wél tegelijk doorgaan op hetzelfde uur?</p>
       <div class="q-body">
         <div class="choices inline">
           <label class="choice"><input type="radio" name="q24"><span>Ja</span></label>
@@ -270,11 +240,8 @@
     </div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">2.5</span> <b>Minimum</b> aantal boekingen om een groepsles te laten doorgaan (quorum)?</p>
-      <div class="q-body">
-        <div class="row"><label class="tag">Minimum</label><input type="number" min="1" placeholder="bv. 2"><span class="unit">personen</span></div>
-        <textarea placeholder="Wat doe je nu als er te weinig zijn? (afbellen / verzetten / toch aan privé-tarief / samenvoegen met andere groep)"></textarea>
-      </div>
+      <p class="q-label"><span class="q-num">2.5</span> Een deluxe les start vanaf 2 personen, een gewone groep vanaf 3. Wat doe je als er <b>te weinig</b> boekingen zijn?</p>
+      <div class="q-body"><textarea placeholder="Bv. afbellen en voorschot terugbetalen · verzetten naar een andere dag · samenvoegen met een andere groep · toch laten doorgaan aan een aangepast tarief…"></textarea></div>
     </div>
 
     <div class="q">
@@ -289,100 +256,56 @@
     </div>
   </section>
 
-  <!-- ===== 3. Prijzen ===== -->
+  <!-- ===== 3. Pakketten & korting ===== -->
   <section class="block wrap">
-    <div class="sec-head"><h2>3 · Prijzen &amp; kortingen</h2><span class="count">tarieven</span></div>
+    <div class="sec-head"><h2>3 · Pakketten &amp; korting</h2><span class="count">tarieven</span></div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">3.1</span> Wat kost elk lestype? <span class="unit">(per persoon, tenzij anders)</span></p>
+      <p class="q-label"><span class="q-num">3.1</span> Je pakketten (3 lessen, 5-daagse stage) staan al op de site, en “2 of 4 lessen” kan ook. Hoe bepaal je de prijs voor <b>2 of 4</b> lessen?</p>
+      <p class="q-help">En geldt een pakket per persoon, of mag een groep vrienden samen één pakket delen?</p>
+      <div class="q-body"><textarea placeholder="Bv. 2 lessen = … / 4 lessen = … · pakket geldt per persoon / per boeking…"></textarea></div>
+    </div>
+
+    <div class="q">
+      <p class="q-label"><span class="q-num">3.2</span> Bestaan er <b>cadeaubonnen</b> die iemand online zou moeten kunnen inwisselen?</p>
       <div class="q-body">
-        <div class="row"><label class="tag">Normale groepsles</label><input type="text" placeholder="€ …"></div>
-        <div class="row"><label class="tag">Deluxe groepsles</label><input type="text" placeholder="€ …"></div>
-        <div class="row"><label class="tag">Privéles</label><input type="text" placeholder="€ …"></div>
-        <div class="row"><label class="tag">Ontdekking / discovery</label><input type="text" placeholder="€ …"></div>
-        <div class="row"><label class="tag">Kids club</label><input type="text" placeholder="€ …"></div>
-        <div class="row"><label class="tag">Stage / meerdaagse</label><input type="text" placeholder="€ …"></div>
-      </div>
-    </div>
-
-    <div class="q">
-      <p class="q-label"><span class="q-num">3.2</span> Meerdere lessen = korting: hoe werkt dat <b>precies</b>?</p>
-      <p class="q-help">We hadden voorlopig “vanaf 3 lessen 10%” gezet, maar we willen jouw echte regels.</p>
-      <div class="q-body">
-        <div class="row"><label class="tag">Korting vanaf</label><input type="number" min="1" placeholder="bv. 3"><span class="unit">lessen</span></div>
         <div class="choices inline">
-          <label class="choice"><input type="radio" name="q32type"><span>Percentage (bv. −10%)</span></label>
-          <label class="choice"><input type="radio" name="q32type"><span>Vaste pakketprijs (bv. 5-lessenkaart = € …)</span></label>
+          <label class="choice"><input type="radio" name="q32"><span>Ja</span></label>
+          <label class="choice"><input type="radio" name="q32"><span>Nee</span></label>
         </div>
-        <div class="choices inline">
-          <label class="choice"><input type="radio" name="q32per"><span>Korting geldt per persoon</span></label>
-          <label class="choice"><input type="radio" name="q32per"><span>Korting geldt per boeking (bv. 4 vrienden samen)</span></label>
-        </div>
-        <textarea placeholder="Bestaan er vaste lessenkaarten / pakketten? Welke en aan welke prijs?"></textarea>
+        <input type="text" placeholder="Toelichting (optioneel)…">
       </div>
-    </div>
-
-    <div class="q">
-      <p class="q-label"><span class="q-num">3.3</span> Is er een <b>groepskorting</b> als meerdere mensen samen boeken? Zit <b>materiaal</b> (board + wetsuit) altijd in de prijs?</p>
-      <div class="q-body"><textarea placeholder="Groepskorting: … · Materiaal inbegrepen: ja/nee, uitzonderingen…"></textarea></div>
-    </div>
-
-    <div class="q">
-      <p class="q-label"><span class="q-num">3.4</span> Privéles: strikt 1 persoon, of mag een <b>koppel/duo</b> samen een “privé” nemen? Bestaan er <b>cadeaubonnen</b>?</p>
-      <div class="q-body"><textarea placeholder="Duo-privé: ja/nee + prijs · Cadeaubonnen: ja/nee…"></textarea></div>
     </div>
   </section>
 
-  <!-- ===== 4. Betaling ===== -->
+  <!-- ===== 4. Voorschot & betaling ===== -->
   <section class="block wrap">
     <div class="sec-head"><h2>4 · Voorschot &amp; betaling</h2><span class="count">geld</span></div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">4.1</span> We gingen uit van een <b>voorschot van 30%</b> om te bevestigen. Klopt dat?</p>
-      <div class="q-body">
-        <div class="row"><label class="tag">Voorschot</label><input type="text" placeholder="bv. 30%"></div>
-        <div class="choices inline">
-          <label class="choice"><input type="radio" name="q41"><span>Voor alle lestypes hetzelfde</span></label>
-          <label class="choice"><input type="radio" name="q41"><span>Verschilt per type (leg uit)</span></label>
-        </div>
-        <input type="text" placeholder="Toelichting…">
-      </div>
-    </div>
-
-    <div class="q">
-      <p class="q-label"><span class="q-num">4.2</span> Hoe betaalt de klant het <b>voorschot</b> het liefst?</p>
+      <p class="q-label"><span class="q-num">4.1</span> Je vraagt nu 30% voorschot via overschrijving of cash. Wil je in de online tool ook <b>online betalen</b> toevoegen?</p>
+      <p class="q-help">Online betalen (Bancontact / Payconiq / kaart) zorgt dat een boeking meteen écht bevestigd is, zonder heen-en-weer.</p>
       <div class="q-body">
         <div class="choices">
-          <label class="choice"><input type="checkbox"><span>Online (kaart / Payconiq / Bancontact) <em>(aanrader voor een echte bevestiging)</em></span></label>
-          <label class="choice"><input type="checkbox"><span>Overschrijving</span></label>
-          <label class="choice"><input type="checkbox"><span>Cash ter plaatse</span></label>
+          <label class="choice"><input type="radio" name="q41"><span>Ja, graag online betalen</span></label>
+          <label class="choice"><input type="radio" name="q41"><span>Nee, hou het bij overschrijving / cash</span></label>
+          <label class="choice"><input type="radio" name="q41"><span>Weet ik nog niet, leg me de opties uit</span></label>
         </div>
       </div>
     </div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">4.3</span> Hoe wordt het <b>saldo</b> (de rest) op de dag zelf betaald?</p>
-      <div class="q-body">
-        <div class="row"><label class="tag">Betaalwijze</label><input type="text" placeholder="cash / kaart"></div>
-        <div class="choices inline">
-          <label class="choice"><input type="radio" name="q43"><span>Ik heb een kaartlezer/betaalterminal</span></label>
-          <label class="choice"><input type="radio" name="q43"><span>Enkel cash</span></label>
-        </div>
-      </div>
-    </div>
-
-    <div class="q">
-      <p class="q-label"><span class="q-num">4.4</span> <b>Annulatie- en terugbetaalbeleid</b>: tot wanneer mag een klant gratis annuleren of verzetten? En wat bij een <b>no-show</b>?</p>
+      <p class="q-label"><span class="q-num">4.2</span> Tot wanneer mag een klant gratis <b>annuleren of verzetten</b>? En wat doe je bij een <b>no-show</b>?</p>
       <div class="q-body"><textarea placeholder="Bv. gratis annuleren tot 48u ervoor; voorschot blijft bij latere annulatie; no-show = …"></textarea></div>
     </div>
   </section>
 
-  <!-- ===== 5. Getijden ===== -->
+  <!-- ===== 5. Getijden, planning & seizoen ===== -->
   <section class="block wrap">
-    <div class="sec-head"><h2>5 · Getijden, tijdsloten &amp; seizoen</h2><span class="count">planning</span></div>
+    <div class="sec-head"><h2>5 · Getijden, planning &amp; seizoen</h2><span class="count">agenda</span></div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">5.1</span> De uren hangen af van het <b>getij</b>. Zet je ze liever zelf vast, of mag de tool ze automatisch berekenen?</p>
+      <p class="q-label"><span class="q-num">5.1</span> De uren hangen af van het getij. Zet je ze liever zelf vast, of mag de tool ze automatisch voorstellen?</p>
       <div class="q-body">
         <div class="choices inline">
           <label class="choice"><input type="radio" name="q51"><span>Automatisch uit het getij</span></label>
@@ -393,9 +316,9 @@
     </div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">5.2</span> Hoeveel sessies doe je typisch <b>per dag</b>, en in welke <b>maanden</b> ben je open?</p>
+      <p class="q-label"><span class="q-num">5.2</span> Hoeveel sessies doe je typisch <b>per dag</b>, en wanneer ben je <b>open</b>?</p>
       <div class="q-body">
-        <div class="row"><label class="tag">Sessies/dag hoogseizoen</label><input type="text" placeholder="bv. 4"></div>
+        <div class="row"><label class="tag">Sessies/dag hoogseizoen</label><input type="text" placeholder="bv. 3-4"></div>
         <div class="row"><label class="tag">Sessies/dag laagseizoen</label><input type="text" placeholder="bv. 1-2"></div>
         <div class="row"><label class="tag">Open van/tot</label><input type="text" placeholder="bv. april → oktober"></div>
         <div class="row"><label class="tag">Vaste sluitingsdag(en)</label><input type="text" placeholder="bv. zondag, of geen"></div>
@@ -403,12 +326,7 @@
     </div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">5.3</span> Op welke <b>stranden</b> geef je les, en wisselt dat per sessie?</p>
-      <div class="q-body"><input type="text" placeholder="bv. Les Bourdaines, Les Estagnots, La Gravière…"></div>
-    </div>
-
-    <div class="q">
-      <p class="q-label"><span class="q-num">5.4</span> Mogen mensen <b>last-minute</b> boeken (zelfde dag)? En wat doe je bij <b>slecht weer / te grote swell</b>?</p>
+      <p class="q-label"><span class="q-num">5.3</span> Mogen mensen <b>last-minute</b> boeken (zelfde dag)? En wat doe je bij <b>slecht weer</b> of te grote swell?</p>
       <div class="q-body">
         <div class="row"><label class="tag">Last-minute tot</label><input type="text" placeholder="bv. tot 2u voor de les / niet"></div>
         <textarea placeholder="Slecht weer: annuleren of verzetten? Hoe verwittig je klanten nu?"></textarea>
@@ -416,7 +334,7 @@
     </div>
   </section>
 
-  <!-- ===== 6. Klantgegevens ===== -->
+  <!-- ===== 6. Klantgegevens & communicatie ===== -->
   <section class="block wrap">
     <div class="sec-head"><h2>6 · Klantgegevens &amp; communicatie</h2><span class="count">contact</span></div>
 
@@ -427,7 +345,6 @@
           <label class="choice"><input type="checkbox"><span>Naam</span></label>
           <label class="choice"><input type="checkbox"><span>E-mail</span></label>
           <label class="choice"><input type="checkbox"><span>Telefoon</span></label>
-          <label class="choice"><input type="checkbox"><span>Taal</span></label>
           <label class="choice"><input type="checkbox"><span>Niveau</span></label>
           <label class="choice"><input type="checkbox"><span>Leeftijd</span></label>
           <label class="choice"><input type="checkbox"><span>Lengte / gewicht <em>(voor de juiste board- en wetsuitmaat?)</em></span></label>
@@ -437,7 +354,7 @@
     </div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">6.2</span> Moet de klant een <b>waiver / aansprakelijkheidsverklaring</b> tekenen of medische vragen beantwoorden (kan zwemmen, gezondheid)?</p>
+      <p class="q-label"><span class="q-num">6.2</span> Moet de klant een <b>waiver</b> tekenen of medische vragen beantwoorden (kan zwemmen, gezondheid)?</p>
       <div class="q-body">
         <div class="choices inline">
           <label class="choice"><input type="radio" name="q62"><span>Ja, doe ik nu op papier</span></label>
@@ -448,20 +365,15 @@
     </div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">6.3</span> Welke automatische e-mails wil je, en in welke <b>talen</b>?</p>
+      <p class="q-label"><span class="q-num">6.3</span> Welke automatische e-mails wil je?</p>
+      <p class="q-help">De talen kennen we al van je site (FR · NL · DE · EN · ES), die sturen we in de juiste taal per klant.</p>
       <div class="q-body">
         <div class="choices">
           <label class="choice"><input type="checkbox"><span>Bevestiging na boeking</span></label>
           <label class="choice"><input type="checkbox"><span>Herinnering vóór de les (bv. dag ervoor)</span></label>
           <label class="choice"><input type="checkbox"><span>Bedankt / review-vraag na de les</span></label>
         </div>
-        <div class="row"><label class="tag">Talen</label><input type="text" placeholder="bv. FR · NL · DE · EN · ES"></div>
       </div>
-    </div>
-
-    <div class="q">
-      <p class="q-label"><span class="q-num">6.4</span> Kan een <b>ouder voor een kind</b> boeken? Is er een <b>minimumleeftijd</b>?</p>
-      <div class="q-body"><input type="text" placeholder="bv. ja, ouder boekt · minimumleeftijd 6 jaar"></div>
     </div>
   </section>
 
@@ -484,7 +396,7 @@
     </div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">7.2</span> Wil je sessies zelf <b>aanmaken</b>, of automatisch laten <b>genereren</b> uit een getij-regel en enkel goedkeuren?</p>
+      <p class="q-label"><span class="q-num">7.2</span> Wil je sessies zelf <b>aanmaken</b>, of automatisch laten <b>genereren</b> uit het getij en enkel goedkeuren?</p>
       <div class="q-body">
         <div class="choices inline">
           <label class="choice"><input type="radio" name="q72"><span>Zelf aanmaken</span></label>
@@ -495,7 +407,7 @@
     </div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">7.3</span> Hoe ver op voorhand wil je sessies <b>openzetten</b> voor boeking? Wil je elke boeking eerst zelf <b>bevestigen</b>, of automatisch zodra het voorschot betaald is?</p>
+      <p class="q-label"><span class="q-num">7.3</span> Hoe ver op voorhand wil je sessies <b>openzetten</b>? En wil je elke boeking eerst zelf bevestigen, of automatisch zodra het voorschot betaald is?</p>
       <div class="q-body">
         <div class="row"><label class="tag">Openzetten</label><input type="text" placeholder="bv. 1-2 maanden vooruit"></div>
         <div class="choices inline">
@@ -511,8 +423,8 @@
     <div class="sec-head"><h2>8 · Extra &amp; edge cases</h2><span class="count">bijna klaar</span></div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">8.1</span> <b>Stages / meerdaagse</b>: boekt iemand per dag of als één pakket (bv. 5 dagen)? Kan iemand een hele sessie <b>privatiseren</b> (bv. vrijgezellenweekend van 8)?</p>
-      <div class="q-body"><textarea placeholder="Stage: per dag / als pakket… · Volledige sessie afhuren: ja/nee + prijs…"></textarea></div>
+      <p class="q-label"><span class="q-num">8.1</span> Een <b>5-daagse stage</b>: boekt iemand dat als één pakket, en moet elke dag apart in de agenda staan (met een eigen uur per getij)?</p>
+      <div class="q-body"><textarea placeholder="Bv. één pakket, maar 5 losse sessies in de agenda; of alle 5 op hetzelfde uur…"></textarea></div>
     </div>
 
     <div class="q">
@@ -531,8 +443,8 @@
     </div>
 
     <div class="q">
-      <p class="q-label"><span class="q-num">8.4</span> Wat is voor jou het <b>belangrijkste</b> dat deze tool moet kunnen: waaraan merk je dat hij écht werkt?</p>
-      <div class="q-body"><textarea placeholder="Het allerbelangrijkste voor jou…"></textarea></div>
+      <p class="q-label"><span class="q-num">8.4</span> Wat is voor jou het <b>belangrijkste</b> dat deze tool moet kunnen?</p>
+      <div class="q-body"><textarea placeholder="Waaraan merk je dat de tool écht werkt voor jou…"></textarea></div>
     </div>
   </section>
 
@@ -563,7 +475,7 @@
 <script>
 (function(){
   var MAIL = "admin@be-tango.com";
-  var KEY  = "coco-vragen-annelies-v1";
+  var KEY  = "coco-vragen-annelies-v2";
   var form = document.getElementById('form');
   var inputs = [].slice.call(form.querySelectorAll('input, textarea, select'));
 
@@ -597,7 +509,6 @@
   }
   function compile(){
     var lines = ["COCO SURF SCHOOL — antwoorden Annelies (reservatietool)", ""];
-    // walk section headings and question cards in document order
     var nodes = form.querySelectorAll('.sec-head h2, .q');
     nodes.forEach(function(node){
       if(node.tagName === 'H2'){ lines.push("", "=== " + node.textContent.trim() + " ==="); return; }
