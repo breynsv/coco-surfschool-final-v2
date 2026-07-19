@@ -180,8 +180,24 @@
 .sum-total .sub .rest{color:#fff; font-weight:600}
 .sum-foot{padding:14px 24px 20px; font-size:12.5px; color:var(--ink-soft); display:flex; gap:9px; align-items:flex-start}
 .sum-foot svg{width:15px; height:15px; color:var(--seafoam-deep); flex:none; margin-top:2px}
-/* mobile: keep the wizard on top and let the summary follow below it */
-@media(max-width:959px){ .summary{position:static; order:0} }
+/* mobile: sticky bottom bar (tap to expand the full summary as a bottom sheet) */
+.mbar{display:none}
+@media(max-width:959px){
+  .booking{padding-bottom:80px}
+  .summary{position:fixed; left:0; right:0; bottom:0; top:auto; z-index:60; margin:0}
+  .summary .panel{display:none; border-radius:20px 20px 0 0; max-height:72vh; overflow:auto; box-shadow:0 -18px 46px rgba(35,65,58,.24)}
+  .summary.open .panel{display:block; animation:bksheet .28s cubic-bezier(.2,.7,.3,1)}
+  @keyframes bksheet{from{transform:translateY(24px)} to{transform:none}}
+  .mbar{display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%;
+    background:var(--ink); color:var(--cream); border:none; cursor:pointer; padding:13px 20px 15px;
+    box-shadow:0 -8px 24px rgba(35,65,58,.20); font-family:var(--font-body); text-align:left}
+  .mbar-left{font-size:12.5px; line-height:1.35; color:var(--mint-2)}
+  .mbar-left b{color:#fff; font-weight:600; display:block; font-size:13.5px}
+  .mbar-right{display:flex; align-items:center; gap:9px; font-family:var(--font-display); font-size:21px; font-weight:600; color:#fff; white-space:nowrap}
+  .mbar-right svg{width:18px; height:18px; transition:transform .2s}
+  .summary.open .mbar-right svg{transform:rotate(180deg)}
+  .wa-fab{bottom:78px}
+}
 
 /* confirmation */
 .done-wrap{text-align:center; padding:20px 10px 8px}
@@ -389,7 +405,7 @@
     </form>
 
     <!-- ============ STICKY SUMMARY ============ -->
-    <aside class="summary" aria-label="Your booking summary">
+    <aside class="summary" id="summary" aria-label="Your booking summary">
       <div class="panel">
         <div class="sum-head"><span class="eyebrow">Your booking</span><h3>Session summary</h3></div>
         <div class="sum-body">
@@ -404,6 +420,10 @@
         </div>
         <div class="sum-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Board &amp; wetsuit included · 30% deposit reserves your spot.</span></div>
       </div>
+      <button type="button" class="mbar" id="mbarBtn" aria-expanded="false" aria-controls="summary">
+        <span class="mbar-left"><b id="mLesson">Deluxe group lesson</b><span id="mDep">€13.20</span> deposit now · tap for details</span>
+        <span class="mbar-right"><span id="mTotal">€44.00</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></span>
+      </button>
     </aside>
 
   </div>
@@ -470,6 +490,7 @@
     deposit:document.getElementById('sumDeposit'), total:document.getElementById('sumTotal'),
     balance:document.getElementById('sumBalance'), depInline:document.getElementById('depInline')
   };
+  var M = { lesson:document.getElementById('mLesson'), total:document.getElementById('mTotal'), dep:document.getElementById('mDep') };
   var partyVal=document.getElementById('partyVal'), partyMinus=document.getElementById('partyMinus'), partyPlus=document.getElementById('partyPlus');
   var partyLabel=document.getElementById('partyLabel'), runNote=document.getElementById('runNote'), runNoteText=document.getElementById('runNoteText');
   var packField=document.getElementById('packField'), privateNote=document.getElementById('privateNote'), groupSub=document.getElementById('groupSub');
@@ -481,6 +502,9 @@
     S.total.textContent=money(total); S.deposit.textContent=money(deposit); S.balance.textContent=money(total-deposit);
     if(S.depInline) S.depInline.textContent=money(deposit);
     S.formula.textContent=f.label;
+    if(M.lesson) M.lesson.textContent=f.label;
+    if(M.total) M.total.textContent=money(total);
+    if(M.dep) M.dep.textContent=money(deposit);
     if(f.kind==="private"){ S.party.textContent="Group of "+state.party; S.pack.textContent="Private session"; }
     else { S.party.textContent=state.party+(state.party===1?" surfer":" surfers"); S.pack.textContent=PACK_LABEL[state.pack]; }
   }
@@ -527,6 +551,10 @@
   }); });
   partyMinus.addEventListener('click', function(){ if(state.party>1){ state.party--; syncParty(); } });
   partyPlus .addEventListener('click', function(){ if(state.party<state.partyMax){ state.party++; syncParty(); } });
+
+  // mobile bottom-bar: tap to expand/collapse the full summary sheet
+  var summaryEl=document.getElementById('summary'), mbarBtn=document.getElementById('mbarBtn');
+  if(mbarBtn){ mbarBtn.addEventListener('click', function(){ var open=summaryEl.classList.toggle('open'); mbarBtn.setAttribute('aria-expanded', open?'true':'false'); }); }
 
   function render(){
     screens.forEach(function(s){ s.classList.toggle('is-active', +s.getAttribute('data-screen')===state.step); });
