@@ -87,3 +87,11 @@
 /service-page/yoga-pr%C3%A9natal               /fr/                301
 # Backstop for any service not listed above. MUST STAY LAST — first match wins.
 /service-page/*                                /fr/                301
+
+# ---- Booking pages withheld until the Membrero booking API is live ----
+# build.mjs omits these from PROD builds; without these rules they would 404.
+/fr/reserver/     /fr/contact/    301
+/en/book/         /en/contact/    301
+/nl/reserveren/   /nl/contact/    301
+/de/buchen/       /de/kontakt/    301
+/es/reservar/     /es/contacto/   301

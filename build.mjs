@@ -16,9 +16,22 @@ const SITE = 'https://www.coco-surfschool.com';
 // Preview (default) keeps the site noindexed and fully disallowed.
 const PROD = process.env.PROD === '1';
 const ROBOTS_META = PROD ? '' : '<meta name="robots" content="noindex, nofollow">\n';
+// The booking page renders a live sessions list from the Membrero CRM API.
+// Until that API is reachable over https from this domain it would render a
+// permanent "Loading available sessions…" state, so production omits it; the
+// slugs are redirected to contact in _redirects. Set COCO_BUILD_BOOK=1 (with a
+// real https COCO_API) to bring it back.
+const BUILD_BOOK = process.env.COCO_BUILD_BOOK === '1';
+const PROD_EXCLUDE = PROD && !BUILD_BOOK ? ['book'] : [];
 // Draft surf-booking page — points at the CRM booking API. Configurable via
 // COCO_API for other environments; defaults to the local dev tenant server.
 const API_BASE = process.env.COCO_API || 'http://coco.membrero.test:8090';
+// Never bake a non-https or dev API host into a production page.
+if (process.env.PROD === '1' && process.env.COCO_BUILD_BOOK === '1'
+    && !/^https:\/\//.test(API_BASE)) {
+  console.error(`Refusing to build: PROD=1 with the booking page enabled, but COCO_API is "${API_BASE}" (not https). Set COCO_API to the production booking API.`);
+  process.exit(1);
+}
 const LANGS = ['fr', 'nl', 'de', 'en', 'es'];
 const XDEFAULT = 'fr';
 const C = { fr, en, nl, de, es };
@@ -49,6 +62,7 @@ const PAGES = {
   book:      { fr: 'reserver',                en: 'book',                   nl: 'reserveren',           de: 'buchen',               es: 'reservar' },
 };
 const KEYS = Object.keys(PAGES);
+const EMITTED = KEYS.filter(k => !PROD_EXCLUDE.includes(k));
 const NAV = ['lessons', 'coach', 'stay', 'rental', 'contact'];
 
 const abs = (lang, key) => `${SITE}/${lang}/${PAGES[key][lang] ? PAGES[key][lang] + '/' : ''}`;
@@ -62,6 +76,9 @@ function urls(lang, key) {
     wa: 'https://wa.me/33647454265?text=' + encodeURIComponent(C[lang].waText),
   };
   for (const k of KEYS) u[k] = root + lang + '/' + (PAGES[k][lang] ? PAGES[k][lang] + '/' : '');
+  // Excluded pages are not emitted; point their links at contact so no CTA
+  // lands on a redirect or a 404.
+  for (const k of PROD_EXCLUDE) u[k] = root + lang + '/' + PAGES.contact[lang] + '/';
   u.alt = {};
   for (const l of LANGS) u.alt[l] = root + l + '/' + (PAGES[key][l] ? PAGES[key][l] + '/' : '');
   return u;
@@ -552,7 +569,7 @@ async function build() {
   let n = 0;
   for (const lang of LANGS) {
     const c = C[lang];
-    for (const key of KEYS) {
+    for (const key of EMITTED) {
       const u = urls(lang, key), t = c.pages[key];
       const main = RENDER[key](u, t, c.ui, lang);
       const html = head(lang, key, c) + '\n' + header(lang, key, c) + '\n' + crumbs(lang, key, c) + '\n<main>\n' + main + '\n</main>\n' + footer(lang, key, c);
@@ -564,7 +581,7 @@ async function build() {
   }
   // sitemap + robots
   const urlset = [];
-  for (const key of KEYS) for (const lang of LANGS) {
+  for (const key of EMITTED) for (const lang of LANGS) {
     const alts = LANGS.map(l => `    <xhtml:link rel="alternate" hreflang="${l}" href="${abs(l, key)}"/>`).join('\n');
     urlset.push(`  <url>\n    <loc>${abs(lang, key)}</loc>\n${alts}\n  </url>`);
   }

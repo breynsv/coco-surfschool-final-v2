@@ -59,7 +59,7 @@ test('production root index.html drops noindex', async () => {
 test('sitemap always uses the www canonical host', async () => {
   const out = await buildTo({ PROD: '1' });
   const xml = await read(out, 'sitemap.xml');
-  assert.equal((xml.match(/<loc>/g) || []).length, 55);
+  assert.equal((xml.match(/<loc>/g) || []).length, 50);
   assert.doesNotMatch(xml, /<loc>https:\/\/coco-surfschool\.com/);
 });
 
@@ -81,4 +81,38 @@ test('404 page uses root-absolute asset paths', async () => {
 test('404 page stays noindex even in production', async () => {
   const out = await buildTo({ PROD: '1' });
   assert.match(await read(out, '404.html'), /<meta name="robots" content="noindex">/);
+});
+
+test('production omits the booking pages', async () => {
+  const out = await buildTo({ PROD: '1' });
+  for (const p of ['fr/reserver', 'en/book', 'nl/reserveren', 'de/buchen', 'es/reservar']) {
+    await assert.rejects(read(out, `${p}/index.html`), `${p} must not be emitted in production`);
+  }
+});
+
+test('preview still builds the booking pages', async () => {
+  const out = await buildTo();
+  const html = await read(out, 'fr/reserver/index.html');
+  assert.match(html, /surf-sessions/);
+});
+
+test('production sitemap excludes the booking pages', async () => {
+  const out = await buildTo({ PROD: '1' });
+  const xml = await read(out, 'sitemap.xml');
+  assert.equal((xml.match(/<loc>/g) || []).length, 50);
+  for (const slug of ['reserver', '/book/', 'reserveren', 'buchen', 'reservar']) {
+    assert.ok(!xml.includes(slug), `sitemap must not reference ${slug}`);
+  }
+});
+
+test('production hero CTA points at contact, not the booking page', async () => {
+  const out = await buildTo({ PROD: '1' });
+  const html = await read(out, 'fr/index.html');
+  assert.ok(!html.includes('fr/reserver/'), 'no link may target the excluded booking page');
+  assert.match(html, /href="\.\.\/fr\/contact\/"/);
+});
+
+test('production refuses to build if booking is emitted with a non-https API', async () => {
+  await assert.rejects(buildTo({ PROD: '1', COCO_BUILD_BOOK: '1' }),
+    'build must fail rather than bake a dev endpoint into production');
 });
