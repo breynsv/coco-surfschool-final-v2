@@ -624,3 +624,190 @@ Rollback: point DNS back at the Wix IPs. Keep the Wix subscription for several w
 **Post-deploy verification** (spec "Verification"): happy path emails Coco and Reply addresses the visitor; invalid email → 422; honeypot `company` filled → 200 but **no email**; all five languages; every Wix sitemap URL single-hop 301 → 200; unknown path → branded 404; apex → `www`.
 
 **Raise with Coco before launch:** the three yoga classes are still taking bookings on Wix, and `/book-online` redirects to a contact form — replacing her live booking flow on launch day.
+
+---
+
+### Task 7: Exclude the booking pages from production
+
+Added after Task 6, from an out-of-band SEO audit finding. `build.mjs:21` sets
+`API_BASE = process.env.COCO_API || 'http://coco.membrero.test:8090'` and bakes it
+into the page at build time. The Task 6 production build did not set `COCO_API`, so
+all 5 booking pages shipped a dev-only, non-HTTPS endpoint. Verified in the committed
+output. Consequences: mixed content blocks the fetch, the host is unresolvable from
+the internet, and the 5 pages are in the sitemap and indexable — 5 permanently-empty
+pages. The homepage hero CTA (`build.mjs:272`, `href="${u.book}"`) points at them.
+
+Owner decision: exclude `/book/` from launch, redirect to contact, restore when the
+Membrero booking API is live.
+
+**Files:**
+- Modify: `build.mjs` (constants, `urls()`, the build loop, the sitemap loop)
+- Modify: `_redirects` (5 new rules)
+- Modify: `test/build.test.mjs` (one existing assertion changes)
+- Delete: `fr/reserver/`, `en/book/`, `nl/reserveren/`, `de/buchen/`, `es/reservar/`
+- Test: `test/build.test.mjs`
+
+**Interfaces:**
+- Consumes: `PROD`, `buildTo()`, `read()`
+- Produces: `PROD_EXCLUDE` and `EMITTED` in build.mjs
+
+Contact slugs per language, needed for the redirect targets — copy exactly:
+`fr: contact`, `en: contact`, `nl: contact`, `de: kontakt`, `es: contacto`.
+
+- [ ] **Step 1: Update the one existing assertion that will change**
+
+In `test/build.test.mjs`, the test `'sitemap always uses the www canonical host'`
+asserts 55 `<loc>` entries. Production now emits 50 (11 page types minus `book`,
+times 5 languages). Change that assertion from `55` to `50`. Leave the
+`doesNotMatch` host assertion untouched.
+
+- [ ] **Step 2: Write the failing tests**
+
+Append to `test/build.test.mjs`:
+
+```js
+test('production omits the booking pages', async () => {
+  const out = await buildTo({ PROD: '1' });
+  for (const p of ['fr/reserver', 'en/book', 'nl/reserveren', 'de/buchen', 'es/reservar']) {
+    await assert.rejects(read(out, `${p}/index.html`), `${p} must not be emitted in production`);
+  }
+});
+
+test('preview still builds the booking pages', async () => {
+  const out = await buildTo();
+  const html = await read(out, 'fr/reserver/index.html');
+  assert.match(html, /surf-sessions/);
+});
+
+test('production sitemap excludes the booking pages', async () => {
+  const out = await buildTo({ PROD: '1' });
+  const xml = await read(out, 'sitemap.xml');
+  assert.equal((xml.match(/<loc>/g) || []).length, 50);
+  for (const slug of ['reserver', '/book/', 'reserveren', 'buchen', 'reservar']) {
+    assert.ok(!xml.includes(slug), `sitemap must not reference ${slug}`);
+  }
+});
+
+test('production hero CTA points at contact, not the booking page', async () => {
+  const out = await buildTo({ PROD: '1' });
+  const html = await read(out, 'fr/index.html');
+  assert.ok(!html.includes('fr/reserver/'), 'no link may target the excluded booking page');
+  assert.match(html, /href="\.\.\/fr\/contact\/"/);
+});
+
+test('production refuses to build if booking is emitted with a non-https API', async () => {
+  await assert.rejects(buildTo({ PROD: '1', COCO_BUILD_BOOK: '1' }),
+    'build must fail rather than bake a dev endpoint into production');
+});
+```
+
+- [ ] **Step 3: Run the tests to verify they fail**
+
+Run: `node --test`
+Expected: FAIL — the booking pages are still emitted in production.
+
+- [ ] **Step 4: Add the exclusion constants**
+
+In `build.mjs`, immediately after the `PROD` / `ROBOTS_META` block, add:
+
+```js
+// The booking page renders a live sessions list from the Membrero CRM API.
+// Until that API is reachable over https from this domain it would render a
+// permanent "Loading available sessions…" state, so production omits it; the
+// slugs are redirected to contact in _redirects. Set COCO_BUILD_BOOK=1 (with a
+// real https COCO_API) to bring it back.
+const BUILD_BOOK = process.env.COCO_BUILD_BOOK === '1';
+const PROD_EXCLUDE = PROD && !BUILD_BOOK ? ['book'] : [];
+```
+
+- [ ] **Step 5: Add the build guard**
+
+Immediately after the `API_BASE` declaration (`build.mjs:21`), add:
+
+```js
+// Never bake a non-https or dev API host into a production page.
+if (process.env.PROD === '1' && process.env.COCO_BUILD_BOOK === '1'
+    && !/^https:\/\//.test(API_BASE)) {
+  console.error(`Refusing to build: PROD=1 with the booking page enabled, but COCO_API is "${API_BASE}" (not https). Set COCO_API to the production booking API.`);
+  process.exit(1);
+}
+```
+
+- [ ] **Step 6: Derive the emitted page list**
+
+After the `KEYS` declaration, add:
+
+```js
+const EMITTED = KEYS.filter(k => !PROD_EXCLUDE.includes(k));
+```
+
+In `urls()`, immediately after the line `for (const k of KEYS) u[k] = ...`, add:
+
+```js
+  // Excluded pages are not emitted; point their links at contact so no CTA
+  // lands on a redirect or a 404.
+  for (const k of PROD_EXCLUDE) u[k] = root + lang + '/' + PAGES.contact[lang] + '/';
+```
+
+- [ ] **Step 7: Use EMITTED in both loops**
+
+In `build()`, the page loop reads `for (const key of KEYS) {`. Change that one
+occurrence to `for (const key of EMITTED) {`.
+
+The sitemap loop reads `for (const key of KEYS) for (const lang of LANGS) {`.
+Change it to `for (const key of EMITTED) for (const lang of LANGS) {`.
+
+Change nothing else that references `KEYS` — `urls()` must still populate every key.
+
+- [ ] **Step 8: Run the tests to verify they pass**
+
+Run: `node --test`
+Expected: PASS, 18 tests.
+
+- [ ] **Step 9: Add the redirects**
+
+Append to `_redirects`:
+
+```
+# ---- Booking pages withheld until the Membrero booking API is live ----
+# build.mjs omits these from PROD builds; without these rules they would 404.
+/fr/reserver/     /fr/contact/    301
+/en/book/         /en/contact/    301
+/nl/reserveren/   /nl/contact/    301
+/de/buchen/       /de/kontakt/    301
+/es/reservar/     /es/contacto/   301
+```
+
+- [ ] **Step 10: Rebuild and remove the stale committed pages**
+
+The build does not delete files, so the 5 booking directories committed in Task 6
+must be removed explicitly.
+
+```bash
+PROD=1 node build.mjs
+git rm -r --quiet fr/reserver en/book nl/reserveren de/buchen es/reservar
+```
+
+- [ ] **Step 11: Verify**
+
+```bash
+echo "dev API refs remaining (expect 0):"; grep -rl "coco.membrero.test" --include=index.html fr en nl de es | wc -l
+echo "sitemap locs (expect 50):"; grep -c "<loc>" sitemap.xml
+echo "booking dirs remaining (expect 0):"; ls -d fr/reserver en/book nl/reserveren de/buchen es/reservar 2>/dev/null | wc -l
+echo "hero CTA target:"; grep -o 'hero-cta"><a class="btn btn--primary" href="[^"]*"' fr/index.html
+```
+
+Expected: `0`, `50`, `0`, and a hero CTA pointing at `../fr/contact/`.
+
+- [ ] **Step 12: Commit**
+
+```bash
+git add -A
+git commit -m "fix: withhold booking pages from production
+
+build.mjs baked http://coco.membrero.test:8090 into all 5 booking pages
+whenever COCO_API was unset, which the production build was. Mixed content
+plus an unresolvable host meant 5 indexable, permanently-empty pages, and
+the homepage hero CTA pointed at them. Excluded from PROD, redirected to
+contact, and a guard now refuses to build them with a non-https API."
+```
