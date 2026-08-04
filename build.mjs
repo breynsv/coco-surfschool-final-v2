@@ -515,6 +515,39 @@ ${reviewsSection(t, lang)}
 };
 const RENDER = { home: R.home, lessons: R.lessons, coach: R.coach, stay: R.stay, rental: R.rental, srilanka: R.srilanka, contact: R.contact, hossegor: R.article, seignosse: R.article, team: R.article, learn: R.article, book: R.book };
 
+// Cloudflare Pages serves this for any unmatched path, at any depth, so every
+// asset reference must be root-absolute. Stays noindex in every build.
+function notFound() {
+  const links = LANGS
+    .map(l => `<a class="btn btn--ghost" href="/${l}/">${FLAG[l]} ${LANGNAME[l]}</a>`)
+    .join('\n        ');
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Page introuvable — Coco Surf School</title>
+<link rel="icon" href="/assets/images/ee16c3_71361371647c417f89cde7e315ac662c.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<main class="section" style="min-height:70vh;display:grid;place-items:center;text-align:center">
+  <div class="wrap">
+    <p class="eyebrow">404</p>
+    <h1 class="section-title">Page introuvable · Page not found · Pagina niet gevonden</h1>
+    <p class="lead">Cette page n'existe plus — choisissez votre langue :<br>
+      This page no longer exists — pick your language:</p>
+    <div class="hero-cta" style="justify-content:center;flex-wrap:wrap;margin-top:1.6rem">
+        ${links}
+    </div>
+  </div>
+</main>
+</body>
+</html>
+`;
+}
+
 async function build() {
   let n = 0;
   for (const lang of LANGS) {
@@ -539,6 +572,7 @@ async function build() {
   await writeFile(join(ROOT, 'robots.txt'), PROD
     ? `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`
     : `User-agent: *\nDisallow: /\n`);
+  await writeFile(join(ROOT, '404.html'), notFound());
   // root redirect
   await writeFile(join(ROOT, 'index.html'), `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">${PROD ? '' : '<meta name="robots" content="noindex">'}<title>Coco Surf School</title><link rel="icon" href="assets/images/ee16c3_71361371647c417f89cde7e315ac662c.png"><script>var s={fr:1,en:1,nl:1,de:1,es:1},l=(navigator.languages||[navigator.language||'fr']),p='fr';for(var i=0;i<l.length;i++){var x=(l[i]||'').slice(0,2).toLowerCase();if(s[x]){p=x;break}}location.replace('./'+p+'/')</script></head><body><p style="font-family:sans-serif;text-align:center;padding:2rem">Coco Surf School — <a href="./fr/">Français</a> · <a href="./en/">English</a> · <a href="./nl/">Nederlands</a></p></body></html>\n`);
   console.log('Generated ' + n + ' pages + sitemap + robots + redirect');

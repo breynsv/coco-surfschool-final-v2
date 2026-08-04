@@ -62,3 +62,23 @@ test('sitemap always uses the www canonical host', async () => {
   assert.equal((xml.match(/<loc>/g) || []).length, 55);
   assert.doesNotMatch(xml, /<loc>https:\/\/coco-surfschool\.com/);
 });
+
+test('404 page is generated with a link to every language', async () => {
+  const out = await buildTo({ PROD: '1' });
+  const html = await read(out, '404.html');
+  for (const lang of ['fr', 'nl', 'de', 'en', 'es']) {
+    assert.ok(html.includes(`href="/${lang}/"`), `missing link to /${lang}/`);
+  }
+});
+
+test('404 page uses root-absolute asset paths', async () => {
+  const out = await buildTo({ PROD: '1' });
+  const html = await read(out, '404.html');
+  assert.match(html, /href="\/styles\.css"/);
+  assert.doesNotMatch(html, /(href|src)="(?!\/|https:)/);
+});
+
+test('404 page stays noindex even in production', async () => {
+  const out = await buildTo({ PROD: '1' });
+  assert.match(await read(out, '404.html'), /<meta name="robots" content="noindex">/);
+});
