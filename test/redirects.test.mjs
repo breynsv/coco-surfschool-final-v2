@@ -1,10 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const REPO = dirname(dirname(fileURLToPath(import.meta.url)));
+
+const exists = async (p) => stat(p).then(() => true, () => false);
 
 const rules = async () =>
   (await readFile(join(REPO, '_redirects'), 'utf8'))
@@ -46,4 +48,53 @@ test('there is no global catch-all redirect', async () => {
   const r = await rules();
   assert.equal(r.find(x => x.from === '/*'), undefined,
     'a global /* catch-all creates soft-404s and must not be added');
+});
+
+test('the five booking-withhold rules target the correct per-language contact slug', async () => {
+  const r = await rules();
+  // Slugs differ per language: fr/en/nl all use "contact", de uses "kontakt",
+  // es uses "contacto".
+  const expected = {
+    '/fr/reserver/': '/fr/contact/',
+    '/en/book/': '/en/contact/',
+    '/nl/reserveren/': '/nl/contact/',
+    '/de/buchen/': '/de/kontakt/',
+    '/es/reservar/': '/es/contacto/',
+  };
+  for (const [from, to] of Object.entries(expected)) {
+    const rule = r.find(x => x.from === from);
+    assert.ok(rule, `no redirect rule for ${from}`);
+    assert.equal(rule.to, to, `${from} must redirect to ${to}`);
+    assert.equal(rule.code, '301', `${from} must be a 301`);
+  }
+});
+
+test('the booking-withhold rules also cover the no-trailing-slash form', async () => {
+  const r = await rules();
+  const expected = {
+    '/fr/reserver': '/fr/contact/',
+    '/en/book': '/en/contact/',
+    '/nl/reserveren': '/nl/contact/',
+    '/de/buchen': '/de/kontakt/',
+    '/es/reservar': '/es/contacto/',
+  };
+  for (const [from, to] of Object.entries(expected)) {
+    const rule = r.find(x => x.from === from);
+    assert.ok(rule, `no no-trailing-slash redirect rule for ${from}`);
+    assert.equal(rule.to, to, `${from} must redirect to ${to}`);
+    assert.equal(rule.code, '301', `${from} must be a 301`);
+  }
+});
+
+test('every redirect target that points at a site path resolves to a real emitted page', async () => {
+  const r = await rules();
+  for (const { from, to } of r) {
+    if (!to || /^https?:\/\//.test(to)) continue; // external targets are out of scope
+    const rel = to.replace(/^\//, '');
+    const resolvesAsPageDir = await exists(join(REPO, rel, 'index.html'));
+    const resolvesAsFile = await exists(join(REPO, rel));
+    assert.ok(resolvesAsPageDir || resolvesAsFile,
+      `redirect ${from} -> ${to} does not resolve to a real emitted page (checked for ` +
+      `${rel}index.html and ${rel}) — a redirect to a 404 is worse than no redirect`);
+  }
 });

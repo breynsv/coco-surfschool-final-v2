@@ -1,4 +1,19 @@
 User-agent: *
 Allow: /
 
+Disallow: /docs/
+Disallow: /test/
+Disallow: /scripts/
+Disallow: /content/
+Disallow: /REPORT-OWNER.md
+Disallow: /README.md
+Disallow: /DESIGN.md
+Disallow: /build.mjs
+Disallow: /wrangler.toml
+Disallow: /.htaccess
+Disallow: /.gitignore
+Disallow: /.dev.vars.example
+Disallow: /.impeccable/
+Disallow: /.github/
+
 Sitemap: https://www.coco-surfschool.com/sitemap.xml

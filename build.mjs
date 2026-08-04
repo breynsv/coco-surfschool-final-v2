@@ -19,18 +19,31 @@ const ROBOTS_META = PROD ? '' : '<meta name="robots" content="noindex, nofollow"
 // The booking page renders a live sessions list from the Membrero CRM API.
 // Until that API is reachable over https from this domain it would render a
 // permanent "Loading available sessions…" state, so production omits it; the
-// slugs are redirected to contact in _redirects. Set COCO_BUILD_BOOK=1 (with a
-// real https COCO_API) to bring it back.
+// slugs are redirected to contact in _redirects. Setting COCO_BUILD_BOOK=1
+// (with a real https COCO_API) is NOT enough on its own to bring the booking
+// page back live: _redirects unconditionally 301s all five booking URLs to
+// contact, and Cloudflare Pages applies that redirect regardless of whether
+// a matching asset exists, so visitors (and crawlers) never reach the page
+// this build emits. Fully re-enabling booking also requires deleting the
+// five "Booking pages withheld…" rules further down in _redirects — otherwise
+// the pages get built, get linked from the sitemap, and immediately 301 away
+// again (a soft-404).
 const BUILD_BOOK = process.env.COCO_BUILD_BOOK === '1';
 const PROD_EXCLUDE = PROD && !BUILD_BOOK ? ['book'] : [];
 // Draft surf-booking page — points at the CRM booking API. Configurable via
 // COCO_API for other environments; defaults to the local dev tenant server.
 const API_BASE = process.env.COCO_API || 'http://coco.membrero.test:8090';
-// Never bake a non-https or dev API host into a production page.
-if (process.env.PROD === '1' && process.env.COCO_BUILD_BOOK === '1'
-    && !/^https:\/\//.test(API_BASE)) {
-  console.error(`Refusing to build: PROD=1 with the booking page enabled, but COCO_API is "${API_BASE}" (not https). Set COCO_API to the production booking API.`);
-  process.exit(1);
+// Never bake a non-https or dev/local API host into a production page.
+if (PROD && BUILD_BOOK) {
+  if (!/^https:\/\//.test(API_BASE)) {
+    console.error(`Refusing to build: PROD=1 with the booking page enabled, but COCO_API is "${API_BASE}" (not https). Set COCO_API to the production booking API.`);
+    process.exit(1);
+  }
+  const apiHost = new URL(API_BASE).hostname;
+  if (/\.(test|local)$/.test(apiHost) || apiHost === 'localhost' || apiHost === '127.0.0.1') {
+    console.error(`Refusing to build: PROD=1 with the booking page enabled, but COCO_API host "${apiHost}" is a dev/local host (.test, .local, localhost, or 127.0.0.1). Set COCO_API to the production booking API.`);
+    process.exit(1);
+  }
 }
 const LANGS = ['fr', 'nl', 'de', 'en', 'es'];
 const XDEFAULT = 'fr';
@@ -586,8 +599,18 @@ async function build() {
     urlset.push(`  <url>\n    <loc>${abs(lang, key)}</loc>\n${alts}\n  </url>`);
   }
   await writeFile(join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urlset.join('\n')}\n</urlset>\n`);
+  // Production defence-in-depth: keep crawlers off the private/internal
+  // files that pages_build_output_dir="." otherwise serves publicly (they
+  // are also hard-404'd in _redirects). The preview branch below must stay
+  // byte-identical to `User-agent: *\nDisallow: /\n` — a test asserts this.
+  const PROD_DISALLOW = [
+    '/docs/', '/test/', '/scripts/', '/content/',
+    '/REPORT-OWNER.md', '/README.md', '/DESIGN.md', '/build.mjs',
+    '/wrangler.toml', '/.htaccess', '/.gitignore', '/.dev.vars.example',
+    '/.impeccable/', '/.github/',
+  ].map(p => `Disallow: ${p}`).join('\n');
   await writeFile(join(ROOT, 'robots.txt'), PROD
-    ? `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`
+    ? `User-agent: *\nAllow: /\n\n${PROD_DISALLOW}\n\nSitemap: ${SITE}/sitemap.xml\n`
     : `User-agent: *\nDisallow: /\n`);
   await writeFile(join(ROOT, '404.html'), notFound());
   // root redirect

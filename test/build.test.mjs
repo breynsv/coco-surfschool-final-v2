@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 const REPO = dirname(dirname(fileURLToPath(import.meta.url)));
 
 /** Run build.mjs into a throwaway directory. Returns that directory. */
-export async function buildTo(extraEnv = {}) {
+async function buildTo(extraEnv = {}) {
   const out = await mkdtemp(join(tmpdir(), 'coco-build-'));
   execFileSync(process.execPath, [join(REPO, 'build.mjs')], {
     env: { ...process.env, COCO_OUT: out, ...extraEnv },
@@ -113,6 +113,36 @@ test('production hero CTA points at contact, not the booking page', async () => 
 });
 
 test('production refuses to build if booking is emitted with a non-https API', async () => {
-  await assert.rejects(buildTo({ PROD: '1', COCO_BUILD_BOOK: '1' }),
-    'build must fail rather than bake a dev endpoint into production');
+  await assert.rejects(buildTo({ PROD: '1', COCO_BUILD_BOOK: '1' }), (err) => {
+    assert.match(String(err.stderr), /not https/,
+      'error output must name which check failed, not just fail silently');
+    return true;
+  });
+});
+
+test('production refuses a booking API host ending in .test even over https', async () => {
+  await assert.rejects(
+    buildTo({ PROD: '1', COCO_BUILD_BOOK: '1', COCO_API: 'https://coco.membrero.test:8090' }),
+    (err) => {
+      assert.match(String(err.stderr), /dev\/local host/,
+        'error output must name which check failed');
+      return true;
+    },
+  );
+});
+
+test('production succeeds with a real https booking API and re-emits the booking pages', async () => {
+  const out = await buildTo({ PROD: '1', COCO_BUILD_BOOK: '1', COCO_API: 'https://example.com' });
+  const html = await read(out, 'fr/reserver/index.html');
+  assert.match(html, /surf-sessions/);
+});
+
+test('the committed robots.txt is a production build, not a preview', async () => {
+  // Guards against README.md:4's `node build.mjs` (no PROD=1) ever being run
+  // and committed over the live site's robots.txt, which would silently
+  // deindex it. This reads the REPO's own committed file, not a temp build.
+  const txt = await readFile(join(REPO, 'robots.txt'), 'utf8');
+  assert.match(txt, /^Allow: \/$/m,
+    'committed robots.txt must allow crawling — run PROD=1 node build.mjs before committing');
+  assert.match(txt, /^Sitemap: https:\/\/www\.coco-surfschool\.com\/sitemap\.xml$/m);
 });
