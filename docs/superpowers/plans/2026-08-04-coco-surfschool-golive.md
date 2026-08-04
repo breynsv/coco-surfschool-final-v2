@@ -18,7 +18,7 @@ Spec: `docs/superpowers/specs/2026-08-04-coco-surfschool-golive-design.md`
 - **Never touch** `booking-preview/`, `vragenlijst/`, `rapport/`. They are hand-authored, carry their own `noindex`, and are not generated.
 - **`_redirects` is first-match-wins.** Specific rules always precede splats.
 - **Secrets never get committed.** `.dev.vars` is gitignored; only `.dev.vars.example` is tracked.
-- Node's test runner is invoked as `node --test test/` — there is no `npm test`.
+- Node's test runner is invoked as **bare** `node --test` — there is no `npm test`. Do NOT pass a directory (`node --test test/`): Node v25 treats the path as a module and emits a spurious failing test. Bare `node --test` auto-discovers `test/**`.
 
 ---
 
@@ -83,7 +83,7 @@ test('build writes to COCO_OUT instead of the repo root', async () => {
 
 - [ ] **Step 2: Run the test to verify it fails**
 
-Run: `node --test test/`
+Run: `node --test`
 Expected: FAIL — the build ignores `COCO_OUT` and writes to the repo, so `fr/contact/index.html` does not exist in the temp dir (`ENOENT`).
 
 - [ ] **Step 3: Make the output directory overridable**
@@ -104,7 +104,7 @@ const ROOT = process.env.COCO_OUT || dirname(fileURLToPath(import.meta.url));
 
 - [ ] **Step 4: Run the test to verify it passes**
 
-Run: `node --test test/`
+Run: `node --test`
 Expected: PASS, 1 test.
 
 - [ ] **Step 5: Verify the repo was not modified**
@@ -178,7 +178,7 @@ test('sitemap always uses the www canonical host', async () => {
 
 - [ ] **Step 2: Run the tests to verify they fail**
 
-Run: `node --test test/`
+Run: `node --test`
 Expected: FAIL. `PROD` is not implemented, so the production cases still see `noindex` and `Disallow: /`. The two preview cases and the sitemap case should already pass.
 
 - [ ] **Step 3: Add the PROD constant**
@@ -231,7 +231,7 @@ In the same function, the root `index.html` template contains `<meta name="robot
 
 - [ ] **Step 7: Run the tests to verify they pass**
 
-Run: `node --test test/`
+Run: `node --test`
 Expected: PASS, 7 tests.
 
 - [ ] **Step 8: Commit**
@@ -286,7 +286,7 @@ Root-absolute paths matter because Cloudflare Pages serves `404.html` for a requ
 
 - [ ] **Step 2: Run the tests to verify they fail**
 
-Run: `node --test test/`
+Run: `node --test`
 Expected: FAIL — `404.html` does not exist (`ENOENT`).
 
 - [ ] **Step 3: Add the notFound() generator**
@@ -338,7 +338,7 @@ In `build()`, immediately after the `robots.txt` write, add:
 
 - [ ] **Step 5: Run the tests to verify they pass**
 
-Run: `node --test test/`
+Run: `node --test`
 Expected: PASS, 10 tests.
 
 - [ ] **Step 6: Commit**
@@ -424,7 +424,7 @@ test('there is no global catch-all redirect', async () => {
 
 - [ ] **Step 2: Run the test to verify it fails**
 
-Run: `node --test test/`
+Run: `node --test`
 Expected: FAIL — "no redirect rule for /service-page/deluxe-group-lesson".
 
 - [ ] **Step 3: Append the rules**
@@ -449,7 +449,7 @@ Add to the **end** of `_redirects`:
 
 - [ ] **Step 4: Run the tests to verify they pass**
 
-Run: `node --test test/`
+Run: `node --test`
 Expected: PASS, 13 tests total across both files.
 
 - [ ] **Step 5: Commit**
@@ -550,7 +550,7 @@ Run last, after every code change is merged. This is the artifact Cloudflare act
 
 - [ ] **Step 1: Confirm the full suite passes**
 
-Run: `node --test test/`
+Run: `node --test`
 Expected: PASS, 13 tests. Do not continue if anything fails.
 
 - [ ] **Step 2: Run the production build against the real repo**
