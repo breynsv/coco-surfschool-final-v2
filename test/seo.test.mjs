@@ -17,7 +17,14 @@ async function builtTo(extraEnv = {}) {
   return out;
 }
 
-/** Every assets/images/... referenced by any generated page, deduped. */
+/**
+ * Every assets/images/... referenced by any generated page, deduped.
+ * NB: this only walks the five language directories. Root-level pages
+ * (index.html, 404.html) live outside fr/en/nl/de/es and are NOT covered
+ * here — their only image reference (the favicon) is handled separately
+ * via the explicit `used.add(...)` below. If a root-level page ever
+ * references a non-favicon image, this walk would miss it.
+ */
 async function referencedImages(out) {
   const found = new Set();
   const walk = async (dir) => {
@@ -34,10 +41,23 @@ async function referencedImages(out) {
   return [...found];
 }
 
+/**
+ * Guard against a silently-broken walk (e.g. an extension mismatch or a
+ * moved output dir) making the tests below pass vacuously on an empty set.
+ * The site references well over 10 distinct images, so anything at or
+ * under that floor means the walk itself is broken, not that the site is
+ * clean.
+ */
+function assertWalkFound(names) {
+  assert.ok(names.length > 10, `image walk found only ${names.length} name(s); the walk itself is broken`);
+}
+
 test('every referenced image exists on disk', async () => {
   const out = await builtTo({ PROD: '1' });
+  const names = await referencedImages(out);
+  assertWalkFound(names);
   const missing = [];
-  for (const name of await referencedImages(out)) {
+  for (const name of names) {
     try { await stat(join(REPO, 'assets/images', name)); }
     catch { missing.push(name); }
   }
@@ -46,8 +66,10 @@ test('every referenced image exists on disk', async () => {
 
 test('no referenced image exceeds 600 KB', async () => {
   const out = await builtTo({ PROD: '1' });
+  const names = await referencedImages(out);
+  assertWalkFound(names);
   const heavy = [];
-  for (const name of await referencedImages(out)) {
+  for (const name of names) {
     try {
       const s = await stat(join(REPO, 'assets/images', name));
       if (s.size > 600 * 1024) heavy.push(`${name} (${(s.size / 1048576).toFixed(2)} MB)`);
@@ -58,7 +80,9 @@ test('no referenced image exceeds 600 KB', async () => {
 
 test('no unreferenced images are shipped', async () => {
   const out = await builtTo({ PROD: '1' });
-  const used = new Set(await referencedImages(out));
+  const names = await referencedImages(out);
+  assertWalkFound(names);
+  const used = new Set(names);
   // The favicon is referenced from the root index.html and 404.html, outside the language dirs.
   used.add('ee16c3_71361371647c417f89cde7e315ac662c.png');
   const orphans = (await readdir(join(REPO, 'assets/images'))).filter(f => !used.has(f));
