@@ -97,9 +97,25 @@ since crawlers request the encoded form. A `/service-page/* → /fr/ 301` splat 
 **after** the specific rules — `_redirects` is first-match-wins.
 
 Yoga targets are provisional. The new site has **zero** yoga content (`grep -ri yoga
-content/` → 0 matches) while Coco sold three yoga services on Wix. Pending her
-confirmation, these point at the homepage; if she still teaches yoga this becomes a
-content gap to fill and the targets change.
+content/` → 0 matches) while Wix is currently taking bookings for three yoga classes.
+Pending Coco's confirmation these point at the homepage; if the classes are still
+running this becomes a content gap to fill and the targets change.
+
+These are **Wix Bookings** services, which is why they are easy to miss: Wix
+auto-generates a `/service-page/<slug>` per service and auto-publishes it to
+`booking-services-sitemap.xml`, but the pages are not in the site navigation.
+Verified 2026-08-04 — all three return HTTP 200, `lastmod` 2026-06-15, and yoga
+appears on `/book-online` only (0 mentions on `/`, `/cours-les-formules`, `/tarifs`,
+`/a-propos`). Anyone rebuilding the site from its visible pages would not see them.
+
+### Related: `/book-online` is a functional downgrade at launch
+
+`/book-online` is the storefront for the whole Wix Bookings system and currently
+redirects to `/fr/contact/`. The redirect is fine for SEO, but it means Coco's live
+online-booking flow is replaced by a contact form on launch day. This is a business
+decision to confirm with her explicitly, not just a redirect detail. The
+`booking-preview/` work in this repo and the Membrero booking integration are the
+intended replacement; neither is in scope here.
 
 ### 4. Local dev config
 
