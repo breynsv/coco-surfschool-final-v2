@@ -37,12 +37,12 @@ Verified 2026-08-04.
 - Contact form markup with honeypot — `build.mjs:436-443` (hidden `company` field)
 - Contact endpoint — `functions/api/contact.js`, silently 200s on honeypot hit (`:33-36`)
 - Submit handler with sending/ok/error states — `script.js:135-174`
-- Sitemap — `build.mjs:527-533`, 55 URLs, 275 hreflang alternates, already on `www`
+- Sitemap — `build.mjs:527-533`, 50 URLs, 250 hreflang alternates, already on `www`
 - Canonical/hreflang/x-default/og:url — all use `SITE` (`build.mjs:12`)
 - `_redirects` — 57 rules; all 18 URLs in Wix's `pages-sitemap.xml` are covered
 
 **Blocking go-live**
-- `build.mjs:111` — `noindex, nofollow` on all 55 generated pages
+- `build.mjs:111` — `noindex, nofollow` on all 50 generated pages
 - `build.mjs:534` — `robots.txt` is `Disallow: /`
 - No `RESEND_API_KEY`; the Function returns `not_configured` 500 without it
 - Four indexed Wix URLs have no redirect (see below)
@@ -167,7 +167,7 @@ Site:
 - `noindex` gone from generated pages; still present on `booking-preview/`,
   `vragenlijst/`, `rapport/`
 - `robots.txt` allows crawl and lists the sitemap
-- `sitemap.xml` reachable, 55 URLs, all `www`
+- `sitemap.xml` reachable, 50 URLs, all `www`
 - Every URL in Wix's `pages-sitemap.xml` and `booking-services-sitemap.xml`
   returns a **single-hop 301** to a **200**
 - Unknown path serves the branded 404, not a redirect

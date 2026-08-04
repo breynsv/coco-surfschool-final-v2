@@ -1,0 +1,5 @@
+# Copy to .dev.vars and fill in real values. .dev.vars is gitignored.
+# Consumed by functions/api/contact.js via the `env` binding.
+RESEND_API_KEY="re_xxxxxxxxxxxxxxxxxxxxxxxx"
+CONTACT_TO="cocobosurfschool@gmail.com"
+CONTACT_FROM="Coco Surf School <contact@coco-surfschool.com>"

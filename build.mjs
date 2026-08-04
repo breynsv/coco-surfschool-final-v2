@@ -8,11 +8,43 @@ import nl from './content/nl.mjs';
 import de from './content/de.mjs';
 import es from './content/es.mjs';
 
-const ROOT = dirname(fileURLToPath(import.meta.url));
+// Output directory. Defaults to the repo root; overridable so tests (and any
+// out-of-tree build) can write somewhere disposable.
+const ROOT = process.env.COCO_OUT || dirname(fileURLToPath(import.meta.url));
 const SITE = 'https://www.coco-surfschool.com';
+// Production build: PROD=1 node build.mjs
+// Preview (default) keeps the site noindexed and fully disallowed.
+const PROD = process.env.PROD === '1';
+const ROBOTS_META = PROD ? '' : '<meta name="robots" content="noindex, nofollow">\n';
+// The booking page renders a live sessions list from the Membrero CRM API.
+// Until that API is reachable over https from this domain it would render a
+// permanent "Loading available sessions…" state, so production omits it; the
+// slugs are redirected to contact in _redirects. Setting COCO_BUILD_BOOK=1
+// (with a real https COCO_API) is NOT enough on its own to bring the booking
+// page back live: _redirects unconditionally 301s all five booking URLs to
+// contact, and Cloudflare Pages applies that redirect regardless of whether
+// a matching asset exists, so visitors (and crawlers) never reach the page
+// this build emits. Fully re-enabling booking also requires deleting the
+// five "Booking pages withheld…" rules further down in _redirects — otherwise
+// the pages get built, get linked from the sitemap, and immediately 301 away
+// again (a soft-404).
+const BUILD_BOOK = process.env.COCO_BUILD_BOOK === '1';
+const PROD_EXCLUDE = PROD && !BUILD_BOOK ? ['book'] : [];
 // Draft surf-booking page — points at the CRM booking API. Configurable via
 // COCO_API for other environments; defaults to the local dev tenant server.
 const API_BASE = process.env.COCO_API || 'http://coco.membrero.test:8090';
+// Never bake a non-https or dev/local API host into a production page.
+if (PROD && BUILD_BOOK) {
+  if (!/^https:\/\//.test(API_BASE)) {
+    console.error(`Refusing to build: PROD=1 with the booking page enabled, but COCO_API is "${API_BASE}" (not https). Set COCO_API to the production booking API.`);
+    process.exit(1);
+  }
+  const apiHost = new URL(API_BASE).hostname;
+  if (/\.(test|local)$/.test(apiHost) || apiHost === 'localhost' || apiHost === '127.0.0.1') {
+    console.error(`Refusing to build: PROD=1 with the booking page enabled, but COCO_API host "${apiHost}" is a dev/local host (.test, .local, localhost, or 127.0.0.1). Set COCO_API to the production booking API.`);
+    process.exit(1);
+  }
+}
 const LANGS = ['fr', 'nl', 'de', 'en', 'es'];
 const XDEFAULT = 'fr';
 const C = { fr, en, nl, de, es };
@@ -43,6 +75,7 @@ const PAGES = {
   book:      { fr: 'reserver',                en: 'book',                   nl: 'reserveren',           de: 'buchen',               es: 'reservar' },
 };
 const KEYS = Object.keys(PAGES);
+const EMITTED = KEYS.filter(k => !PROD_EXCLUDE.includes(k));
 const NAV = ['lessons', 'coach', 'stay', 'rental', 'contact'];
 
 const abs = (lang, key) => `${SITE}/${lang}/${PAGES[key][lang] ? PAGES[key][lang] + '/' : ''}`;
@@ -56,6 +89,9 @@ function urls(lang, key) {
     wa: 'https://wa.me/33647454265?text=' + encodeURIComponent(C[lang].waText),
   };
   for (const k of KEYS) u[k] = root + lang + '/' + (PAGES[k][lang] ? PAGES[k][lang] + '/' : '');
+  // Excluded pages are not emitted; point their links at contact so no CTA
+  // lands on a redirect or a 404.
+  for (const k of PROD_EXCLUDE) u[k] = root + lang + '/' + PAGES.contact[lang] + '/';
   u.alt = {};
   for (const l of LANGS) u.alt[l] = root + l + '/' + (PAGES[key][l] ? PAGES[key][l] + '/' : '');
   return u;
@@ -108,8 +144,7 @@ function head(lang, key, c) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>document.documentElement.className+=' js'</script>
-<meta name="robots" content="noindex, nofollow">
-<title>${t.title}</title>
+${ROBOTS_META}<title>${t.title}</title>
 <meta name="description" content="${t.desc}">
 <link rel="canonical" href="${abs(lang, key)}">
 ${alt}
@@ -510,11 +545,44 @@ ${reviewsSection(t, lang)}
 };
 const RENDER = { home: R.home, lessons: R.lessons, coach: R.coach, stay: R.stay, rental: R.rental, srilanka: R.srilanka, contact: R.contact, hossegor: R.article, seignosse: R.article, team: R.article, learn: R.article, book: R.book };
 
+// Cloudflare Pages serves this for any unmatched path, at any depth, so every
+// asset reference must be root-absolute. Stays noindex in every build.
+function notFound() {
+  const links = LANGS
+    .map(l => `<a class="btn btn--ghost" href="/${l}/">${FLAG[l]} ${LANGNAME[l]}</a>`)
+    .join('\n        ');
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Page introuvable — Coco Surf School</title>
+<link rel="icon" href="/assets/images/ee16c3_71361371647c417f89cde7e315ac662c.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<main class="section" style="min-height:70vh;display:grid;place-items:center;text-align:center">
+  <div class="wrap">
+    <p class="eyebrow">404</p>
+    <h1 class="section-title">Page introuvable · Page not found · Pagina niet gevonden</h1>
+    <p class="lead">Cette page n'existe plus — choisissez votre langue :<br>
+      This page no longer exists — pick your language:</p>
+    <div class="hero-cta" style="justify-content:center;flex-wrap:wrap;margin-top:1.6rem">
+        ${links}
+    </div>
+  </div>
+</main>
+</body>
+</html>
+`;
+}
+
 async function build() {
   let n = 0;
   for (const lang of LANGS) {
     const c = C[lang];
-    for (const key of KEYS) {
+    for (const key of EMITTED) {
       const u = urls(lang, key), t = c.pages[key];
       const main = RENDER[key](u, t, c.ui, lang);
       const html = head(lang, key, c) + '\n' + header(lang, key, c) + '\n' + crumbs(lang, key, c) + '\n<main>\n' + main + '\n</main>\n' + footer(lang, key, c);
@@ -526,14 +594,27 @@ async function build() {
   }
   // sitemap + robots
   const urlset = [];
-  for (const key of KEYS) for (const lang of LANGS) {
+  for (const key of EMITTED) for (const lang of LANGS) {
     const alts = LANGS.map(l => `    <xhtml:link rel="alternate" hreflang="${l}" href="${abs(l, key)}"/>`).join('\n');
     urlset.push(`  <url>\n    <loc>${abs(lang, key)}</loc>\n${alts}\n  </url>`);
   }
   await writeFile(join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urlset.join('\n')}\n</urlset>\n`);
-  await writeFile(join(ROOT, 'robots.txt'), `User-agent: *\nDisallow: /\n`);
+  // Production defence-in-depth: keep crawlers off the private/internal
+  // files that pages_build_output_dir="." otherwise serves publicly (they
+  // are also hard-404'd in _redirects). The preview branch below must stay
+  // byte-identical to `User-agent: *\nDisallow: /\n` — a test asserts this.
+  const PROD_DISALLOW = [
+    '/docs/', '/test/', '/scripts/', '/content/',
+    '/REPORT-OWNER.md', '/README.md', '/DESIGN.md', '/build.mjs',
+    '/wrangler.toml', '/.htaccess', '/.gitignore', '/.dev.vars.example',
+    '/.impeccable/', '/.github/',
+  ].map(p => `Disallow: ${p}`).join('\n');
+  await writeFile(join(ROOT, 'robots.txt'), PROD
+    ? `User-agent: *\nAllow: /\n\n${PROD_DISALLOW}\n\nSitemap: ${SITE}/sitemap.xml\n`
+    : `User-agent: *\nDisallow: /\n`);
+  await writeFile(join(ROOT, '404.html'), notFound());
   // root redirect
-  await writeFile(join(ROOT, 'index.html'), `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Coco Surf School</title><link rel="icon" href="assets/images/ee16c3_71361371647c417f89cde7e315ac662c.png"><script>var s={fr:1,en:1,nl:1,de:1,es:1},l=(navigator.languages||[navigator.language||'fr']),p='fr';for(var i=0;i<l.length;i++){var x=(l[i]||'').slice(0,2).toLowerCase();if(s[x]){p=x;break}}location.replace('./'+p+'/')</script></head><body><p style="font-family:sans-serif;text-align:center;padding:2rem">Coco Surf School — <a href="./fr/">Français</a> · <a href="./en/">English</a> · <a href="./nl/">Nederlands</a></p></body></html>\n`);
+  await writeFile(join(ROOT, 'index.html'), `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">${PROD ? '' : '<meta name="robots" content="noindex">'}<title>Coco Surf School</title><link rel="icon" href="assets/images/ee16c3_71361371647c417f89cde7e315ac662c.png"><script>var s={fr:1,en:1,nl:1,de:1,es:1},l=(navigator.languages||[navigator.language||'fr']),p='fr';for(var i=0;i<l.length;i++){var x=(l[i]||'').slice(0,2).toLowerCase();if(s[x]){p=x;break}}location.replace('./'+p+'/')</script></head><body><p style="font-family:sans-serif;text-align:center;padding:2rem">Coco Surf School — <a href="./fr/">Français</a> · <a href="./en/">English</a> · <a href="./nl/">Nederlands</a></p></body></html>\n`);
   console.log('Generated ' + n + ' pages + sitemap + robots + redirect');
 }
 build().catch(e => { console.error(e); process.exit(1); });

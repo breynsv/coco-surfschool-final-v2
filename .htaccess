@@ -1,9 +1,15 @@
 # =============================================================================
 # 301 redirects — old Wix site -> new site structure
 # =============================================================================
-# IMPORTANT: Apache-only. Cloudflare Pages and GitHub Pages IGNORE this file —
-# there, the sibling `_redirects` file does the job. Kept here for reference and
-# in case an Apache/LiteSpeed layer ever fronts the domain.
+# `_redirects` (repo root) is the SINGLE SOURCE OF TRUTH on Cloudflare Pages,
+# which is what this site actually runs on — Cloudflare Pages and GitHub Pages
+# IGNORE this file entirely. This .htaccess is retained only for the
+# hypothetical case of a future Apache/LiteSpeed host, is NOT deployed or
+# exercised by anything today, and is KNOWN TO BE INCOMPLETE relative to
+# `_redirects` (missing the /service-page/* Wix Bookings rules, the splat
+# backstop, and the booking-withhold rules, among others). Do not try to keep
+# it in sync rule-for-rule with `_redirects` — if this file is ever needed for
+# real, regenerate it from `_redirects` rather than trusting it as-is.
 #
 # Anchored (^...$) so each rule matches ONE path; trailing slash optional.
 # Source: live Wix sitemaps (pages, en_en, nl_nl) captured 2026-07-18.

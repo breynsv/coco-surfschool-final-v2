@@ -73,3 +73,52 @@
 /nl/en-home               /nl/                     301
 /nl/nl-home               /nl/                     301
 /nl/book-online           /nl/contact/             301
+
+# ---- Wix Bookings service pages (booking-services-sitemap.xml) ----
+# Wix auto-generates a /service-page/<slug> per bookable service and publishes
+# it to its own sitemap; these are indexed but were never in the page sitemaps.
+# Accented slugs need BOTH the literal-UTF-8 and percent-encoded forms.
+# Yoga targets are provisional pending Coco — the new site has no yoga content.
+/service-page/deluxe-group-lesson              /fr/cours-de-surf/  301
+/service-page/ashtanga-yoga-introduction       /fr/                301
+/service-page/ashtanga-yoga-intermédiaire      /fr/                301
+/service-page/ashtanga-yoga-interm%C3%A9diaire /fr/                301
+/service-page/yoga-prénatal                    /fr/                301
+/service-page/yoga-pr%C3%A9natal               /fr/                301
+# Backstop for any service not listed above. MUST STAY LAST — first match wins.
+/service-page/*                                /fr/                301
+
+# ---- Booking pages withheld until the Membrero booking API is live ----
+# build.mjs omits these from PROD builds; without these rules they would 404.
+# Both the trailing-slash and no-slash forms are covered, matching every
+# other rule in this file.
+/fr/reserver/     /fr/contact/    301
+/fr/reserver      /fr/contact/    301
+/en/book/         /en/contact/    301
+/en/book          /en/contact/    301
+/nl/reserveren/   /nl/contact/    301
+/nl/reserveren    /nl/contact/    301
+/de/buchen/       /de/kontakt/    301
+/de/buchen        /de/kontakt/    301
+/es/reservar/     /es/contacto/   301
+/es/reservar      /es/contacto/   301
+
+# ---- Private/internal files (source, docs, tooling) — not site content ----
+# pages_build_output_dir="." means every committed path is publicly served by
+# default. These are not merely unindexed (see robots.txt) — they are hard
+# 404s so they are unreachable outright. Keep this list in sync with anything
+# new committed at the repo root that isn't meant to be public.
+/REPORT-OWNER.md      /404.html   404
+/README.md            /404.html   404
+/DESIGN.md            /404.html   404
+/build.mjs            /404.html   404
+/wrangler.toml        /404.html   404
+/.htaccess            /404.html   404
+/.gitignore           /404.html   404
+/.dev.vars.example    /404.html   404
+/docs/*               /404.html   404
+/content/*            /404.html   404
+/test/*               /404.html   404
+/scripts/*            /404.html   404
+/.impeccable/*        /404.html   404
+/.github/*            /404.html   404
