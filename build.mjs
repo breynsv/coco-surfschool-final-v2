@@ -12,6 +12,10 @@ import es from './content/es.mjs';
 // out-of-tree build) can write somewhere disposable.
 const ROOT = process.env.COCO_OUT || dirname(fileURLToPath(import.meta.url));
 const SITE = 'https://www.coco-surfschool.com';
+// Production build: PROD=1 node build.mjs
+// Preview (default) keeps the site noindexed and fully disallowed.
+const PROD = process.env.PROD === '1';
+const ROBOTS_META = PROD ? '' : '<meta name="robots" content="noindex, nofollow">\n';
 // Draft surf-booking page — points at the CRM booking API. Configurable via
 // COCO_API for other environments; defaults to the local dev tenant server.
 const API_BASE = process.env.COCO_API || 'http://coco.membrero.test:8090';
@@ -110,8 +114,7 @@ function head(lang, key, c) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>document.documentElement.className+=' js'</script>
-<meta name="robots" content="noindex, nofollow">
-<title>${t.title}</title>
+${ROBOTS_META}<title>${t.title}</title>
 <meta name="description" content="${t.desc}">
 <link rel="canonical" href="${abs(lang, key)}">
 ${alt}
@@ -533,9 +536,11 @@ async function build() {
     urlset.push(`  <url>\n    <loc>${abs(lang, key)}</loc>\n${alts}\n  </url>`);
   }
   await writeFile(join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urlset.join('\n')}\n</urlset>\n`);
-  await writeFile(join(ROOT, 'robots.txt'), `User-agent: *\nDisallow: /\n`);
+  await writeFile(join(ROOT, 'robots.txt'), PROD
+    ? `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`
+    : `User-agent: *\nDisallow: /\n`);
   // root redirect
-  await writeFile(join(ROOT, 'index.html'), `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Coco Surf School</title><link rel="icon" href="assets/images/ee16c3_71361371647c417f89cde7e315ac662c.png"><script>var s={fr:1,en:1,nl:1,de:1,es:1},l=(navigator.languages||[navigator.language||'fr']),p='fr';for(var i=0;i<l.length;i++){var x=(l[i]||'').slice(0,2).toLowerCase();if(s[x]){p=x;break}}location.replace('./'+p+'/')</script></head><body><p style="font-family:sans-serif;text-align:center;padding:2rem">Coco Surf School — <a href="./fr/">Français</a> · <a href="./en/">English</a> · <a href="./nl/">Nederlands</a></p></body></html>\n`);
+  await writeFile(join(ROOT, 'index.html'), `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">${PROD ? '' : '<meta name="robots" content="noindex">'}<title>Coco Surf School</title><link rel="icon" href="assets/images/ee16c3_71361371647c417f89cde7e315ac662c.png"><script>var s={fr:1,en:1,nl:1,de:1,es:1},l=(navigator.languages||[navigator.language||'fr']),p='fr';for(var i=0;i<l.length;i++){var x=(l[i]||'').slice(0,2).toLowerCase();if(s[x]){p=x;break}}location.replace('./'+p+'/')</script></head><body><p style="font-family:sans-serif;text-align:center;padding:2rem">Coco Surf School — <a href="./fr/">Français</a> · <a href="./en/">English</a> · <a href="./nl/">Nederlands</a></p></body></html>\n`);
   console.log('Generated ' + n + ' pages + sitemap + robots + redirect');
 }
 build().catch(e => { console.error(e); process.exit(1); });
