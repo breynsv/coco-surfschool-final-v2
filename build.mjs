@@ -8,7 +8,9 @@ import nl from './content/nl.mjs';
 import de from './content/de.mjs';
 import es from './content/es.mjs';
 
-const ROOT = dirname(fileURLToPath(import.meta.url));
+// Output directory. Defaults to the repo root; overridable so tests (and any
+// out-of-tree build) can write somewhere disposable.
+const ROOT = process.env.COCO_OUT || dirname(fileURLToPath(import.meta.url));
 const SITE = 'https://www.coco-surfschool.com';
 // Draft surf-booking page — points at the CRM booking API. Configurable via
 // COCO_API for other environments; defaults to the local dev tenant server.
