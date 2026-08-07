@@ -190,6 +190,18 @@ test('location pages carry business schema', async () => {
   }
 });
 
+test('the schema review count matches the number shown in the rating badge', async () => {
+  const out = await builtTo({ PROD: '1' });
+  for (const lang of ['fr', 'en', 'nl', 'de', 'es']) {
+    const html = await readFile(join(out, lang, 'index.html'), 'utf8');
+    const badge = html.match(/<span class="rb-count">(\d+)\+/);
+    assert.ok(badge, `${lang}: no rating badge count found`);
+    const biz = jsonLdOf(html).find(o => o['@type'] === 'SportsActivityLocation');
+    assert.equal(biz.aggregateRating.reviewCount, badge[1],
+      `${lang}: schema says ${biz.aggregateRating.reviewCount} but the badge shows ${badge[1]}+`);
+  }
+});
+
 test('no JSON-LD carries an HTML-escaped URL', async () => {
   const out = await builtTo({ PROD: '1' });
   const bad = [];

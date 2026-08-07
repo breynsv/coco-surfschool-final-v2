@@ -55,6 +55,12 @@ const FLAG = { fr: '🇫🇷', nl: '🇳🇱', de: '🇩🇪', en: '🇬🇧', e
 const FB_URL = 'https://www.facebook.com/Coco-Surfschool-1393366264020009/';
 const IG_URL = 'https://www.instagram.com/coco_surf_school_hossegor/';
 const REVIEWS_WORD = { fr: 'avis Google', en: 'Google reviews', nl: 'Google reviews', de: 'Google-Bewertungen', es: 'reseñas Google' };
+// The Google rating, in ONE place. It feeds both the visible rating badge and
+// the aggregateRating in the business schema — those two used to be maintained
+// separately and had drifted to "150+" on the page against reviewCount 7 in the
+// markup, which is exactly the mismatch Google acts on.
+const REVIEW_COUNT = 150;
+const RATING_VALUE = '5.0';
 const GOOGLE_REVIEWS_URL = 'https://www.google.com/maps/search/?api=1&amp;query=Coco%20Surf%20School%20Seignosse';
 const SOC_SVG = {
   fb: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.51 1.49-3.9 3.78-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.9h-2.34V22c4.78-.79 8.44-4.94 8.44-9.94Z"/></svg>',
@@ -158,7 +164,11 @@ const SPOT_KEYS = new Set(['hossegor', 'seignosse']);
 function schemasFor(key, c) {
   const t = c.pages[key], out = [];
   const biz = t.jsonld || (SPOT_KEYS.has(key) ? c.pages.home.jsonld : null);
-  if (biz) out.push(biz['@type'] === 'SportsActivityLocation' ? { ...biz, sameAs: BUSINESS_SAMEAS } : biz);
+  if (biz) out.push(biz['@type'] === 'SportsActivityLocation' ? {
+    ...biz,
+    sameAs: BUSINESS_SAMEAS,
+    aggregateRating: { '@type': 'AggregateRating', ratingValue: RATING_VALUE, reviewCount: String(REVIEW_COUNT) },
+  } : biz);
   if (key === 'contact') { const faq = faqSchema(t); if (faq) out.push(faq); }
   return out;
 }
@@ -334,7 +344,7 @@ const R = {
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <p class="eyebrow">${h.eyebrow}</p>
-      <a class="rating-badge" href="${GOOGLE_REVIEWS_URL}" target="_blank" rel="noopener"><span class="rb-stars" aria-hidden="true">★★★★★</span><b>5,0</b><span class="rb-count">150+ ${REVIEWS_WORD[lang]}</span></a>
+      <a class="rating-badge" href="${GOOGLE_REVIEWS_URL}" target="_blank" rel="noopener"><span class="rb-stars" aria-hidden="true">★★★★★</span><b>${RATING_VALUE.replace('.', ',')}</b><span class="rb-count">${REVIEW_COUNT}+ ${REVIEWS_WORD[lang]}</span></a>
       <h1>${h.h1}</h1>
       <p class="lead">${h.lead}</p>
       <div class="hero-cta"><a class="btn btn--primary" href="${u.book}">${h.cta1}</a><a class="btn btn--ghost" href="${u.lessons}">${h.cta2}</a>${h.cta3 ? `<a class="btn btn--coral" href="${u.lessons}#tarieven">${h.cta3}</a>` : ''}</div>
