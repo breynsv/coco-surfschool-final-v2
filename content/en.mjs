@@ -56,6 +56,9 @@ export default {
         { pin: 'Seignosse tourist office', h: 'More options', p: 'Find more accommodation and good tips through the Seignosse tourist office.', href: 'https://seignosse-tourisme.com', link: 'seignosse-tourisme.com' },
       ],
     },
+    // Unused: no PAGES entry, so no page is emitted from this block. Kept as
+    // translated copy in case the Sri Lanka trip comes back. The four images it
+    // referenced were deleted; restore them before re-enabling.
     srilanka: {
       title: 'Sri Lanka surf camp — Midigama with Coco Surf School', desc: 'Join Coco Surf School on the south coast of Sri Lanka. Family house 100 m from Midigama beach — Lazy Left & Rams.', h1: 'Sri Lanka surf camp', crumb: 'Sri Lanka', bannerAlt: 'Sunset on the south coast of Sri Lanka', eyebrow: 'Surf camp',
       h1: 'Sri Lanka, with family',
@@ -83,15 +86,10 @@ export default {
         { q: 'How do I book and pay?', a: 'A 30% deposit is requested on booking. Payment is by bank transfer or cash.' },
         { q: 'Do I need to know how to surf already?', a: 'No. Annelies welcomes beginners as well as surfers who want to progress.' },
       ],
-      jsonld: { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: [
-        { '@type': 'Question', name: 'Where do the surf lessons take place?', acceptedAnswer: { '@type': 'Answer', text: 'Coco Surf School is a mobile school between Hossegor and Seignosse: the best spot is chosen for your level and the conditions.' } },
-        { '@type': 'Question', name: 'How many people are there per lesson?', acceptedAnswer: { '@type': 'Answer', text: 'Maximum 6 people per instructor (8 on request).' } },
-        { '@type': 'Question', name: 'Is the equipment included?', acceptedAnswer: { '@type': 'Answer', text: 'Yes, board and wetsuit are included. Each lesson lasts 1h30.' } },
-      ] },
     },
     hossegor: {
-      title: 'Surf lessons in Hossegor — Coco Surf School | All levels', desc: 'Surf lessons in Hossegor with Coco Surf School. Small groups (max 6), board & wetsuit included, ISA-qualified coach.', h1: 'Surf lessons in Hossegor', crumb: 'Surf in Hossegor', ogImage: 'owner-hossegor-page.png',
-      eyebrow: 'Landes · France', h1html: 'Surf lessons in <em>Hossegor</em>', lead: 'Come surf with us in Hossegor! Learn to surf in one of the most renowned surf towns in Europe. Small groups of 6 maximum in the deluxe formula, board and wetsuit included, with certified coaches.', cta1: 'Book a lesson', cta2: 'See rates', img: 'owner-hossegor-page.png', imgAlt: 'Surfers on a Hossegor beach',
+      title: 'Surf lessons in Hossegor — Coco Surf School | All levels', desc: 'Surf lessons in Hossegor with Coco Surf School. Small groups (max 6), board & wetsuit included, ISA-qualified coach.', h1: 'Surf lessons in Hossegor', crumb: 'Surf in Hossegor', ogImage: 'owner-hossegor-page.jpg',
+      eyebrow: 'Landes · France', h1html: 'Surf lessons in <em>Hossegor</em>', lead: 'Come surf with us in Hossegor! Learn to surf in one of the most renowned surf towns in Europe. Small groups of 6 maximum in the deluxe formula, board and wetsuit included, with certified coaches.', cta1: 'Book a lesson', cta2: 'See rates', img: 'owner-hossegor-page.jpg', imgAlt: 'Surfers on a Hossegor beach',
       body: '<p class="lead">Hossegor is the heart of surfing in the Landes, a reference for beach breaks in Europe. Coco Surf School is a mobile school between Hossegor and Seignosse: we choose the best spot for your level and the conditions of the day.</p><h2>Why learn in Hossegor?</h2><ul class="ticks"><li>Atlantic beach breaks suited to every level, from white water for beginners to punchier peaks.</li><li>A town built around surfing, ideal for a stay with your feet in the water.</li><li>Wide sandy beaches a stone’s throw from the ocean.</li></ul><h2>Lessons for every level</h2><p>Never surfed, or want to progress? Every session adapts to you. Lessons last 1h30, board and wetsuit included, in groups of 6 maximum (8 on request).</p><h2>Good to know</h2><p>The best spot — Hossegor, Seignosse or Capbreton — is chosen based on the tide and wave conditions. In summer the school is based at Seignosse, Les Bourdaines.</p>',
       aside: { h: 'Book in Hossegor', p: 'Small groups · all levels · gear included.', b1: 'Book a lesson', b2: 'WhatsApp' },
     },
@@ -102,8 +100,8 @@ export default {
       aside: { h: 'Book in Seignosse', p: 'Small groups · all levels · gear included.', b1: 'Book a lesson', b2: 'WhatsApp' },
     },
     team: {
-      title: 'Surf team building in the Landes — Coco Surf School', desc: 'Surf team building in Hossegor & Seignosse. A day out with colleagues: team spirit, stress relief and smiles guaranteed. Rates on request.', h1: 'Team building', crumb: 'Team building', ogImage: 'owner-team-new.png',
-      eyebrow: 'Companies · Landes', h1html: 'Surf <em>team building</em>', lead: 'Go for a surf with your colleagues! Team spirit, stress relief, smiles and fun all round — a sporty day in the ocean in Seignosse, Hossegor or Capbreton.', cta1: 'Request a quote', cta2: 'See rates', img: 'owner-team-new.png', imgAlt: 'Colleagues heading to the ocean with their boards',
+      title: 'Surf team building in the Landes — Coco Surf School', desc: 'Surf team building in Hossegor & Seignosse. A day out with colleagues: team spirit, stress relief and smiles guaranteed. Rates on request.', h1: 'Team building', crumb: 'Team building', ogImage: 'owner-team-new.jpg',
+      eyebrow: 'Companies · Landes', h1html: 'Surf <em>team building</em>', lead: 'Go for a surf with your colleagues! Team spirit, stress relief, smiles and fun all round — a sporty day in the ocean in Seignosse, Hossegor or Capbreton.', cta1: 'Request a quote', cta2: 'See rates', img: 'owner-team-new.jpg', imgAlt: 'Colleagues heading to the ocean with their boards',
       body: '<p class="lead">Fancy a different team activity in the Landes? Take your team surfing. A shared challenge in the ocean is one of the finest ways to build bonds — and everyone comes out of the water with a smile.</p><h2>Why surf as a team?</h2><ul class="ticks"><li><strong>Team spirit</strong> — a first shared experience where you cheer each other on.</li><li><strong>Stress relief</strong> — nothing clears the mind like the ocean and the fresh air.</li><li><strong>Accessible to all</strong> — no experience required, fun guaranteed.</li></ul><h2>How it works</h2><p>Sessions are led by Annelies, a certified coach, board and wetsuit included. We can host large groups of up to 32 people at once. We adapt the format to your group and choose the best beach between Seignosse, Hossegor and Capbreton. Rates on request.</p>',
       aside: { h: 'Organise your day', p: 'Tell us your group size and dates — a tailor-made quote.', b1: 'Request a quote', b2: 'WhatsApp' },
     },

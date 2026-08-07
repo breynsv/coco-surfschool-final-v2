@@ -133,10 +133,42 @@ const SUN_UP = '<svg class="sr-sunic" viewBox="0 0 24 24" fill="none" stroke="cu
 const SUN_DOWN = '<svg class="sr-sunic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="3"/><path d="M12 8V6.6M7.8 10 6.7 8.9M16.2 10l1.1-1.1M5.6 14H4M20 14h-1.6M3 18.5h18"/><path d="M9.7 3 12 5.3 14.3 3"/></svg>';
 const WIND_ARROW = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3.2l4.4 8H13.2v9.6h-2.4V11.2H7.6z"/></svg>';
 
+/**
+ * FAQPage schema derived from the FAQ that actually renders, so the two can
+ * never drift. Hand-maintaining a second copy in the content files is what
+ * left two of five questions unmarked-up in every language.
+ */
+const faqSchema = (t) => t.faq && t.faq.length ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: t.faq.map(f => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+} : null;
+
+/** Profiles that identify the same business entity. NOT html-escaped — this goes into JSON. */
+const BUSINESS_SAMEAS = [FB_URL, IG_URL].filter(Boolean);
+
+/** The two spot pages describe the same business, so they carry its schema too. */
+const SPOT_KEYS = new Set(['hossegor', 'seignosse']);
+
+/** Every JSON-LD object a page should carry, in emission order. */
+function schemasFor(key, c) {
+  const t = c.pages[key], out = [];
+  const biz = t.jsonld || (SPOT_KEYS.has(key) ? c.pages.home.jsonld : null);
+  if (biz) out.push(biz['@type'] === 'SportsActivityLocation' ? { ...biz, sameAs: BUSINESS_SAMEAS } : biz);
+  if (key === 'contact') { const faq = faqSchema(t); if (faq) out.push(faq); }
+  return out;
+}
+
 function head(lang, key, c) {
   const t = c.pages[key], u = urls(lang, key);
   const alt = LANGS.map(l => `<link rel="alternate" hreflang="${l}" href="${abs(l, key)}">`).join('\n');
-  const ld = t.jsonld ? `\n<script type="application/ld+json">\n${JSON.stringify(t.jsonld, null, 2)}\n</script>` : '';
+  const ld = schemasFor(key, c)
+    .map(s => `\n<script type="application/ld+json">\n${JSON.stringify(s, null, 2)}\n</script>`)
+    .join('');
   const ogImg = `${SITE}/assets/images/${t.ogImage || 'a29fce_9ddbf1309cf04bb189e246d843dfc188.jpg'}`;
   return `<!DOCTYPE html>
 <html lang="${lang}">
@@ -217,14 +249,14 @@ function footer(lang, key, c) {
         <p>${ui.footTagline}</p>
       </div>
       <div class="footer-col">
-        <h4>${ui.footNav}</h4>
+        <h2>${ui.footNav}</h2>
         <ul>
           ${navcol}
           <li><a href="${u.learn}">${ui.nav.learn || 'Learn to surf'}</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Contact</h4>
+        <h2>Contact</h2>
         <ul>
           <li><a href="tel:+33647454265">06 47 45 42 65</a></li>
           <li><a href="mailto:cocobosurfschool@gmail.com">cocobosurfschool@gmail.com</a></li>
@@ -252,10 +284,16 @@ function trustBar(t) {
     ${t.trust.map(i => `<div class="trust-item"><span class="ic">${i.ic}</span><div><b>${i.b}</b><span>${i.s}</span></div></div>`).join('\n    ')}
   </div></section>`;
 }
-function lessonCards(u, cards, from = true) {
+/**
+ * `level` is the heading level of each card title. On the home page the grid
+ * sits inside an h2 section so the cards are h3; on the lessons page the cards
+ * ARE the top-level sections under the h1, so they must be h2 or the page
+ * skips a level.
+ */
+function lessonCards(u, cards, level = 3) {
   return cards.map((c, i) => `<article class="lesson-card reveal">
       <div class="lesson-pic"><img src="${u.img(c.img)}" alt="${c.alt}" width="1600" height="1600" loading="lazy" decoding="async"></div>
-      <div class="card-head"><h3>${c.title}</h3>${c.from ? `<span class="from">${c.from}</span>` : `<span class="num">0${i + 1}</span>`}</div>
+      <div class="card-head"><h${level}>${c.title}</h${level}>${c.from ? `<span class="from">${c.from}</span>` : `<span class="num">0${i + 1}</span>`}</div>
       <p>${c.p}</p>
       <div class="chips">${c.chips.map(ch => `<span class="chip">${ch}</span>`).join('')}</div>
     </article>`).join('\n    ');
@@ -318,7 +356,7 @@ ${trustBar(t)}
 <section class="section" id="filosofie">
   <div class="wrap">
     <div class="section-head center reveal"><p class="eyebrow">${t.philosophy.eyebrow}</p><h2 class="section-title" style="margin-inline:auto">${t.philosophy.title}</h2><p class="lead" style="margin-inline:auto">${t.philosophy.lead}</p></div>
-    <div class="philo-grid">${t.philosophy.points.map(pt => `<div class="extra-card reveal"><h4>${pt.h}</h4><p>${pt.p}</p></div>`).join('')}</div>
+    <div class="philo-grid">${t.philosophy.points.map(pt => `<div class="extra-card reveal"><h3>${pt.h}</h3><p>${pt.p}</p></div>`).join('')}</div>
   </div>
 </section>
 <section class="section" id="cours">
@@ -383,7 +421,7 @@ ${reviewsSection(t, lang)}
     <div class="section-head reveal"><p class="eyebrow">${t.spots.eyebrow}</p><h2 class="section-title">${t.spots.title}</h2><p class="lead">${t.spots.lead}</p></div>
     <div class="spots-grid">
       <a class="spot-card reveal" href="${u.seignosse}"><img src="${u.img('a29fce_571dd78100a24c038429f1bfaf22b936.jpg')}" alt="${t.spots.seignosse.alt}" width="1600" height="1600" loading="lazy"><div class="sc-body"><h3>${t.spots.seignosse.h}</h3><p>${t.spots.seignosse.p}</p></div></a>
-      <a class="spot-card reveal" href="${u.hossegor}"><img src="${u.img('owner-spots.png')}" alt="${t.spots.hossegor.alt}" width="1537" height="1023" loading="lazy"><div class="sc-body"><h3>${t.spots.hossegor.h}</h3><p>${t.spots.hossegor.p}</p></div></a>
+      <a class="spot-card reveal" href="${u.hossegor}"><img src="${u.img('owner-spots.jpg')}" alt="${t.spots.hossegor.alt}" width="1537" height="1023" loading="lazy"><div class="sc-body"><h3>${t.spots.hossegor.h}</h3><p>${t.spots.hossegor.p}</p></div></a>
     </div>
   </div>
 </section>
@@ -394,7 +432,7 @@ ${reviewsSection(t, lang)}
     return `
 <section class="page-hero"><div class="wrap"><div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p><div class="hero-cta"><a class="btn btn--primary" href="${u.contact}">${t.cta1}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.cta2}</a></div><p class="we-speak">We speak <span aria-hidden="true">🇫🇷 🇳🇱 🇩🇪 🇬🇧 🇪🇸</span></p></div></div></section>
 <section class="section"><div class="wrap"><div class="lessons-grid">
-  ${lessonCards(u, t.cards)}
+  ${lessonCards(u, t.cards, 2)}
 </div><p class="lessons-note reveal"><span>💡</span><span>${t.note}</span></p></div></section>
 <section class="section section--tint" id="tarifs"><div class="wrap">
   <div class="section-head center reveal"><p class="eyebrow">${t.rates.eyebrow}</p><h2 class="section-title" style="margin-inline:auto">${t.rates.title}</h2><p class="lead" style="margin-inline:auto">${t.rates.lead}</p></div>
@@ -408,14 +446,14 @@ ${reviewsSection(t, lang)}
   coach(u, t, ui) {
     return `
 <section class="section section--tint" id="coach" style="padding-top:clamp(2.4rem,5vw,3.4rem)"><div class="wrap coach-grid">
-  <div class="coach-photo reveal"><img src="${u.img('owner-coach-new.png')}" alt="${t.imgAlt}" width="1448" height="1086" fetchpriority="high" decoding="async"></div>
+  <div class="coach-photo reveal"><img src="${u.img('owner-coach-new.jpg')}" alt="${t.imgAlt}" width="1448" height="1086" fetchpriority="high" decoding="async"></div>
   <div class="coach-body reveal">
     <p class="eyebrow">${t.eyebrow}</p>
     <h1 class="section-title">${t.h1}</h1>
     <p class="coach-quote">${t.quote}</p>
     ${t.body.map(p => `<p>${p}</p>`).join('\n    ')}
     <p class="coach-sign">— Annelies</p>
-    <div class="diplomas"><h4>${t.dipTitle}</h4><ul class="diploma-list">${t.diplomas.map(d => `<li><b>${d[0]}</b> ${d[1]}</li>`).join('')}</ul></div>
+    <div class="diplomas"><h2>${t.dipTitle}</h2><ul class="diploma-list">${t.diplomas.map(d => `<li><b>${d[0]}</b> ${d[1]}</li>`).join('')}</ul></div>
     <p style="margin-top:1.6rem"><a class="btn btn--primary" href="${u.contact}">${t.cta}</a></p>
   </div>
 </div></section>`;
@@ -425,7 +463,7 @@ ${reviewsSection(t, lang)}
     return `
 <section class="page-hero"><div class="wrap"><div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p></div></div></section>
 <section class="section"><div class="wrap"><div class="stay-grid">
-  ${t.cards.map(s => `<article class="stay-card reveal"><span class="pin">${s.pin}</span><h3>${s.h}</h3><p>${s.p}</p><a class="link" href="${s.href}"${s.href.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${s.link}</a></article>`).join('\n  ')}
+  ${t.cards.map(s => `<article class="stay-card reveal"><span class="pin">${s.pin}</span><h2>${s.h}</h2><p>${s.p}</p><a class="link" href="${s.href}"${s.href.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${s.link}</a></article>`).join('\n  ')}
 </div></div></section>`;
   },
 
@@ -440,21 +478,6 @@ ${reviewsSection(t, lang)}
   <p class="reveal" style="margin-top:1.6rem;text-align:center"><a class="btn btn--primary" href="${u.contact}">${t.cta}</a></p>
 </div></section>`;
   },
-  srilanka(u, t, ui) {
-    return `
-<section class="section srilanka" style="padding-top:clamp(2.4rem,5vw,3.4rem)"><div class="wrap">
-  <div class="sl-banner reveal"><img src="${u.img('a29fce_dcf84276ce074f1eaa9dba99897623be.jpg')}" alt="${t.bannerAlt}" width="1600" height="1600" fetchpriority="high" decoding="async"><div class="cap"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1}</h1></div></div>
-  <div class="sl-body">
-    <div class="reveal">${t.body.map(p => `<p>${p}</p>`).join('')}<p class="sl-ayubowan">Ayubowan !</p><p style="margin-top:1.4rem"><a class="btn btn--coral" href="${u.contact}">${t.cta}</a></p></div>
-    <div class="sl-gallery reveal">
-      <img src="${u.img('a29fce_becd34756fab44a98c1b1e602e5a8b11.jpg')}" alt="${t.g1}" width="1600" height="1600" loading="lazy">
-      <img src="${u.img('a29fce_2486b6dfe856444ebe10266f32e3ea95.jpg')}" alt="${t.g2}" width="1600" height="1600" loading="lazy">
-      <img src="${u.img('a29fce_aec7b4e0cf3346c5b67e02ffdbaa8088_d_1920_1280_s_2.jpg')}" alt="${t.g3}" width="1600" height="1600" loading="lazy">
-    </div>
-  </div>
-</div></section>`;
-  },
-
   contact(u, t, ui) {
     return `
 <section class="section section--tint" id="contact" style="padding-top:clamp(2.4rem,5vw,3.4rem)"><div class="wrap contact-grid">
@@ -483,7 +506,13 @@ ${reviewsSection(t, lang)}
 </div></section>`;
   },
 
-  article(u, t, ui) {
+  // `article` also serves the team and learn pages; only the two spot pages
+  // get the cross-link, so nothing connected Hossegor and Seignosse before.
+  article(u, t, ui, lang, key, c) {
+    const other = key === 'hossegor' ? 'seignosse' : key === 'seignosse' ? 'hossegor' : null;
+    const crossLink = other
+      ? `<a class="spot-crosslink" href="${u[other]}">${c.pages[other].crumb} <span aria-hidden="true">→</span></a>`
+      : '';
     return `
 <section class="page-hero has-media"><div class="wrap">
   <div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p><div class="hero-cta"><a class="btn btn--primary" href="${u.contact}">${t.cta1}</a><a class="btn btn--ghost" href="${u.lessons}">${t.cta2}</a></div></div>
@@ -491,7 +520,7 @@ ${reviewsSection(t, lang)}
 </div></section>
 <section class="section"><div class="wrap article-grid">
   <div class="prose reveal">${t.body}</div>
-  <aside class="aside-card reveal"><h3>${t.aside.h}</h3><p>${t.aside.p}</p><div class="mini"><a href="tel:+33647454265">06 47 45 42 65</a><a href="mailto:cocobosurfschool@gmail.com">cocobosurfschool@gmail.com</a></div><a class="btn btn--primary" href="${u.contact}">${t.aside.b1}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.aside.b2}</a></aside>
+  <aside class="aside-card reveal"><h3>${t.aside.h}</h3><p>${t.aside.p}</p><div class="mini"><a href="tel:+33647454265">06 47 45 42 65</a><a href="mailto:cocobosurfschool@gmail.com">cocobosurfschool@gmail.com</a></div><a class="btn btn--primary" href="${u.contact}">${t.aside.b1}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.aside.b2}</a>${crossLink}</aside>
 </div></section>`;
   },
 
@@ -543,7 +572,7 @@ ${reviewsSection(t, lang)}
 </div></section>`;
   },
 };
-const RENDER = { home: R.home, lessons: R.lessons, coach: R.coach, stay: R.stay, rental: R.rental, srilanka: R.srilanka, contact: R.contact, hossegor: R.article, seignosse: R.article, team: R.article, learn: R.article, book: R.book };
+const RENDER = { home: R.home, lessons: R.lessons, coach: R.coach, stay: R.stay, rental: R.rental, contact: R.contact, hossegor: R.article, seignosse: R.article, team: R.article, learn: R.article, book: R.book };
 
 // Cloudflare Pages serves this for any unmatched path, at any depth, so every
 // asset reference must be root-absolute. Stays noindex in every build.
@@ -584,7 +613,7 @@ async function build() {
     const c = C[lang];
     for (const key of EMITTED) {
       const u = urls(lang, key), t = c.pages[key];
-      const main = RENDER[key](u, t, c.ui, lang);
+      const main = RENDER[key](u, t, c.ui, lang, key, c);
       const html = head(lang, key, c) + '\n' + header(lang, key, c) + '\n' + crumbs(lang, key, c) + '\n<main>\n' + main + '\n</main>\n' + footer(lang, key, c);
       const dir = join(ROOT, lang, PAGES[key][lang]);
       await mkdir(dir, { recursive: true });

@@ -56,6 +56,9 @@ export default {
         { pin: 'Office de tourisme de Seignosse', h: 'Plus d’options', p: 'Retrouvez d’autres hébergements et bons plans via l’office de tourisme de Seignosse.', href: 'https://seignosse-tourisme.com', link: 'seignosse-tourisme.com' },
       ],
     },
+    // Unused: no PAGES entry, so no page is emitted from this block. Kept as
+    // translated copy in case the Sri Lanka trip comes back. The four images it
+    // referenced were deleted; restore them before re-enabling.
     srilanka: {
       title: 'Surf camp Sri Lanka — Midigama avec Coco Surf School', desc: 'Rejoignez Coco Surf School sur la côte sud du Sri Lanka. Maison familiale à 100 m de la plage de Midigama — Lazy Left & Rams.', h1: 'Surf camp Sri Lanka', crumb: 'Sri Lanka', bannerAlt: 'Coucher de soleil sur la côte sud du Sri Lanka', eyebrow: 'Surf camp',
       h1: 'Sri Lanka, en famille',
@@ -83,15 +86,10 @@ export default {
         { q: 'Comment réserver et payer ?', a: 'Un acompte de 30 % est demandé à la réservation. Le paiement se fait par virement bancaire ou en espèces.' },
         { q: 'Faut-il déjà savoir surfer ?', a: 'Non. Annelies accueille les débutants comme les surfeurs qui veulent se perfectionner.' },
       ],
-      jsonld: { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: [
-        { '@type': 'Question', name: 'Où ont lieu les cours de surf ?', acceptedAnswer: { '@type': 'Answer', text: 'Coco Surf School est une école mobile entre Hossegor et Seignosse : le meilleur spot est choisi selon votre niveau et les conditions.' } },
-        { '@type': 'Question', name: 'Combien de personnes par cours ?', acceptedAnswer: { '@type': 'Answer', text: 'Maximum 6 personnes par moniteur (8 sur demande).' } },
-        { '@type': 'Question', name: 'Le matériel est-il inclus ?', acceptedAnswer: { '@type': 'Answer', text: 'Oui, la planche et la combinaison sont incluses. Chaque cours dure 1h30.' } },
-      ] },
     },
     hossegor: {
-      title: 'Cours de surf à Hossegor — Coco Surf School | Tous niveaux', desc: 'Cours de surf à Hossegor avec Coco Surf School. Petits groupes (max 6), planche & combinaison incluses, coach diplômée ISA.', h1: 'Cours de surf à Hossegor', crumb: 'Surf à Hossegor', ogImage: 'owner-hossegor-page.png',
-      eyebrow: 'Landes · France', h1html: 'Cours de surf à <em>Hossegor</em>', lead: 'Venez surfer avec nous à Hossegor ! Apprenez à surfer dans l’une des villes de surf les plus réputées d’Europe. Petits groupes de 6 maximum en formule deluxe, planche et combinaison incluses, avec des coachs diplômées.', cta1: 'Réserver un cours', cta2: 'Voir les tarifs', img: 'owner-hossegor-page.png', imgAlt: 'Surfeurs sur une plage de Hossegor',
+      title: 'Cours de surf à Hossegor — Coco Surf School | Tous niveaux', desc: 'Cours de surf à Hossegor avec Coco Surf School. Petits groupes (max 6), planche & combinaison incluses, coach diplômée ISA.', h1: 'Cours de surf à Hossegor', crumb: 'Surf à Hossegor', ogImage: 'owner-hossegor-page.jpg',
+      eyebrow: 'Landes · France', h1html: 'Cours de surf à <em>Hossegor</em>', lead: 'Venez surfer avec nous à Hossegor ! Apprenez à surfer dans l’une des villes de surf les plus réputées d’Europe. Petits groupes de 6 maximum en formule deluxe, planche et combinaison incluses, avec des coachs diplômées.', cta1: 'Réserver un cours', cta2: 'Voir les tarifs', img: 'owner-hossegor-page.jpg', imgAlt: 'Surfeurs sur une plage de Hossegor',
       body: '<p class="lead">Hossegor est le cœur du surf dans les Landes, une référence des beach breaks en Europe. Coco Surf School est une école mobile entre Hossegor et Seignosse : on choisit le meilleur spot selon votre niveau et les conditions du jour.</p><h2>Pourquoi apprendre à Hossegor ?</h2><ul class="ticks"><li>Des beach breaks atlantiques adaptés à tous les niveaux, de la mousse pour débuter aux pics plus toniques.</li><li>Une ville tournée vers le surf, idéale pour un séjour les pieds dans l’eau.</li><li>De larges plages de sable à deux pas de l’océan.</li></ul><h2>Des cours pour tous les niveaux</h2><p>Jamais surfé, ou envie de vous perfectionner ? Chaque session s’adapte à vous. Les cours durent 1h30, planche et combinaison incluses, en groupes de 6 maximum (8 sur demande).</p><h2>Bon à savoir</h2><p>Le meilleur spot — Hossegor, Seignosse ou Capbreton — est choisi selon la marée et les conditions de vagues. En été, l’école est basée à Seignosse, Les Bourdaines.</p>',
       aside: { h: 'Réserver à Hossegor', p: 'Petits groupes · tous niveaux · matériel inclus.', b1: 'Réserver un cours', b2: 'WhatsApp' },
     },
@@ -102,8 +100,8 @@ export default {
       aside: { h: 'Réserver à Seignosse', p: 'Petits groupes · tous niveaux · matériel inclus.', b1: 'Réserver un cours', b2: 'WhatsApp' },
     },
     team: {
-      title: 'Team building surf dans les Landes — Coco Surf School', desc: 'Team building surf à Hossegor & Seignosse. Une sortie entre collègues : esprit d’équipe, anti-stress et sourires garantis. Tarifs sur demande.', h1: 'Team building', crumb: 'Team building', ogImage: 'owner-team-new.png',
-      eyebrow: 'Entreprises · Landes', h1html: 'Surf <em>team building</em>', lead: 'Allez surfer avec vos collègues ! Esprit d’équipe, anti-stress, sourires et fun au rendez-vous — une journée sportive dans l’océan à Seignosse, Hossegor ou Capbreton.', cta1: 'Demander un devis', cta2: 'Voir les tarifs', img: 'owner-team-new.png', imgAlt: 'Des collègues rejoignent l’océan avec leurs planches',
+      title: 'Team building surf dans les Landes — Coco Surf School', desc: 'Team building surf à Hossegor & Seignosse. Une sortie entre collègues : esprit d’équipe, anti-stress et sourires garantis. Tarifs sur demande.', h1: 'Team building', crumb: 'Team building', ogImage: 'owner-team-new.jpg',
+      eyebrow: 'Entreprises · Landes', h1html: 'Surf <em>team building</em>', lead: 'Allez surfer avec vos collègues ! Esprit d’équipe, anti-stress, sourires et fun au rendez-vous — une journée sportive dans l’océan à Seignosse, Hossegor ou Capbreton.', cta1: 'Demander un devis', cta2: 'Voir les tarifs', img: 'owner-team-new.jpg', imgAlt: 'Des collègues rejoignent l’océan avec leurs planches',
       body: '<p class="lead">Envie d’une activité d’équipe différente dans les Landes ? Emmenez votre équipe surfer. Un défi partagé dans l’océan, c’est l’une des plus belles façons de créer du lien — et tout le monde ressort de l’eau le sourire aux lèvres.</p><h2>Pourquoi surfer en équipe ?</h2><ul class="ticks"><li><strong>Esprit d’équipe</strong> — une première expérience partagée où l’on s’encourage.</li><li><strong>Anti-stress</strong> — rien ne remet les idées en place comme l’océan et le grand air.</li><li><strong>Accessible à tous</strong> — aucune expérience requise, fun garanti.</li></ul><h2>Comment ça se passe</h2><p>Les sessions sont encadrées par Annelies, coach diplômée, planche et combinaison incluses. Nous pouvons encadrer de grands groupes jusqu’à 32 personnes à la fois. On adapte le format à votre groupe et on choisit la meilleure plage entre Seignosse, Hossegor et Capbreton. Tarifs sur demande.</p>',
       aside: { h: 'Organisez votre journée', p: 'Dites-nous la taille du groupe et vos dates — devis sur mesure.', b1: 'Demander un devis', b2: 'WhatsApp' },
     },
