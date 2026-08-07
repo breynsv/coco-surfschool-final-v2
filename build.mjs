@@ -148,10 +148,17 @@ const faqSchema = (t) => t.faq && t.faq.length ? {
   })),
 } : null;
 
+/** Profiles that identify the same business entity. NOT html-escaped — this goes into JSON. */
+const BUSINESS_SAMEAS = [FB_URL, IG_URL].filter(Boolean);
+
+/** The two spot pages describe the same business, so they carry its schema too. */
+const SPOT_KEYS = new Set(['hossegor', 'seignosse']);
+
 /** Every JSON-LD object a page should carry, in emission order. */
-function schemasFor(key, t) {
-  const out = [];
-  if (t.jsonld) out.push(t.jsonld);
+function schemasFor(key, c) {
+  const t = c.pages[key], out = [];
+  const biz = t.jsonld || (SPOT_KEYS.has(key) ? c.pages.home.jsonld : null);
+  if (biz) out.push(biz['@type'] === 'SportsActivityLocation' ? { ...biz, sameAs: BUSINESS_SAMEAS } : biz);
   if (key === 'contact') { const faq = faqSchema(t); if (faq) out.push(faq); }
   return out;
 }
@@ -159,7 +166,7 @@ function schemasFor(key, t) {
 function head(lang, key, c) {
   const t = c.pages[key], u = urls(lang, key);
   const alt = LANGS.map(l => `<link rel="alternate" hreflang="${l}" href="${abs(l, key)}">`).join('\n');
-  const ld = schemasFor(key, t)
+  const ld = schemasFor(key, c)
     .map(s => `\n<script type="application/ld+json">\n${JSON.stringify(s, null, 2)}\n</script>`)
     .join('');
   const ogImg = `${SITE}/assets/images/${t.ogImage || 'a29fce_9ddbf1309cf04bb189e246d843dfc188.jpg'}`;

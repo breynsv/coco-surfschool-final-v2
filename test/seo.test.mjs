@@ -157,3 +157,46 @@ test('every page has exactly one h1', async () => {
   });
   assert.deepEqual(bad, [], `wrong h1 count:\n${bad.join('\n')}`);
 });
+
+const SPOT_SLUGS = {
+  fr: ['cours-de-surf-hossegor', 'cours-de-surf-seignosse'],
+  en: ['surf-lessons-hossegor', 'surf-lessons-seignosse'],
+  nl: ['surflessen-hossegor', 'surflessen-seignosse'],
+  de: ['surfkurse-hossegor', 'surfkurse-seignosse'],
+  es: ['clases-de-surf-hossegor', 'clases-de-surf-seignosse'],
+};
+
+test('home schema links the social profiles via sameAs', async () => {
+  const out = await builtTo({ PROD: '1' });
+  for (const lang of ['fr', 'en', 'nl', 'de', 'es']) {
+    const html = await readFile(join(out, lang, 'index.html'), 'utf8');
+    const biz = jsonLdOf(html).find(o => o['@type'] === 'SportsActivityLocation');
+    assert.ok(biz, `${lang}: no business schema`);
+    assert.ok(Array.isArray(biz.sameAs) && biz.sameAs.length >= 2, `${lang}: sameAs missing`);
+    assert.ok(biz.sameAs.some(u => u.includes('facebook')), `${lang}: no facebook in sameAs`);
+    assert.ok(biz.sameAs.some(u => u.includes('instagram')), `${lang}: no instagram in sameAs`);
+  }
+});
+
+test('location pages carry business schema', async () => {
+  const out = await builtTo({ PROD: '1' });
+  for (const [lang, slugs] of Object.entries(SPOT_SLUGS)) {
+    for (const slug of slugs) {
+      const html = await readFile(join(out, lang, slug, 'index.html'), 'utf8');
+      const biz = jsonLdOf(html).find(o => o['@type'] === 'SportsActivityLocation');
+      assert.ok(biz, `${lang}/${slug}: no business schema`);
+      assert.ok(Array.isArray(biz.sameAs) && biz.sameAs.length >= 2, `${lang}/${slug}: sameAs missing`);
+    }
+  }
+});
+
+test('no JSON-LD carries an HTML-escaped URL', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const bad = [];
+  await eachPage(out, (rel, html) => {
+    for (const o of jsonLdOf(html)) {
+      if (JSON.stringify(o).includes('&amp;')) bad.push(rel);
+    }
+  });
+  assert.deepEqual(bad, [], `HTML entities leaked into JSON-LD:\n${bad.join('\n')}`);
+});
