@@ -1,0 +1,46 @@
+name: Tests
+
+on:
+  push:
+    branches-ignore: []
+  pull_request:
+  workflow_dispatch: {}
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # No dependencies — build.mjs and the tests use only node: builtins.
+      - name: Run tests
+        run: npm test
+
+      # The suite builds into a temp dir, so it cannot catch a preview build that
+      # was committed by hand. This does.
+      #
+      # Scope: only the generated pages — the five language trees and the root
+      # redirect stub. 404.html, vragenlijst/, booking-preview/ and rapport/ are
+      # noindex on purpose and must NOT be flagged.
+      - name: Committed output must be a production build
+        run: |
+          set -euo pipefail
+          if grep -q '^Disallow: /$' robots.txt; then
+            echo "::error file=robots.txt::robots.txt is a PREVIEW build (Disallow: /). Run 'npm run build' and commit the result."
+            exit 1
+          fi
+          hits=$(grep -rl 'name="robots" content="noindex' \
+                   --include=index.html fr en nl de es index.html 2>/dev/null || true)
+          if [ -n "$hits" ]; then
+            echo "::error::A committed generated page carries noindex. Run 'npm run build' (PROD=1) and commit the result."
+            echo "$hits"
+            exit 1
+          fi
+          echo "Committed output is a production build."
