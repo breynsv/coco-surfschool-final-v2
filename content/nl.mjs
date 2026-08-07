@@ -83,11 +83,6 @@ export default {
         { q: 'Hoe reserveer en betaal ik?', a: 'Bij reservatie wordt een voorschot van 30% gevraagd. Betalen kan via bankoverschrijving of cash.' },
         { q: 'Moet ik al kunnen surfen?', a: 'Nee. Annelies verwelkomt zowel beginners als surfers die zich willen verbeteren.' },
       ],
-      jsonld: { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: [
-        { '@type': 'Question', name: 'Waar gaan de surflessen door?', acceptedAnswer: { '@type': 'Answer', text: 'Coco Surf School is een mobiele school tussen Hossegor en Seignosse: de beste spot wordt gekozen volgens jouw niveau en de condities.' } },
-        { '@type': 'Question', name: 'Met hoeveel personen is een les?', acceptedAnswer: { '@type': 'Answer', text: 'Maximum 6 personen per lesgever (8 op aanvraag).' } },
-        { '@type': 'Question', name: 'Is het materiaal inbegrepen?', acceptedAnswer: { '@type': 'Answer', text: 'Ja, board en wetsuit zijn inbegrepen. Elke les duurt 1u30.' } },
-      ] },
     },
     hossegor: {
       title: 'Surflessen in Hossegor — Coco Surf School | Alle niveaus', desc: 'Surflessen in Hossegor met Coco Surf School. Kleine groepjes (max 6), board &amp; wetsuit inbegrepen, ISA-gediplomeerd coach.', h1: 'Surflessen in Hossegor', crumb: 'Surfen in Hossegor', ogImage: 'owner-hossegor-page.jpg',

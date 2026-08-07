@@ -88,3 +88,36 @@ test('no unreferenced images are shipped', async () => {
   const orphans = (await readdir(join(REPO, 'assets/images'))).filter(f => !used.has(f));
   assert.deepEqual(orphans, [], `unreferenced images still in repo: ${orphans.length}`);
 });
+
+/** Every JSON-LD block on a page, parsed. */
+const jsonLdOf = (html) =>
+  (html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g) || [])
+    .map(b => JSON.parse(b.replace(/<\/?script[^>]*>/g, '')));
+
+const CONTACT_SLUGS = { fr: 'contact', en: 'contact', nl: 'contact', de: 'kontakt', es: 'contacto' };
+
+test('FAQ schema covers every rendered FAQ item, in all languages', async () => {
+  const out = await builtTo({ PROD: '1' });
+  for (const [lang, slug] of Object.entries(CONTACT_SLUGS)) {
+    const html = await readFile(join(out, lang, slug, 'index.html'), 'utf8');
+    const rendered = (html.match(/<details class="faq-item/g) || []).length;
+    const faq = jsonLdOf(html).find(o => o['@type'] === 'FAQPage');
+    assert.ok(faq, `${lang}: no FAQPage schema`);
+    assert.ok(rendered > 0, `${lang}: no FAQ items rendered`);
+    assert.equal(faq.mainEntity.length, rendered,
+      `${lang}: ${faq.mainEntity.length} in schema vs ${rendered} rendered`);
+  }
+});
+
+test('every FAQ answer in schema matches the rendered answer verbatim', async () => {
+  const out = await builtTo({ PROD: '1' });
+  for (const [lang, slug] of Object.entries(CONTACT_SLUGS)) {
+    const html = await readFile(join(out, lang, slug, 'index.html'), 'utf8');
+    const faq = jsonLdOf(html).find(o => o['@type'] === 'FAQPage');
+    for (const item of faq.mainEntity) {
+      const answer = item.acceptedAnswer.text;
+      assert.ok(html.includes(`<p>${answer}</p>`),
+        `${lang}: schema answer not rendered verbatim: ${answer.slice(0, 60)}…`);
+    }
+  }
+});

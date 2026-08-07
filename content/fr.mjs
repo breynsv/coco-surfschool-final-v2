@@ -83,11 +83,6 @@ export default {
         { q: 'Comment réserver et payer ?', a: 'Un acompte de 30 % est demandé à la réservation. Le paiement se fait par virement bancaire ou en espèces.' },
         { q: 'Faut-il déjà savoir surfer ?', a: 'Non. Annelies accueille les débutants comme les surfeurs qui veulent se perfectionner.' },
       ],
-      jsonld: { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: [
-        { '@type': 'Question', name: 'Où ont lieu les cours de surf ?', acceptedAnswer: { '@type': 'Answer', text: 'Coco Surf School est une école mobile entre Hossegor et Seignosse : le meilleur spot est choisi selon votre niveau et les conditions.' } },
-        { '@type': 'Question', name: 'Combien de personnes par cours ?', acceptedAnswer: { '@type': 'Answer', text: 'Maximum 6 personnes par moniteur (8 sur demande).' } },
-        { '@type': 'Question', name: 'Le matériel est-il inclus ?', acceptedAnswer: { '@type': 'Answer', text: 'Oui, la planche et la combinaison sont incluses. Chaque cours dure 1h30.' } },
-      ] },
     },
     hossegor: {
       title: 'Cours de surf à Hossegor — Coco Surf School | Tous niveaux', desc: 'Cours de surf à Hossegor avec Coco Surf School. Petits groupes (max 6), planche & combinaison incluses, coach diplômée ISA.', h1: 'Cours de surf à Hossegor', crumb: 'Surf à Hossegor', ogImage: 'owner-hossegor-page.jpg',

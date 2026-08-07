@@ -133,10 +133,35 @@ const SUN_UP = '<svg class="sr-sunic" viewBox="0 0 24 24" fill="none" stroke="cu
 const SUN_DOWN = '<svg class="sr-sunic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="3"/><path d="M12 8V6.6M7.8 10 6.7 8.9M16.2 10l1.1-1.1M5.6 14H4M20 14h-1.6M3 18.5h18"/><path d="M9.7 3 12 5.3 14.3 3"/></svg>';
 const WIND_ARROW = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3.2l4.4 8H13.2v9.6h-2.4V11.2H7.6z"/></svg>';
 
+/**
+ * FAQPage schema derived from the FAQ that actually renders, so the two can
+ * never drift. Hand-maintaining a second copy in the content files is what
+ * left two of five questions unmarked-up in every language.
+ */
+const faqSchema = (t) => t.faq && t.faq.length ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: t.faq.map(f => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+} : null;
+
+/** Every JSON-LD object a page should carry, in emission order. */
+function schemasFor(key, t) {
+  const out = [];
+  if (t.jsonld) out.push(t.jsonld);
+  if (key === 'contact') { const faq = faqSchema(t); if (faq) out.push(faq); }
+  return out;
+}
+
 function head(lang, key, c) {
   const t = c.pages[key], u = urls(lang, key);
   const alt = LANGS.map(l => `<link rel="alternate" hreflang="${l}" href="${abs(l, key)}">`).join('\n');
-  const ld = t.jsonld ? `\n<script type="application/ld+json">\n${JSON.stringify(t.jsonld, null, 2)}\n</script>` : '';
+  const ld = schemasFor(key, t)
+    .map(s => `\n<script type="application/ld+json">\n${JSON.stringify(s, null, 2)}\n</script>`)
+    .join('');
   const ogImg = `${SITE}/assets/images/${t.ogImage || 'a29fce_9ddbf1309cf04bb189e246d843dfc188.jpg'}`;
   return `<!DOCTYPE html>
 <html lang="${lang}">
