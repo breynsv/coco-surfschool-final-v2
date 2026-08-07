@@ -200,3 +200,36 @@ test('no JSON-LD carries an HTML-escaped URL', async () => {
   });
   assert.deepEqual(bad, [], `HTML entities leaked into JSON-LD:\n${bad.join('\n')}`);
 });
+
+test('the two spot pages link to each other', async () => {
+  const out = await builtTo({ PROD: '1' });
+  for (const [lang, [a, b]] of Object.entries(SPOT_SLUGS)) {
+    const ha = await readFile(join(out, lang, a, 'index.html'), 'utf8');
+    const hb = await readFile(join(out, lang, b, 'index.html'), 'utf8');
+    assert.ok(ha.includes(`${b}/`), `${lang}/${a} does not link to ${b}`);
+    assert.ok(hb.includes(`${a}/`), `${lang}/${b} does not link to ${a}`);
+  }
+});
+
+test('the cross-link appears only on the two spot pages', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const stray = [];
+  await eachPage(out, (rel, html) => {
+    if (!html.includes('spot-crosslink')) return;
+    const lang = rel.split('/')[1];
+    if (!SPOT_SLUGS[lang].some(s => rel.includes(`/${s}/`))) stray.push(rel);
+  });
+  assert.deepEqual(stray, [], `cross-link on non-spot pages:\n${stray.join('\n')}`);
+});
+
+test('every RENDER key is a page the site actually emits', async () => {
+  const src = await readFile(join(REPO, 'build.mjs'), 'utf8');
+  const renderKeys = src.match(/^const RENDER = \{([^}]*)\}/m)[1]
+    .split(',').map(p => p.split(':')[0].trim()).filter(Boolean);
+  const pageKeys = new Set(
+    [...src.matchAll(/^ {2}([a-z]+): +\{ +fr: /gm)].map(m => m[1])
+  );
+  assert.ok(pageKeys.size >= 10, `PAGES parse found only ${pageKeys.size} key(s); the parse is broken`);
+  const unreachable = renderKeys.filter(k => !pageKeys.has(k));
+  assert.deepEqual(unreachable, [], `RENDER keys with no PAGES entry: ${unreachable.join(', ')}`);
+});

@@ -665,6 +665,8 @@ body.menu-open .wa-fab{opacity:0;visibility:hidden;transition:.2s}
 .aside-card .btn{width:100%;justify-content:center;margin-bottom:.6rem}
 .aside-card .mini{display:flex;flex-direction:column;gap:.1rem;margin:.9rem 0;font-size:.92rem}
 .aside-card .mini a{color:var(--coral-deep);font-weight:600;text-decoration:none}
+.aside-card .spot-crosslink{display:inline-flex;align-items:center;gap:.3rem;margin-top:.4rem;color:var(--coral-deep);font-weight:600;font-size:.92rem;text-decoration:none}
+.aside-card .spot-crosslink:hover{text-decoration:underline}
 @media (max-width:860px){.article-grid{grid-template-columns:1fr}.aside-card{position:static;max-width:520px}}
 
 /* ---- Home teasers ---- */

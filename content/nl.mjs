@@ -56,6 +56,9 @@ export default {
         { pin: 'Toeristische dienst Seignosse', h: 'Meer opties', p: 'Vind meer verblijven en tips via de toeristische dienst van Seignosse.', href: 'https://seignosse-tourisme.com', link: 'seignosse-tourisme.com' },
       ],
     },
+    // Unused: no PAGES entry, so no page is emitted from this block. Kept as
+    // translated copy in case the Sri Lanka trip comes back. The four images it
+    // referenced were deleted; restore them before re-enabling.
     srilanka: {
       title: 'Surfkamp Sri Lanka — Midigama met Coco Surf School', desc: 'Ga mee met Coco Surf School naar de zuidkust van Sri Lanka. Familiehuis op 100 m van het strand van Midigama — Lazy Left &amp; Rams.', h1: 'Surfkamp Sri Lanka', crumb: 'Sri Lanka', bannerAlt: 'Zonsondergang aan de zuidkust van Sri Lanka', eyebrow: 'Surfkamp',
       h1: 'Sri Lanka, met de familie',

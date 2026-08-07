@@ -478,21 +478,6 @@ ${reviewsSection(t, lang)}
   <p class="reveal" style="margin-top:1.6rem;text-align:center"><a class="btn btn--primary" href="${u.contact}">${t.cta}</a></p>
 </div></section>`;
   },
-  srilanka(u, t, ui) {
-    return `
-<section class="section srilanka" style="padding-top:clamp(2.4rem,5vw,3.4rem)"><div class="wrap">
-  <div class="sl-banner reveal"><img src="${u.img('a29fce_dcf84276ce074f1eaa9dba99897623be.jpg')}" alt="${t.bannerAlt}" width="1600" height="1600" fetchpriority="high" decoding="async"><div class="cap"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1}</h1></div></div>
-  <div class="sl-body">
-    <div class="reveal">${t.body.map(p => `<p>${p}</p>`).join('')}<p class="sl-ayubowan">Ayubowan !</p><p style="margin-top:1.4rem"><a class="btn btn--coral" href="${u.contact}">${t.cta}</a></p></div>
-    <div class="sl-gallery reveal">
-      <img src="${u.img('a29fce_becd34756fab44a98c1b1e602e5a8b11.jpg')}" alt="${t.g1}" width="1600" height="1600" loading="lazy">
-      <img src="${u.img('a29fce_2486b6dfe856444ebe10266f32e3ea95.jpg')}" alt="${t.g2}" width="1600" height="1600" loading="lazy">
-      <img src="${u.img('a29fce_aec7b4e0cf3346c5b67e02ffdbaa8088_d_1920_1280_s_2.jpg')}" alt="${t.g3}" width="1600" height="1600" loading="lazy">
-    </div>
-  </div>
-</div></section>`;
-  },
-
   contact(u, t, ui) {
     return `
 <section class="section section--tint" id="contact" style="padding-top:clamp(2.4rem,5vw,3.4rem)"><div class="wrap contact-grid">
@@ -521,7 +506,13 @@ ${reviewsSection(t, lang)}
 </div></section>`;
   },
 
-  article(u, t, ui) {
+  // `article` also serves the team and learn pages; only the two spot pages
+  // get the cross-link, so nothing connected Hossegor and Seignosse before.
+  article(u, t, ui, lang, key, c) {
+    const other = key === 'hossegor' ? 'seignosse' : key === 'seignosse' ? 'hossegor' : null;
+    const crossLink = other
+      ? `<a class="spot-crosslink" href="${u[other]}">${c.pages[other].crumb} <span aria-hidden="true">→</span></a>`
+      : '';
     return `
 <section class="page-hero has-media"><div class="wrap">
   <div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p><div class="hero-cta"><a class="btn btn--primary" href="${u.contact}">${t.cta1}</a><a class="btn btn--ghost" href="${u.lessons}">${t.cta2}</a></div></div>
@@ -529,7 +520,7 @@ ${reviewsSection(t, lang)}
 </div></section>
 <section class="section"><div class="wrap article-grid">
   <div class="prose reveal">${t.body}</div>
-  <aside class="aside-card reveal"><h3>${t.aside.h}</h3><p>${t.aside.p}</p><div class="mini"><a href="tel:+33647454265">06 47 45 42 65</a><a href="mailto:cocobosurfschool@gmail.com">cocobosurfschool@gmail.com</a></div><a class="btn btn--primary" href="${u.contact}">${t.aside.b1}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.aside.b2}</a></aside>
+  <aside class="aside-card reveal"><h3>${t.aside.h}</h3><p>${t.aside.p}</p><div class="mini"><a href="tel:+33647454265">06 47 45 42 65</a><a href="mailto:cocobosurfschool@gmail.com">cocobosurfschool@gmail.com</a></div><a class="btn btn--primary" href="${u.contact}">${t.aside.b1}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.aside.b2}</a>${crossLink}</aside>
 </div></section>`;
   },
 
@@ -581,7 +572,7 @@ ${reviewsSection(t, lang)}
 </div></section>`;
   },
 };
-const RENDER = { home: R.home, lessons: R.lessons, coach: R.coach, stay: R.stay, rental: R.rental, srilanka: R.srilanka, contact: R.contact, hossegor: R.article, seignosse: R.article, team: R.article, learn: R.article, book: R.book };
+const RENDER = { home: R.home, lessons: R.lessons, coach: R.coach, stay: R.stay, rental: R.rental, contact: R.contact, hossegor: R.article, seignosse: R.article, team: R.article, learn: R.article, book: R.book };
 
 // Cloudflare Pages serves this for any unmatched path, at any depth, so every
 // asset reference must be root-absolute. Stays noindex in every build.
@@ -622,7 +613,7 @@ async function build() {
     const c = C[lang];
     for (const key of EMITTED) {
       const u = urls(lang, key), t = c.pages[key];
-      const main = RENDER[key](u, t, c.ui, lang);
+      const main = RENDER[key](u, t, c.ui, lang, key, c);
       const html = head(lang, key, c) + '\n' + header(lang, key, c) + '\n' + crumbs(lang, key, c) + '\n<main>\n' + main + '\n</main>\n' + footer(lang, key, c);
       const dir = join(ROOT, lang, PAGES[key][lang]);
       await mkdir(dir, { recursive: true });

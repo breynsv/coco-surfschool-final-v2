@@ -56,6 +56,9 @@ export default {
         { pin: 'Seignosse tourist office', h: 'More options', p: 'Find more accommodation and good tips through the Seignosse tourist office.', href: 'https://seignosse-tourisme.com', link: 'seignosse-tourisme.com' },
       ],
     },
+    // Unused: no PAGES entry, so no page is emitted from this block. Kept as
+    // translated copy in case the Sri Lanka trip comes back. The four images it
+    // referenced were deleted; restore them before re-enabling.
     srilanka: {
       title: 'Sri Lanka surf camp — Midigama with Coco Surf School', desc: 'Join Coco Surf School on the south coast of Sri Lanka. Family house 100 m from Midigama beach — Lazy Left & Rams.', h1: 'Sri Lanka surf camp', crumb: 'Sri Lanka', bannerAlt: 'Sunset on the south coast of Sri Lanka', eyebrow: 'Surf camp',
       h1: 'Sri Lanka, with family',
