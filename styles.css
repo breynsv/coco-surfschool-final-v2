@@ -245,7 +245,7 @@ h1, h2, h3, h4 {
 .lesson-card .lesson-pic img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
 .lesson-card:hover .lesson-pic img { transform: scale(1.04); }
 .lesson-card .num { font-family: var(--font-display); font-size: .95rem; color: var(--coral-deep); font-weight: 600; letter-spacing: .05em; }
-.lesson-card h3 { font-size: 1.4rem; margin: .2rem 0 .5rem; }
+.lesson-card :is(h2, h3) { font-size: 1.4rem; margin: .2rem 0 .5rem; }
 .lesson-card p { margin: 0; font-size: .96rem; }
 .lesson-card .tag {
   display: inline-block; margin-top: 1rem; font-size: .76rem; font-weight: 700; letter-spacing: .04em;
@@ -273,7 +273,7 @@ h1, h2, h3, h4 {
 .coach-body p { margin: 0 0 1rem; }
 .coach-sign { font-family: var(--font-display); font-size: 1.3rem; color: var(--coral-deep); font-style: italic; }
 .diplomas { margin-top: 2rem; }
-.diplomas h4 { font-size: 1.05rem; letter-spacing: .02em; margin-bottom: 1rem; }
+.diplomas h2 { font-size: 1.05rem; letter-spacing: .02em; margin-bottom: 1rem; }
 .diploma-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: .5rem 1.6rem; }
 .diploma-list li { display: flex; gap: .7rem; font-size: .9rem; padding: .35rem 0; border-bottom: 1px dashed var(--mint-line); }
 .diploma-list li b { color: var(--ink); font-variant-numeric: tabular-nums; flex: none; }
@@ -299,7 +299,7 @@ h1, h2, h3, h4 {
 .rate-card .incl { margin-top: auto; font-size: .82rem; color: var(--seafoam-deep); font-weight: 600; letter-spacing: .03em; padding-top: .4rem; }
 .rates-extra { display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem; margin-top: 1.3rem; }
 .extra-card { background: var(--mint); border-radius: var(--radius); padding: 1.5rem 1.7rem; }
-.extra-card h4 { font-size: 1.15rem; margin-bottom: .35rem; }
+.extra-card :is(h3, h4) { font-size: 1.15rem; margin-bottom: .35rem; }
 .extra-card p { margin: 0; font-size: .92rem; }
 .philo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.3rem; margin-top: 1.9rem; }
 .philo-grid .extra-card { background: var(--white); border: 1px solid rgba(180,211,196,.4); }
@@ -387,7 +387,7 @@ h1, h2, h3, h4 {
 }
 .stay-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
 .stay-card .pin { font-size: .74rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--seafoam-deep); }
-.stay-card h3 { font-size: 1.25rem; margin: .3rem 0 .5rem; }
+.stay-card h2 { font-size: 1.25rem; margin: .3rem 0 .5rem; }
 .stay-card p { margin: 0 0 .9rem; font-size: .93rem; }
 .stay-card a.link { font-weight: 600; font-size: .9rem; display: inline-flex; align-items: center; gap: .3rem; }
 .stay-card a.link::after { content: "→"; transition: transform .25s var(--ease); }
@@ -462,7 +462,7 @@ h1, h2, h3, h4 {
 .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 2rem; margin-bottom: 2.4rem; }
 .footer-brand img { width: 66px; height: 66px; object-fit: contain; background: var(--cream); border-radius: 16px; padding: 6px; margin-bottom: 1rem; }
 .footer-brand p { font-size: .92rem; color: #a9c4ba; max-width: 34ch; margin: 0; }
-.site-footer h4 { color: #fff; font-size: .82rem; letter-spacing: .16em; text-transform: uppercase; font-family: var(--font-body); font-weight: 700; margin-bottom: 1rem; }
+.site-footer h2 { color: #fff; font-size: .82rem; letter-spacing: .16em; text-transform: uppercase; font-family: var(--font-body); font-weight: 700; margin-bottom: 1rem; }
 .footer-col ul { list-style: none; margin: 0; padding: 0; }
 .footer-col li { margin-bottom: .55rem; }
 .footer-col a { color: #cfe0d9; font-size: .93rem; display: inline-block; padding: .45rem 0; }

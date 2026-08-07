@@ -242,14 +242,14 @@ function footer(lang, key, c) {
         <p>${ui.footTagline}</p>
       </div>
       <div class="footer-col">
-        <h4>${ui.footNav}</h4>
+        <h2>${ui.footNav}</h2>
         <ul>
           ${navcol}
           <li><a href="${u.learn}">${ui.nav.learn || 'Learn to surf'}</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Contact</h4>
+        <h2>Contact</h2>
         <ul>
           <li><a href="tel:+33647454265">06 47 45 42 65</a></li>
           <li><a href="mailto:cocobosurfschool@gmail.com">cocobosurfschool@gmail.com</a></li>
@@ -277,10 +277,16 @@ function trustBar(t) {
     ${t.trust.map(i => `<div class="trust-item"><span class="ic">${i.ic}</span><div><b>${i.b}</b><span>${i.s}</span></div></div>`).join('\n    ')}
   </div></section>`;
 }
-function lessonCards(u, cards, from = true) {
+/**
+ * `level` is the heading level of each card title. On the home page the grid
+ * sits inside an h2 section so the cards are h3; on the lessons page the cards
+ * ARE the top-level sections under the h1, so they must be h2 or the page
+ * skips a level.
+ */
+function lessonCards(u, cards, level = 3) {
   return cards.map((c, i) => `<article class="lesson-card reveal">
       <div class="lesson-pic"><img src="${u.img(c.img)}" alt="${c.alt}" width="1600" height="1600" loading="lazy" decoding="async"></div>
-      <div class="card-head"><h3>${c.title}</h3>${c.from ? `<span class="from">${c.from}</span>` : `<span class="num">0${i + 1}</span>`}</div>
+      <div class="card-head"><h${level}>${c.title}</h${level}>${c.from ? `<span class="from">${c.from}</span>` : `<span class="num">0${i + 1}</span>`}</div>
       <p>${c.p}</p>
       <div class="chips">${c.chips.map(ch => `<span class="chip">${ch}</span>`).join('')}</div>
     </article>`).join('\n    ');
@@ -343,7 +349,7 @@ ${trustBar(t)}
 <section class="section" id="filosofie">
   <div class="wrap">
     <div class="section-head center reveal"><p class="eyebrow">${t.philosophy.eyebrow}</p><h2 class="section-title" style="margin-inline:auto">${t.philosophy.title}</h2><p class="lead" style="margin-inline:auto">${t.philosophy.lead}</p></div>
-    <div class="philo-grid">${t.philosophy.points.map(pt => `<div class="extra-card reveal"><h4>${pt.h}</h4><p>${pt.p}</p></div>`).join('')}</div>
+    <div class="philo-grid">${t.philosophy.points.map(pt => `<div class="extra-card reveal"><h3>${pt.h}</h3><p>${pt.p}</p></div>`).join('')}</div>
   </div>
 </section>
 <section class="section" id="cours">
@@ -419,7 +425,7 @@ ${reviewsSection(t, lang)}
     return `
 <section class="page-hero"><div class="wrap"><div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p><div class="hero-cta"><a class="btn btn--primary" href="${u.contact}">${t.cta1}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.cta2}</a></div><p class="we-speak">We speak <span aria-hidden="true">🇫🇷 🇳🇱 🇩🇪 🇬🇧 🇪🇸</span></p></div></div></section>
 <section class="section"><div class="wrap"><div class="lessons-grid">
-  ${lessonCards(u, t.cards)}
+  ${lessonCards(u, t.cards, 2)}
 </div><p class="lessons-note reveal"><span>💡</span><span>${t.note}</span></p></div></section>
 <section class="section section--tint" id="tarifs"><div class="wrap">
   <div class="section-head center reveal"><p class="eyebrow">${t.rates.eyebrow}</p><h2 class="section-title" style="margin-inline:auto">${t.rates.title}</h2><p class="lead" style="margin-inline:auto">${t.rates.lead}</p></div>
@@ -440,7 +446,7 @@ ${reviewsSection(t, lang)}
     <p class="coach-quote">${t.quote}</p>
     ${t.body.map(p => `<p>${p}</p>`).join('\n    ')}
     <p class="coach-sign">— Annelies</p>
-    <div class="diplomas"><h4>${t.dipTitle}</h4><ul class="diploma-list">${t.diplomas.map(d => `<li><b>${d[0]}</b> ${d[1]}</li>`).join('')}</ul></div>
+    <div class="diplomas"><h2>${t.dipTitle}</h2><ul class="diploma-list">${t.diplomas.map(d => `<li><b>${d[0]}</b> ${d[1]}</li>`).join('')}</ul></div>
     <p style="margin-top:1.6rem"><a class="btn btn--primary" href="${u.contact}">${t.cta}</a></p>
   </div>
 </div></section>`;
@@ -450,7 +456,7 @@ ${reviewsSection(t, lang)}
     return `
 <section class="page-hero"><div class="wrap"><div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p></div></div></section>
 <section class="section"><div class="wrap"><div class="stay-grid">
-  ${t.cards.map(s => `<article class="stay-card reveal"><span class="pin">${s.pin}</span><h3>${s.h}</h3><p>${s.p}</p><a class="link" href="${s.href}"${s.href.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${s.link}</a></article>`).join('\n  ')}
+  ${t.cards.map(s => `<article class="stay-card reveal"><span class="pin">${s.pin}</span><h2>${s.h}</h2><p>${s.p}</p><a class="link" href="${s.href}"${s.href.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${s.link}</a></article>`).join('\n  ')}
 </div></div></section>`;
   },
 

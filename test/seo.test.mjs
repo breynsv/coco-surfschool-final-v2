@@ -121,3 +121,39 @@ test('every FAQ answer in schema matches the rendered answer verbatim', async ()
     }
   }
 });
+
+/** Walk every generated page in the five language dirs, calling fn(relPath, html). */
+async function eachPage(out, fn) {
+  let seen = 0;
+  const walk = async (dir) => {
+    for (const e of await readdir(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name);
+      if (e.isDirectory()) await walk(p);
+      else if (e.name === 'index.html') { seen++; await fn(p.replace(out, ''), await readFile(p, 'utf8')); }
+    }
+  };
+  for (const lang of ['fr', 'en', 'nl', 'de', 'es']) await walk(join(out, lang));
+  assert.ok(seen >= 50, `page walk found only ${seen} page(s); the walk itself is broken`);
+}
+
+test('no page skips a heading level', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const bad = [];
+  await eachPage(out, (rel, html) => {
+    const levels = [...html.matchAll(/<h([1-6])[ >]/g)].map(m => Number(m[1]));
+    for (let i = 1; i < levels.length; i++) {
+      if (levels[i] - levels[i - 1] > 1) { bad.push(`${rel}: h${levels[i - 1]} -> h${levels[i]}`); break; }
+    }
+  });
+  assert.deepEqual(bad, [], `heading level skipped:\n${bad.join('\n')}`);
+});
+
+test('every page has exactly one h1', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const bad = [];
+  await eachPage(out, (rel, html) => {
+    const n = (html.match(/<h1[ >]/g) || []).length;
+    if (n !== 1) bad.push(`${rel}: ${n} h1`);
+  });
+  assert.deepEqual(bad, [], `wrong h1 count:\n${bad.join('\n')}`);
+});
