@@ -231,7 +231,7 @@ ${alt}
 <meta property="og:image" content="${ogImg}">
 <meta name="theme-color" content="#23413A">
 <link rel="preload" href="${u.root}assets/fonts/petrona-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="${u.css}?v=11">
+<link rel="stylesheet" href="${u.css}?v=12">
 <link rel="icon" href="${u.root}assets/images/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="${u.root}assets/images/favicon-180.png">${ld}
 </head>`;
@@ -313,7 +313,7 @@ function footer(lang, key, c) {
   </div>
 </footer>
 <a class="wa-fab" href="${u.wa}" target="_blank" rel="noopener" aria-label="WhatsApp">${WA_SVG}</a>
-<script src="${u.js}?v=5" defer></script>
+<script src="${u.js}?v=6" defer></script>
 </body>
 </html>`;
 }

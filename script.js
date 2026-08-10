@@ -17,7 +17,10 @@
     if (scrim) scrim.addEventListener("click", function () { setMenu(false); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
     nav.querySelectorAll("a").forEach(function (a) {
-      a.addEventListener("click", function () { if (window.innerWidth <= 780) setMenu(false); });
+      // Keep in sync with the drawer breakpoint in styles.css (max-width: 1023px).
+      a.addEventListener("click", function () {
+        if (window.matchMedia("(max-width: 1023px)").matches) setMenu(false);
+      });
     });
   }
 

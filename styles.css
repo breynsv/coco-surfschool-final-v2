@@ -175,10 +175,13 @@ h1, h2, h3, h4 {
 .brand-text b { font-family: var(--font-display); font-weight: 600; color: var(--ink); font-size: 1.06rem; letter-spacing: -.01em; }
 .brand-text span { font-size: .64rem; letter-spacing: .24em; text-transform: uppercase; color: var(--seafoam-deep); margin-top: 3px; font-weight: 700; }
 
-.nav { display: flex; align-items: center; gap: 1.9rem; }
-.nav-links { display: flex; gap: 1.6rem; list-style: none; margin: 0; padding: 0; }
+.nav { display: flex; align-items: center; gap: 1.5rem; }
+.nav-links { display: flex; gap: 1.35rem; list-style: none; margin: 0; padding: 0; }
 .nav-links a {
   color: var(--ink); font-size: .93rem; font-weight: 500; position: relative; padding: .3rem 0;
+  /* Two-word labels ("Cours & tarifs") must never break across two lines —
+     the wrap doubled the header height and destroyed the spacing rhythm. */
+  white-space: nowrap;
 }
 .nav-links a::after {
   content: ""; position: absolute; left: 0; bottom: -2px; width: 0; height: 2px;
@@ -558,7 +561,24 @@ h1, h2, h3, h4 {
   .trust-grid { grid-template-columns: 1fr 1fr; }
 }
 
-@media (max-width: 780px) {
+/* Compact desktop header (1024–1219px).
+   The full-size row needs the container at its 1180px max to fit brand +
+   5 links + "Réserver" + the 5-language switch. Between the mobile breakpoint
+   and that width it used to overflow: labels wrapped onto 2–3 lines and the
+   brand got squeezed. Tighten the gaps and drop the flag emoji from the
+   language pills so the single row survives down to the hamburger. */
+@media (min-width: 1024px) and (max-width: 1219px) {
+  .nav { gap: 1rem; }
+  .nav-links { gap: .95rem; }
+  .nav-links a { font-size: .875rem; }
+  .nav .btn--sm { padding: .55rem .85rem; }
+  .lang-switch { padding: 2px; }
+  .lang-switch a { padding: .5rem .48rem; font-size: .74rem; }
+  .lang-switch a span[aria-hidden] { display: none; }
+}
+
+/* Below 1024px the row cannot fit even compacted — hand over to the drawer. */
+@media (max-width: 1023px) {
   .nav-links, .nav .btn { display: none; }
   .nav-toggle { display: block; }
   .nav {
@@ -663,7 +683,7 @@ h1, h2, h3, h4 {
 /* ---- Mobile menu: full-height panel + scrim (fixes bleed-through) ---- */
 .nav-scrim{position:fixed;inset:0;background:rgba(35,65,58,.42);opacity:0;visibility:hidden;transition:.35s;z-index:90;backdrop-filter:blur(2px)}
 body.menu-open .nav-scrim{opacity:1;visibility:visible}
-@media (max-width:780px){
+@media (max-width:1023px){
   .nav{ inset:0 0 0 auto !important; width:min(84vw,340px) !important; height:100dvh !important;
     transform:translateX(100%) !important; overflow-y:auto; padding:5.2rem 1.5rem 2rem !important;
     border-bottom:0 !important; border-left:1px solid var(--mint-line); z-index:100; justify-content:flex-start;}
