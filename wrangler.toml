@@ -15,7 +15,5 @@ pages_build_output_dir = "dist"
 # here. RESEND_API_KEY is deliberately NOT here: it is a Secret, added in the
 # dashboard under Settings > Variables and Secrets.
 [vars]
-# TEMPORARY: pointed at Sven for an end-to-end test. Revert to
-# cocobosurfschool@gmail.com immediately after.
-CONTACT_TO = "admin@be-tango.com"
+CONTACT_TO = "cocobosurfschool@gmail.com"
 CONTACT_FROM = "Coco Surf School <contact@coco-surfschool.com>"
