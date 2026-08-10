@@ -87,7 +87,7 @@ const REVIEWS_WORD = { fr: 'avis Google', en: 'Google reviews', nl: 'Google revi
 // the aggregateRating in the business schema — those two used to be maintained
 // separately and had drifted to "150+" on the page against reviewCount 7 in the
 // markup, which is exactly the mismatch Google acts on.
-const REVIEW_COUNT = 150;
+const REVIEW_COUNT = 155;
 const RATING_VALUE = '5.0';
 const GOOGLE_REVIEWS_URL = 'https://www.google.com/maps/search/?api=1&amp;query=Coco%20Surf%20School%20Seignosse';
 const SOC_SVG = {
