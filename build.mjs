@@ -1,6 +1,6 @@
 // Coco Surf School — design-06 (coral) multipage generator
-import { mkdir, writeFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { cp, mkdir, writeFile } from 'node:fs/promises';
+import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fr from './content/fr.mjs';
 import en from './content/en.mjs';
@@ -10,11 +10,39 @@ import es from './content/es.mjs';
 
 // Output directory. Defaults to the repo root; overridable so tests (and any
 // out-of-tree build) can write somewhere disposable.
-const ROOT = process.env.COCO_OUT || dirname(fileURLToPath(import.meta.url));
+const REPO = dirname(fileURLToPath(import.meta.url));
+const ROOT = process.env.COCO_OUT || REPO;
 const SITE = 'https://www.coco-surfschool.com';
 // Production build: PROD=1 node build.mjs
 // Preview (default) keeps the site noindexed and fully disallowed.
 const PROD = process.env.PROD === '1';
+
+// `dist` is what Cloudflare Pages deploys (pages_build_output_dir). A deploy
+// build that forgets PROD=1 would stamp "noindex, nofollow" on all 50 pages and
+// write "Disallow: /" — silently deindexing the live site. Fail the build
+// instead: a failed Pages build keeps the previous deployment serving.
+const DEPLOY_DIR = 'dist';
+if (!PROD && basename(resolve(ROOT)) === DEPLOY_DIR) {
+  console.error(
+    `Refusing to build: output dir "${DEPLOY_DIR}" is the Cloudflare deploy target, ` +
+    `but PROD=1 is not set. That build would noindex every page and write ` +
+    `"Disallow: /". Use: PROD=1 COCO_OUT=${DEPLOY_DIR} node build.mjs`,
+  );
+  process.exit(1);
+}
+
+// Not generated, but part of the deployable site. When building in place they
+// are already beside the output; when building to a separate directory (the
+// Cloudflare path) they must be copied in, or the site ships without CSS,
+// JS, images, tide data, or its redirect rules.
+const STATIC_ASSETS = ['styles.css', 'script.js', 'surf-report.js', '_redirects', 'assets', 'data'];
+
+async function copyStaticAssets() {
+  if (resolve(ROOT) === resolve(REPO)) return; // building in place — nothing to copy
+  for (const name of STATIC_ASSETS) {
+    await cp(join(REPO, name), join(ROOT, name), { recursive: true });
+  }
+}
 const ROBOTS_META = PROD ? '' : '<meta name="robots" content="noindex, nofollow">\n';
 // The booking page renders a live sessions list from the Membrero CRM API.
 // Until that API is reachable over https from this domain it would render a
@@ -654,6 +682,8 @@ async function build() {
   await writeFile(join(ROOT, '404.html'), notFound());
   // root redirect
   await writeFile(join(ROOT, 'index.html'), `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">${PROD ? '' : '<meta name="robots" content="noindex">'}<title>Coco Surf School</title><link rel="icon" href="assets/images/ee16c3_71361371647c417f89cde7e315ac662c.png"><script>var s={fr:1,en:1,nl:1,de:1,es:1},l=(navigator.languages||[navigator.language||'fr']),p='fr';for(var i=0;i<l.length;i++){var x=(l[i]||'').slice(0,2).toLowerCase();if(s[x]){p=x;break}}location.replace('./'+p+'/')</script></head><body><p style="font-family:sans-serif;text-align:center;padding:2rem">Coco Surf School — <a href="./fr/">Français</a> · <a href="./en/">English</a> · <a href="./nl/">Nederlands</a></p></body></html>\n`);
-  console.log('Generated ' + n + ' pages + sitemap + robots + redirect');
+  await copyStaticAssets();
+  console.log('Generated ' + n + ' pages + sitemap + robots + redirect'
+    + (resolve(ROOT) === resolve(REPO) ? '' : ` + ${STATIC_ASSETS.length} static assets -> ${ROOT}`));
 }
 build().catch(e => { console.error(e); process.exit(1); });

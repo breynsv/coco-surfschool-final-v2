@@ -234,6 +234,56 @@ test('the cross-link appears only on the two spot pages', async () => {
   assert.deepEqual(stray, [], `cross-link on non-spot pages:\n${stray.join('\n')}`);
 });
 
+/**
+ * Everything the deployed site must NOT expose. These were previously "blocked"
+ * by 404 rules in _redirects, which never fired: Cloudflare Pages serves a
+ * matching static asset BEFORE consulting _redirects, so a rule can never hide
+ * a file that exists. The only real fix is not shipping them.
+ */
+const MUST_NOT_SHIP = [
+  'build.mjs', 'README.md', 'DESIGN.md', 'REPORT-OWNER.md', 'wrangler.toml',
+  '.htaccess', '.gitignore', '.dev.vars', '.dev.vars.example',
+  'content', 'test', 'docs', 'scripts', '.github', 'functions',
+  'booking-preview', 'vragenlijst', 'rapport', '.superpowers', '.impeccable',
+];
+
+/** Everything the deployed site DOES need. */
+const MUST_SHIP = [
+  'index.html', '404.html', 'sitemap.xml', 'robots.txt', '_redirects',
+  'styles.css', 'script.js', 'surf-report.js',
+  'assets/images', 'data/tide.json',
+  'fr/index.html', 'en/index.html', 'nl/index.html', 'de/index.html', 'es/index.html',
+];
+
+test('the deploy build ships no source, config or private files', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const shipped = new Set(await readdir(out));
+  const leaked = MUST_NOT_SHIP.filter(n => shipped.has(n));
+  assert.deepEqual(leaked, [], `private files in the deploy output: ${leaked.join(', ')}`);
+});
+
+test('the deploy build ships everything the site needs', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const missing = [];
+  for (const rel of MUST_SHIP) {
+    try { await stat(join(out, rel)); } catch { missing.push(rel); }
+  }
+  assert.deepEqual(missing, [], `missing from the deploy output: ${missing.join(', ')}`);
+});
+
+test('a dist build without PROD=1 fails instead of deindexing the site', async () => {
+  const parent = await mkdtemp(join(tmpdir(), 'coco-dist-'));
+  const dist = join(parent, 'dist');
+  assert.throws(
+    () => execFileSync(process.execPath, [join(REPO, 'build.mjs')], {
+      env: { ...process.env, COCO_OUT: dist, PROD: '' },
+      stdio: 'pipe',
+    }),
+    /Refusing to build/,
+    'a dist build without PROD=1 must fail, not emit a noindexed site',
+  );
+});
+
 test('every RENDER key is a page the site actually emits', async () => {
   const src = await readFile(join(REPO, 'build.mjs'), 'utf8');
   const renderKeys = src.match(/^const RENDER = \{([^}]*)\}/m)[1]
