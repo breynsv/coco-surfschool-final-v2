@@ -51,16 +51,30 @@
       if (cards.length > 1) return cards[1].offsetLeft - cards[0].offsetLeft;
       return cards[0].offsetWidth;
     }
-    function pages() { return Math.max(1, Math.ceil(track.scrollWidth / track.clientWidth)); }
-    function currentPage() { return Math.round(track.scrollLeft / track.clientWidth); }
 
-    // Build page dots
+    /**
+     * Every geometry read the carousel needs, taken in one go.
+     *
+     * Reading track.scrollWidth after writing to the DOM forces the browser to
+     * lay the page out synchronously before it can answer. The old code did
+     * that three times during init — clear the dots, measure, append the dots,
+     * measure again — which Lighthouse reported as 74 ms of forced reflow.
+     * Read once, then write; never interleave.
+     */
+    function metrics() {
+      return {
+        scrollWidth: track.scrollWidth,
+        clientWidth: track.clientWidth,
+        scrollLeft: track.scrollLeft,
+      };
+    }
+
     var dots = [];
-    function buildDots() {
+    function buildDots(m) {
       if (!dotsWrap) return;
-      dotsWrap.innerHTML = "";
+      var n = m.clientWidth ? Math.max(1, Math.ceil(m.scrollWidth / m.clientWidth)) : 1;
+      var frag = document.createDocumentFragment();
       dots = [];
-      var n = pages();
       for (var i = 0; i < n; i++) {
         var d = document.createElement("button");
         d.type = "button";
@@ -71,17 +85,22 @@
         d.addEventListener("click", (function (idx) {
           return function () { track.scrollTo({ left: idx * track.clientWidth, behavior: "smooth" }); };
         })(i));
-        dotsWrap.appendChild(d);
+        frag.appendChild(d);
         dots.push(d);
       }
+      // One mutation rather than n+1.
+      dotsWrap.replaceChildren(frag);
     }
 
-    function sync() {
-      var p = currentPage();
+    /** Writes only — everything it needs is already in `m`. */
+    function paint(m) {
+      var p = m.clientWidth ? Math.round(m.scrollLeft / m.clientWidth) : 0;
       dots.forEach(function (d, i) { d.setAttribute("aria-selected", i === p ? "true" : "false"); });
-      if (prev) prev.disabled = track.scrollLeft <= 2;
-      if (next) next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+      if (prev) prev.disabled = m.scrollLeft <= 2;
+      if (next) next.disabled = m.scrollLeft + m.clientWidth >= m.scrollWidth - 2;
     }
+
+    function sync() { paint(metrics()); }
 
     if (next) next.addEventListener("click", function () { track.scrollBy({ left: step(), behavior: "smooth" }); });
     if (prev) prev.addEventListener("click", function () { track.scrollBy({ left: -step(), behavior: "smooth" }); });
@@ -99,13 +118,18 @@
       else if (e.key === "ArrowLeft") { e.preventDefault(); track.scrollBy({ left: -step(), behavior: "smooth" }); }
     });
 
-    buildDots();
-    sync();
+    var init = metrics();
+    buildDots(init);
+    paint(init);
 
     var rt;
     window.addEventListener("resize", function () {
       clearTimeout(rt);
-      rt = setTimeout(function () { buildDots(); sync(); }, 180);
+      rt = setTimeout(function () {
+        var m = metrics();
+        buildDots(m);
+        paint(m);
+      }, 180);
     });
 
     // Gentle autoplay — off under reduced motion; pause on hover/focus

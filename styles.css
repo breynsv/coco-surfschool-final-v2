@@ -3,6 +3,51 @@
    Calm pastel, minimal, editorial. Shared stylesheet.
    ========================================================= */
 
+/* -----------------------------------------------------------
+   Petrona, self-hosted.
+   Served from fonts.googleapis.com this cost ~750 ms of blocking
+   time on mobile, because it is a chain: HTML -> googleapis CSS
+   -> gstatic .woff2, across two extra origins. Same files, served
+   from our own origin on the connection the browser already has.
+   These are the variable fonts (wght 100..900), so one file per
+   style covers every weight the design uses.
+   Paths are relative to this stylesheet, which lives at the site
+   root — do not make them root-absolute or the preview builds
+   under a subpath break.
+   ----------------------------------------------------------- */
+@font-face {
+  font-family: "Petrona";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(assets/fonts/petrona-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Petrona";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(assets/fonts/petrona-latin-ext.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Petrona";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(assets/fonts/petrona-italic-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Petrona";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(assets/fonts/petrona-italic-latin-ext.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 :root {
   /* Pastel palette — pale mint & soft coral on cream */
   --cream:       #FAF8F2;
@@ -30,6 +75,12 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
+
+/* Images are wrapped in <picture> for the AVIF/WebP ladders. Taking the wrapper
+   out of the layout tree means every existing `.thing img { width: 100% }` and
+   every absolutely positioned slide keeps resolving against the same
+   containing block it did when the img was a direct child. */
+picture { display: contents; }
 
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: clip; }
 @media (prefers-reduced-motion: reduce) {
@@ -313,14 +364,24 @@ h1, h2, h3, h4 {
 .rental-table tbody td { text-align: right; padding: .9rem 1.15rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .rental-table tbody tr:nth-child(even) { background: var(--cream-2); }
 
-/* Hero image carousel (3 photos, CSS crossfade) */
+/* Hero image carousel (4 photos, CSS crossfade).
+   Each slide is a <picture>, so the nth-child counting happens on the wrapper
+   and the animation properties land on the img inside it.
+
+   The delays are shifted by -0.4s for a reason worth keeping. On the unshifted
+   timings slide 4 sat at 25% of its cycle at t=0 — mid fade-out, opacity ~0.25
+   — so it painted on load and Chrome picked *it* as the LCP element, while it
+   was the one marked loading="lazy". Slide 4 is now fully transparent at t=0
+   and slide 1, the eager fetchpriority="high" one, is the only thing visible
+   at first paint. Keep the four delays 6s apart and 0.4s past the fade. */
 .hero-slides { position: relative; width: 100%; aspect-ratio: 4/5; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); }
 .hero-slides img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 0; box-shadow: none; opacity: 0; animation: heroFade 24s infinite; }
-.hero-slides img:nth-child(2) { animation-delay: -18s; }
-.hero-slides img:nth-child(3) { animation-delay: -12s; }
-.hero-slides img:nth-child(4) { animation-delay: -6s; }
+.hero-slides > :nth-child(1) img { animation-delay: -.4s; }
+.hero-slides > :nth-child(2) img { animation-delay: -18.4s; }
+.hero-slides > :nth-child(3) img { animation-delay: -12.4s; }
+.hero-slides > :nth-child(4) img { animation-delay: -6.4s; }
 @keyframes heroFade { 0% { opacity: 0 } 1.5% { opacity: 1 } 22% { opacity: 1 } 26% { opacity: 0 } 100% { opacity: 0 } }
-@media (prefers-reduced-motion: reduce) { .hero-slides img { animation: none; opacity: 0 } .hero-slides img:first-child { opacity: 1 } }
+@media (prefers-reduced-motion: reduce) { .hero-slides img { animation: none; opacity: 0 } .hero-slides > :first-child img { opacity: 1 } }
 @media (max-width: 960px) { .hero-slides { aspect-ratio: 5/4; } }
 
 /* We speak (languages) */

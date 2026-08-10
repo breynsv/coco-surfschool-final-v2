@@ -18,12 +18,14 @@ async function builtTo(extraEnv = {}) {
 }
 
 /**
- * Every assets/images/... referenced by any generated page, deduped.
+ * Every assets/images/... referenced by any generated page, deduped. Picks up
+ * srcset candidates as well as plain src, since each match is independent.
+ *
  * NB: this only walks the five language directories. Root-level pages
- * (index.html, 404.html) live outside fr/en/nl/de/es and are NOT covered
- * here — their only image reference (the favicon) is handled separately
- * via the explicit `used.add(...)` below. If a root-level page ever
- * references a non-favicon image, this walk would miss it.
+ * (index.html, 404.html) live outside fr/en/nl/de/es and are NOT covered here.
+ * Their only image reference is the favicon, which every language page also
+ * carries. If a root-level page ever references an image no language page does,
+ * this walk would miss it.
  */
 async function referencedImages(out) {
   const found = new Set();
@@ -83,8 +85,13 @@ test('no unreferenced images are shipped', async () => {
   const names = await referencedImages(out);
   assertWalkFound(names);
   const used = new Set(names);
-  // The favicon is referenced from the root index.html and 404.html, outside the language dirs.
-  used.add('ee16c3_71361371647c417f89cde7e315ac662c.png');
+  // The favicons are also referenced from the root index.html and 404.html,
+  // outside the language dirs — but every language page carries them too, so
+  // the walk above already finds them and no exemption is needed.
+  //
+  // The two flat-graphic masters (the logo and the palm) are deliberately NOT
+  // in assets/images: nothing links to them, so they live in masters/ and stay
+  // out of the deploy. See MASTERS_DIR in scripts/image-manifest.mjs.
   const orphans = (await readdir(join(REPO, 'assets/images'))).filter(f => !used.has(f));
   assert.deepEqual(orphans, [], `unreferenced images still in repo: ${orphans.length}`);
 });
@@ -245,13 +252,16 @@ const MUST_NOT_SHIP = [
   '.htaccess', '.gitignore', '.dev.vars', '.dev.vars.example',
   'content', 'test', 'docs', 'scripts', '.github', 'functions',
   'booking-preview', 'vragenlijst', 'rapport', '.superpowers', '.impeccable',
+  // Image masters for the flat graphics. Nothing links to them, so they exist
+  // only to re-run scripts/gen-images.mjs and must stay out of the deploy.
+  'masters',
 ];
 
 /** Everything the deployed site DOES need. */
 const MUST_SHIP = [
   'index.html', '404.html', 'sitemap.xml', 'robots.txt', '_redirects',
   'styles.css', 'script.js', 'surf-report.js',
-  'assets/images', 'data/tide.json',
+  'assets/images', 'assets/fonts', 'data/tide.json',
   'fr/index.html', 'en/index.html', 'nl/index.html', 'de/index.html', 'es/index.html',
 ];
 
@@ -269,6 +279,27 @@ test('the deploy build ships everything the site needs', async () => {
     try { await stat(join(out, rel)); } catch { missing.push(rel); }
   }
   assert.deepEqual(missing, [], `missing from the deploy output: ${missing.join(', ')}`);
+});
+
+/**
+ * Petrona is self-hosted, so a missing or renamed .woff2 no longer 404s
+ * visibly — the @font-face just never loads and every heading silently falls
+ * back to Georgia. Same for any other url() the stylesheet gains.
+ */
+test('every url() in styles.css resolves in the deploy output', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const css = await readFile(join(out, 'styles.css'), 'utf8');
+  const refs = [...css.matchAll(/url\(\s*['"]?([^'")]+)['"]?\s*\)/g)]
+    .map(m => m[1].trim())
+    .filter(u => !/^(data:|https?:|\/\/)/.test(u));
+  assert.ok(refs.length > 0, 'no url() found in styles.css; the parse is broken');
+  const missing = [];
+  for (const ref of refs) {
+    // styles.css sits at the site root, so its urls resolve from there.
+    try { await stat(join(out, ref.replace(/^\.?\//, '').split('?')[0])); }
+    catch { missing.push(ref); }
+  }
+  assert.deepEqual(missing, [], `styles.css references files the deploy lacks: ${missing.join(', ')}`);
 });
 
 test('a dist build without PROD=1 fails instead of deindexing the site', async () => {

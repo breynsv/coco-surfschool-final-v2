@@ -7,6 +7,9 @@ import en from './content/en.mjs';
 import nl from './content/nl.mjs';
 import de from './content/de.mjs';
 import es from './content/es.mjs';
+import {
+  LOGO, PALM, PHOTOS, ROLES, variant, widthsFor,
+} from './scripts/image-manifest.mjs';
 
 // Output directory. Defaults to the repo root; overridable so tests (and any
 // out-of-tree build) can write somewhere disposable.
@@ -118,7 +121,7 @@ function urls(lang, key) {
   const depth = PAGES[key][lang] === '' ? 1 : 2;
   const root = '../'.repeat(depth);
   const u = {
-    root, css: root + 'styles.css', js: root + 'script.js', logo: root + 'assets/images/ee16c3_71361371647c417f89cde7e315ac662c.png',
+    root, css: root + 'styles.css', js: root + 'script.js',
     img: (n) => root + 'assets/images/' + n,
     wa: 'https://wa.me/33647454265?text=' + encodeURIComponent(C[lang].waText),
   };
@@ -227,11 +230,10 @@ ${alt}
 <meta property="og:url" content="${abs(lang, key)}">
 <meta property="og:image" content="${ogImg}">
 <meta name="theme-color" content="#23413A">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Petrona:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="${u.css}?v=10">
-<link rel="icon" href="${u.logo}" type="image/png">${ld}
+<link rel="preload" href="${u.root}assets/fonts/petrona-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="${u.css}?v=11">
+<link rel="icon" href="${u.root}assets/images/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="${u.root}assets/images/favicon-180.png">${ld}
 </head>`;
 }
 
@@ -251,7 +253,7 @@ function header(lang, key, c) {
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="${u.home}" aria-label="Coco Surf School">
-      <img src="${u.logo}" alt="Logo Coco Surf School" width="46" height="46">
+      ${graphic(u, LOGO, { sizes: '46px', w: 46, h: 46, alt: 'Logo Coco Surf School', lazy: false })}
       <span class="brand-text"><b>Coco Surf School</b><span>Seignosse · Hossegor</span></span>
     </a>
     <nav class="nav" id="mainnav" aria-label="${ui.navLabel}">
@@ -283,7 +285,7 @@ function footer(lang, key, c) {
   <div class="wrap">
     <div class="footer-grid">
       <div class="footer-brand">
-        <img src="${u.logo}" alt="Logo Coco Surf School" width="66" height="66">
+        ${graphic(u, LOGO, { sizes: '66px', w: 66, h: 66, alt: 'Logo Coco Surf School' })}
         <p>${ui.footTagline}</p>
       </div>
       <div class="footer-col">
@@ -311,9 +313,72 @@ function footer(lang, key, c) {
   </div>
 </footer>
 <a class="wa-fab" href="${u.wa}" target="_blank" rel="noopener" aria-label="WhatsApp">${WA_SVG}</a>
-<script src="${u.js}?v=4" defer></script>
+<script src="${u.js}?v=5" defer></script>
 </body>
 </html>`;
+}
+
+/* ---------- responsive images ---------- */
+
+/** attr="value", or nothing at all when the value is empty. */
+const attr = (name, value) => (value ? ` ${name}="${value}"` : '');
+
+/**
+ * A photograph, as <picture> with AVIF and WebP ladders.
+ *
+ * The <img> fallback deliberately points at the untouched master: the browsers
+ * that would use it are the last couple of percent, and pointing them at the
+ * master costs no extra file in the repo. Every modern browser takes an AVIF
+ * one sixth the size.
+ *
+ * `role` selects the `sizes` string — see ROLES in scripts/image-manifest.mjs.
+ * Getting `sizes` wrong is the usual way responsive images end up slower than
+ * what they replaced, so the roles are measured against the real layout rather
+ * than estimated.
+ *
+ * `priority` marks the one image expected to be the LCP: eager, high priority.
+ * Everything else stays lazy.
+ */
+function picture(u, name, { role, alt = '', cls = '', style = '', priority = false, hidden = false } = {}) {
+  const widths = widthsFor(name);
+  const sizes = ROLES[role];
+  if (!sizes) throw new Error(`picture(${name}): unknown role "${role}"`);
+  const src = PHOTOS[name];
+  if (!src) throw new Error(`picture(${name}): not in the image manifest`);
+  const ladder = ext => widths.map(w => `${u.img(variant(name, w))}.${ext} ${w}w`).join(', ');
+  // width/height describe the master, because the master is what src points at.
+  // Every variant shares its ratio, so the reserved box is right either way.
+  return '<picture>'
+    + `<source type="image/avif" srcset="${ladder('avif')}" sizes="${sizes}">`
+    + `<source type="image/webp" srcset="${ladder('webp')}" sizes="${sizes}">`
+    + `<img src="${u.img(name)}"${attr('class', cls)} alt="${alt}"`
+    + ` width="${src[0]}" height="${src[1]}"`
+    + (priority ? ' fetchpriority="high"' : ' loading="lazy"')
+    + ' decoding="async"'
+    + (hidden ? ' aria-hidden="true"' : '')
+    + attr('style', style)
+    + '></picture>';
+}
+
+/**
+ * A flat graphic (the logo, the palm silhouette). Same idea, except the
+ * fallback is a resized PNG rather than the master — both masters are
+ * 1600x1600 and neither renders above 250px, so the master would be the single
+ * heaviest download on the page.
+ */
+function graphic(u, spec, { sizes, w, h, alt = '', cls = '', style = '', hidden = false, lazy = true } = {}) {
+  const max = Math.max(...spec.widths);
+  const ladder = ext => spec.widths.map(x => `${u.img(variant(spec.src, x))}.${ext} ${x}w`).join(', ');
+  return '<picture>'
+    + `<source type="image/avif" srcset="${ladder('avif')}" sizes="${sizes}">`
+    + `<source type="image/webp" srcset="${ladder('webp')}" sizes="${sizes}">`
+    + `<img src="${u.img(variant(spec.src, max))}.png"${attr('class', cls)} alt="${alt}"`
+    + ` width="${w}" height="${h}"`
+    + (lazy ? ' loading="lazy"' : '')
+    + ' decoding="async"'
+    + (hidden ? ' aria-hidden="true"' : '')
+    + attr('style', style)
+    + '></picture>';
 }
 
 /* ---------- shared section fragments ---------- */
@@ -330,7 +395,7 @@ function trustBar(t) {
  */
 function lessonCards(u, cards, level = 3) {
   return cards.map((c, i) => `<article class="lesson-card reveal">
-      <div class="lesson-pic"><img src="${u.img(c.img)}" alt="${c.alt}" width="1600" height="1600" loading="lazy" decoding="async"></div>
+      <div class="lesson-pic">${picture(u, c.img, { role: 'card', alt: c.alt })}</div>
       <div class="card-head"><h${level}>${c.title}</h${level}>${c.from ? `<span class="from">${c.from}</span>` : `<span class="num">0${i + 1}</span>`}</div>
       <p>${c.p}</p>
       <div class="chips">${c.chips.map(ch => `<span class="chip">${ch}</span>`).join('')}</div>
@@ -368,7 +433,7 @@ const R = {
     const h = t.hero;
     return `
 <section class="hero" id="accueil">
-  <img class="palm-mark" src="${u.img('41a3c55f3d76b98ad1058e6d4a659856.png')}" alt="" aria-hidden="true" width="240" height="240" style="top:-40px;right:0;width:230px" loading="lazy">
+  ${graphic(u, PALM, { sizes: '230px', w: 240, h: 240, cls: 'palm-mark', hidden: true, style: 'top:-40px;right:0;width:230px' })}
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <p class="eyebrow">${h.eyebrow}</p>
@@ -381,10 +446,10 @@ const R = {
     </div>
     <div class="hero-media">
       <div class="hero-slides">
-        <img src="${u.img('carousel-1.jpg')}" alt="${h.imgAlt}" width="1500" height="1000" fetchpriority="high" decoding="async">
-        <img src="${u.img('carousel-coach.jpg')}" alt="" width="1448" height="1086" loading="lazy" decoding="async">
-        <img class="hs-group" src="${u.img('real-group.jpg')}" alt="" width="1440" height="1440" loading="lazy" decoding="async" style="object-position:30% center">
-        <img src="${u.img('real-carousel-kids.jpg')}" alt="" width="1440" height="755" loading="lazy" decoding="async">
+        ${picture(u, 'carousel-1.jpg', { role: 'hero', alt: h.imgAlt, priority: true })}
+        ${picture(u, 'carousel-coach.jpg', { role: 'hero' })}
+        ${picture(u, 'real-group.jpg', { role: 'hero', cls: 'hs-group', style: 'object-position:30% center' })}
+        ${picture(u, 'real-carousel-kids.jpg', { role: 'hero' })}
       </div>
       <div class="hero-badge"><span class="dot">🌊</span><span><b>${h.badge1}</b><span>${h.badge2}</span></span></div>
     </div>
@@ -409,7 +474,7 @@ ${trustBar(t)}
 ${reviewsSection(t, lang)}
 <section class="section section--tint">
   <div class="wrap teaser-split">
-    <div class="ts-media reveal"><img src="${u.img('a29fce_449771ae1e2d4c52aa0fbe3159160d3b.jpg')}" alt="${t.coachT.alt}" width="1600" height="1600" loading="lazy"></div>
+    <div class="ts-media reveal">${picture(u, 'a29fce_449771ae1e2d4c52aa0fbe3159160d3b.jpg', { role: 'teaser', alt: t.coachT.alt })}</div>
     <div class="ts-body reveal"><h2>${t.coachT.title}</h2><p class="coach-quote">${t.coachT.quote}</p><p>${t.coachT.p}</p><p><a class="btn btn--ghost" href="${u.coach}">${t.coachT.cta}</a></p></div>
   </div>
 </section>
@@ -458,8 +523,8 @@ ${reviewsSection(t, lang)}
   <div class="wrap">
     <div class="section-head reveal"><p class="eyebrow">${t.spots.eyebrow}</p><h2 class="section-title">${t.spots.title}</h2><p class="lead">${t.spots.lead}</p></div>
     <div class="spots-grid">
-      <a class="spot-card reveal" href="${u.seignosse}"><img src="${u.img('a29fce_571dd78100a24c038429f1bfaf22b936.jpg')}" alt="${t.spots.seignosse.alt}" width="1600" height="1600" loading="lazy"><div class="sc-body"><h3>${t.spots.seignosse.h}</h3><p>${t.spots.seignosse.p}</p></div></a>
-      <a class="spot-card reveal" href="${u.hossegor}"><img src="${u.img('owner-spots.jpg')}" alt="${t.spots.hossegor.alt}" width="1537" height="1023" loading="lazy"><div class="sc-body"><h3>${t.spots.hossegor.h}</h3><p>${t.spots.hossegor.p}</p></div></a>
+      <a class="spot-card reveal" href="${u.seignosse}">${picture(u, 'a29fce_571dd78100a24c038429f1bfaf22b936.jpg', { role: 'spot', alt: t.spots.seignosse.alt })}<div class="sc-body"><h3>${t.spots.seignosse.h}</h3><p>${t.spots.seignosse.p}</p></div></a>
+      <a class="spot-card reveal" href="${u.hossegor}">${picture(u, 'owner-spots.jpg', { role: 'spot', alt: t.spots.hossegor.alt })}<div class="sc-body"><h3>${t.spots.hossegor.h}</h3><p>${t.spots.hossegor.p}</p></div></a>
     </div>
   </div>
 </section>
@@ -484,7 +549,7 @@ ${reviewsSection(t, lang)}
   coach(u, t, ui) {
     return `
 <section class="section section--tint" id="coach" style="padding-top:clamp(2.4rem,5vw,3.4rem)"><div class="wrap coach-grid">
-  <div class="coach-photo reveal"><img src="${u.img('owner-coach-new.jpg')}" alt="${t.imgAlt}" width="1448" height="1086" fetchpriority="high" decoding="async"></div>
+  <div class="coach-photo reveal">${picture(u, 'owner-coach-new.jpg', { role: 'coach', alt: t.imgAlt, priority: true })}</div>
   <div class="coach-body reveal">
     <p class="eyebrow">${t.eyebrow}</p>
     <h1 class="section-title">${t.h1}</h1>
@@ -554,7 +619,7 @@ ${reviewsSection(t, lang)}
     return `
 <section class="page-hero has-media"><div class="wrap">
   <div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p><div class="hero-cta"><a class="btn btn--primary" href="${u.contact}">${t.cta1}</a><a class="btn btn--ghost" href="${u.lessons}">${t.cta2}</a></div></div>
-  <div class="ph-media reveal"><img src="${u.img(t.img)}" alt="${t.imgAlt}" width="1600" height="1600" fetchpriority="high" decoding="async"></div>
+  <div class="ph-media reveal">${picture(u, t.img, { role: 'pagehero', alt: t.imgAlt, priority: true })}</div>
 </div></section>
 <section class="section"><div class="wrap article-grid">
   <div class="prose reveal">${t.body}</div>
@@ -625,7 +690,7 @@ function notFound() {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Page introuvable — Coco Surf School</title>
-<link rel="icon" href="/assets/images/ee16c3_71361371647c417f89cde7e315ac662c.png">
+<link rel="icon" href="/assets/images/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
@@ -681,7 +746,7 @@ async function build() {
     : `User-agent: *\nDisallow: /\n`);
   await writeFile(join(ROOT, '404.html'), notFound());
   // root redirect
-  await writeFile(join(ROOT, 'index.html'), `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">${PROD ? '' : '<meta name="robots" content="noindex">'}<title>Coco Surf School</title><link rel="icon" href="assets/images/ee16c3_71361371647c417f89cde7e315ac662c.png"><script>var s={fr:1,en:1,nl:1,de:1,es:1},l=(navigator.languages||[navigator.language||'fr']),p='fr';for(var i=0;i<l.length;i++){var x=(l[i]||'').slice(0,2).toLowerCase();if(s[x]){p=x;break}}location.replace('./'+p+'/')</script></head><body><p style="font-family:sans-serif;text-align:center;padding:2rem">Coco Surf School — <a href="./fr/">Français</a> · <a href="./en/">English</a> · <a href="./nl/">Nederlands</a></p></body></html>\n`);
+  await writeFile(join(ROOT, 'index.html'), `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">${PROD ? '' : '<meta name="robots" content="noindex">'}<title>Coco Surf School</title><link rel="icon" href="assets/images/favicon-32.png" sizes="32x32" type="image/png"><script>var s={fr:1,en:1,nl:1,de:1,es:1},l=(navigator.languages||[navigator.language||'fr']),p='fr';for(var i=0;i<l.length;i++){var x=(l[i]||'').slice(0,2).toLowerCase();if(s[x]){p=x;break}}location.replace('./'+p+'/')</script></head><body><p style="font-family:sans-serif;text-align:center;padding:2rem">Coco Surf School — <a href="./fr/">Français</a> · <a href="./en/">English</a> · <a href="./nl/">Nederlands</a></p></body></html>\n`);
   await copyStaticAssets();
   console.log('Generated ' + n + ' pages + sitemap + robots + redirect'
     + (resolve(ROOT) === resolve(REPO) ? '' : ` + ${STATIC_ASSETS.length} static assets -> ${ROOT}`));

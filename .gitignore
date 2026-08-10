@@ -3,3 +3,7 @@
 .wrangler/
 node_modules/
 dist/
+# Claude Code's local scratch dir. It holds .claude/worktrees/, which contains
+# nested git repos — `git add -A` would otherwise stage those as broken
+# gitlinks that clone as empty directories.
+.claude/
