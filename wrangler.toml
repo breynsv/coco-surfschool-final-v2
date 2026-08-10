@@ -1,3 +1,19 @@
 name = "coco-surfschool"
 compatibility_date = "2026-08-04"
-pages_build_output_dir = "."
+
+# Cloudflare deploys ONLY this directory. It is produced by the build command
+#   PROD=1 COCO_OUT=dist node build.mjs
+# and contains the generated site plus the static assets build.mjs copies in.
+# Deploying the repo root instead would publish build.mjs, README.md,
+# DESIGN.md, REPORT-OWNER.md, wrangler.toml, content/ and test/ — the
+# _redirects rules that were meant to hide them never fire, because Pages
+# serves a matching static asset before it consults _redirects.
+pages_build_output_dir = "dist"
+
+# Runtime bindings for functions/api/contact.js. The dashboard cannot set plain
+# text vars while this file exists — only Secrets — so non-secret config lives
+# here. RESEND_API_KEY is deliberately NOT here: it is a Secret, added in the
+# dashboard under Settings > Variables and Secrets.
+[vars]
+CONTACT_TO = "cocobosurfschool@gmail.com"
+CONTACT_FROM = "Coco Surf School <contact@coco-surfschool.com>"
