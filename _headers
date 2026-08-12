@@ -1,0 +1,28 @@
+# Cloudflare Pages response headers.
+#
+# Pages already sends x-content-type-options and referrer-policy by default;
+# they are repeated here so the full policy is readable in one place rather
+# than split between this file and Cloudflare's defaults.
+#
+# The Content-Security-Policy is only this tight because the site loads almost
+# nothing it does not host:
+#   - one inline <script> (the `js` class flag in build.mjs head()), allowed by
+#     its sha256 hash rather than 'unsafe-inline'. CHANGING THAT ONE-LINER
+#     CHANGES ITS HASH and will silently break the no-JS/JS style switch —
+#     test/headers.test.mjs asserts the two stay in sync.
+#   - surf-report.js calls the two Open-Meteo hosts from the browser, hence
+#     connect-src. /api/contact is same-origin and covered by 'self'.
+#   - style-src needs 'unsafe-inline' for the handful of style="" attributes in
+#     the markup; attribute styles cannot be hashed without 'unsafe-hashes'.
+#
+# Do NOT add 'unsafe-inline' to script-src: with a hash present, CSP Level 3
+# ignores it anyway, so it would buy nothing and read as protection that isn't.
+
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-G50p3OQJdzmNSHgmrckkRv9E5DVGNkEspwW0gLrWXBE='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.open-meteo.com https://marine-api.open-meteo.com; form-action 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests

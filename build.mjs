@@ -38,7 +38,7 @@ if (!PROD && basename(resolve(ROOT)) === DEPLOY_DIR) {
 // are already beside the output; when building to a separate directory (the
 // Cloudflare path) they must be copied in, or the site ships without CSS,
 // JS, images, tide data, or its redirect rules.
-const STATIC_ASSETS = ['styles.css', 'script.js', 'surf-report.js', '_redirects', 'assets', 'data'];
+const STATIC_ASSETS = ['styles.css', 'script.js', 'surf-report.js', '_redirects', '_headers', 'assets', 'data'];
 
 async function copyStaticAssets() {
   if (resolve(ROOT) === resolve(REPO)) return; // building in place — nothing to copy
