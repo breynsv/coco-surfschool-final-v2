@@ -191,23 +191,191 @@ const BUSINESS_SAMEAS = [FB_URL, IG_URL].filter(Boolean);
 /** The two spot pages describe the same business, so they carry its schema too. */
 const SPOT_KEYS = new Set(['hossegor', 'seignosse']);
 
+/**
+ * ONE identity for the school, shared by every page in every language.
+ *
+ * The full SportsActivityLocation used to be re-emitted on 15 URLs (home +
+ * the two spot pages, x5 languages), each declaring its own page as `url` and
+ * none carrying an @id — so nothing told a search engine these were one
+ * business rather than fifteen competing ones. Now the entity is declared once
+ * per language on the home page under a language-independent @id, and every
+ * other page references that @id instead of restating it.
+ */
+const BUSINESS_ID = `${SITE}/#business`;
+
+/** Text destined for JSON-LD: strip markup and decode the entities the content files carry. */
+const plain = (s) => String(s)
+  .replace(/<[^>]+>/g, ' ')
+  .replace(/&amp;/g, '&').replace(/&nbsp;|&#160;/g, ' ')
+  .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+  .replace(/\s+/g, ' ')
+  .trim();
+
+/**
+ * First euro amount in a rate line. The content files are not consistent about
+ * which side the symbol goes: fr/de/es write "44 € pp", nl/en write "€44 p.p."
+ * Matching only one form silently produced zero Offers for two languages, so
+ * both are handled here.
+ *   "44 € pp"                                  -> "44"
+ *   "€44 p.p."                                 -> "44"
+ *   "130 € <small>juil.–août : 180 €</small>"  -> "130"
+ */
+const firstEuro = (s) => {
+  const m = plain(s).match(/€\s*(\d+(?:[.,]\d+)?)|(\d+(?:[.,]\d+)?)\s*€/);
+  return m ? (m[1] ?? m[2]).replace(',', '.') : null;
+};
+
+/** The business entity itself. Only the home page emits this. */
+const businessSchema = (biz) => ({
+  ...biz,
+  '@id': BUSINESS_ID,
+  sameAs: BUSINESS_SAMEAS,
+  image: `${SITE}/assets/images/carousel-1.jpg`,
+  currenciesAccepted: 'EUR',
+  aggregateRating: { '@type': 'AggregateRating', ratingValue: RATING_VALUE, reviewCount: String(REVIEW_COUNT) },
+});
+
+/** A reference to the business, for pages that mention it but must not redeclare it. */
+const businessRef = { '@id': BUSINESS_ID };
+
+/** Annelies's occupation, per language. schema.org jobTitle wants a job, not a page kicker. */
+const COACH_TITLE = {
+  fr: 'Monitrice de surf',
+  nl: 'Surfcoach',
+  de: 'Surflehrerin',
+  en: 'Surf coach',
+  es: 'Monitora de surf',
+};
+
+/**
+ * Offers derived from the rate cards that actually render, so the published
+ * prices and the marked-up prices cannot drift — the same reason faqSchema
+ * reads t.faq rather than a hand-kept copy. A card whose lines carry no euro
+ * amount (e.g. "on request") simply contributes no Offer.
+ */
+function offersFrom(rates, lang, key) {
+  if (!rates || !Array.isArray(rates.cards)) return [];
+  const out = [];
+  for (const card of rates.cards) {
+    for (const [label, price] of card.lines || []) {
+      const amount = firstEuro(price);
+      if (!amount) continue;
+      out.push({
+        '@type': 'Offer',
+        name: `${plain(card.h)} — ${plain(label)}`,
+        price: amount,
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+        url: abs(lang, key),
+      });
+    }
+  }
+  return out;
+}
+
+/** The lessons page: a Service the school provides, with its price list attached. */
+function lessonsServiceSchema(t, lang, key) {
+  const offers = offersFrom(t.rates, lang, key);
+  if (!offers.length) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `${abs(lang, key)}#service`,
+    name: plain(t.h1 || t.crumb),
+    description: plain(t.desc),
+    serviceType: 'Surf lessons',
+    provider: businessRef,
+    areaServed: ['Seignosse', 'Hossegor', 'Capbreton', 'Les Landes'],
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: plain(t.rates.title || t.rates.eyebrow),
+      itemListElement: offers,
+    },
+  };
+}
+
+/**
+ * A spot page is not a second business — it is the same school teaching at a
+ * named beach. Modelling it as a Service with areaServed keeps the location
+ * signal without cloning the LocalBusiness onto another URL.
+ */
+const spotServiceSchema = (t, lang, key, area) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  '@id': `${abs(lang, key)}#service`,
+  name: plain(t.h1html || t.h1 || t.crumb),
+  description: plain(t.desc),
+  serviceType: 'Surf lessons',
+  provider: businessRef,
+  areaServed: { '@type': 'Place', name: area },
+});
+
+/**
+ * Annelies is the school's expertise, and the coach page already lists her
+ * degree and certifications in prose. Person + hasCredential makes that
+ * legible instead of leaving it as unmarked text.
+ */
+const coachSchema = (t, lang, key) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${SITE}/#annelies`,
+  name: 'Annelies',
+  // Not t.eyebrow — that is the page's kicker ("Votre coach"), which is a
+  // greeting rather than an occupation.
+  jobTitle: COACH_TITLE[lang],
+  description: plain((t.body || [])[0] || t.desc),
+  worksFor: businessRef,
+  image: `${SITE}/assets/images/owner-coach-new.jpg`,
+  knowsLanguage: ['nl', 'fr', 'en', 'de', 'es'],
+  ...(Array.isArray(t.diplomas) && t.diplomas.length ? {
+    hasCredential: t.diplomas.map(d => ({
+      '@type': 'EducationalOccupationalCredential',
+      name: plain(`${d[0]} ${d[1] || ''}`),
+    })),
+  } : {}),
+});
+
+/**
+ * Breadcrumbs render on every interior page but were never marked up. Built
+ * from the same two values crumbs() prints, so the markup cannot describe a
+ * trail the visitor does not see.
+ */
+const breadcrumbSchema = (lang, key, c) => key === 'home' ? null : ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: plain(c.ui.crumbHome), item: abs(lang, 'home') },
+    { '@type': 'ListItem', position: 2, name: plain(c.pages[key].crumb || c.pages[key].h1), item: abs(lang, key) },
+  ],
+});
+
 /** Every JSON-LD object a page should carry, in emission order. */
-function schemasFor(key, c) {
+function schemasFor(key, c, lang) {
   const t = c.pages[key], out = [];
-  const biz = t.jsonld || (SPOT_KEYS.has(key) ? c.pages.home.jsonld : null);
-  if (biz) out.push(biz['@type'] === 'SportsActivityLocation' ? {
-    ...biz,
-    sameAs: BUSINESS_SAMEAS,
-    aggregateRating: { '@type': 'AggregateRating', ratingValue: RATING_VALUE, reviewCount: String(REVIEW_COUNT) },
-  } : biz);
+
+  if (key === 'home' && t.jsonld) {
+    out.push(businessSchema(t.jsonld));
+  } else if (SPOT_KEYS.has(key)) {
+    out.push(spotServiceSchema(t, lang, key, key === 'hossegor' ? 'Hossegor' : 'Seignosse — Les Bourdaines'));
+  } else if (t.jsonld) {
+    // Any other page that ships its own block keeps it verbatim.
+    out.push(t.jsonld);
+  }
+
+  if (key === 'lessons') { const s = lessonsServiceSchema(t, lang, key); if (s) out.push(s); }
+  if (key === 'coach') out.push(coachSchema(t, lang, key));
   if (key === 'contact') { const faq = faqSchema(t); if (faq) out.push(faq); }
+
+  const bc = breadcrumbSchema(lang, key, c);
+  if (bc) out.push(bc);
+
   return out;
 }
 
 function head(lang, key, c) {
   const t = c.pages[key], u = urls(lang, key);
   const alt = LANGS.map(l => `<link rel="alternate" hreflang="${l}" href="${abs(l, key)}">`).join('\n');
-  const ld = schemasFor(key, c)
+  const ld = schemasFor(key, c, lang)
     .map(s => `\n<script type="application/ld+json">\n${JSON.stringify(s, null, 2)}\n</script>`)
     .join('');
   const ogImg = `${SITE}/assets/images/${t.ogImage || 'a29fce_9ddbf1309cf04bb189e246d843dfc188.jpg'}`;

@@ -185,14 +185,31 @@ test('home schema links the social profiles via sameAs', async () => {
   }
 });
 
-test('location pages carry business schema', async () => {
+/**
+ * This used to assert that each spot page carried a full copy of the business
+ * schema. That was the bug, not the contract: the same SportsActivityLocation
+ * was declared on 15 URLs with no @id, so nothing told a search engine these
+ * were one business rather than fifteen. A spot page is the same school
+ * teaching at a named beach, so it now carries a Service that POINTS AT the
+ * business @id. The assertion is no weaker — a spot page that loses its schema,
+ * or that starts cloning the business again, still fails here.
+ */
+test('location pages describe the business without redeclaring it', async () => {
   const out = await builtTo({ PROD: '1' });
   for (const [lang, slugs] of Object.entries(SPOT_SLUGS)) {
     for (const slug of slugs) {
       const html = await readFile(join(out, lang, slug, 'index.html'), 'utf8');
-      const biz = jsonLdOf(html).find(o => o['@type'] === 'SportsActivityLocation');
-      assert.ok(biz, `${lang}/${slug}: no business schema`);
-      assert.ok(Array.isArray(biz.sameAs) && biz.sameAs.length >= 2, `${lang}/${slug}: sameAs missing`);
+      const blocks = jsonLdOf(html);
+
+      assert.ok(!blocks.some(o => o['@type'] === 'SportsActivityLocation'),
+        `${lang}/${slug}: the business is cloned here instead of referenced by @id`);
+
+      const svc = blocks.find(o => o['@type'] === 'Service');
+      assert.ok(svc, `${lang}/${slug}: no Service schema`);
+      assert.deepEqual(svc.provider, { '@id': 'https://www.coco-surfschool.com/#business' },
+        `${lang}/${slug}: Service does not point at the business @id`);
+      assert.ok(svc.areaServed && svc.areaServed.name,
+        `${lang}/${slug}: Service names no areaServed, so it says nothing about the location`);
     }
   }
 });
