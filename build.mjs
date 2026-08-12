@@ -440,7 +440,7 @@ const R = {
       <a class="rating-badge" href="${GOOGLE_REVIEWS_URL}" target="_blank" rel="noopener"><span class="rb-stars" aria-hidden="true">★★★★★</span><b>${RATING_VALUE.replace('.', ',')}</b><span class="rb-count">${REVIEW_COUNT}+ ${REVIEWS_WORD[lang]}</span></a>
       <h1>${h.h1}</h1>
       <p class="lead">${h.lead}</p>
-      <div class="hero-cta"><a class="btn btn--primary" href="${u.book}">${h.cta1}</a><a class="btn btn--ghost" href="${u.lessons}">${h.cta2}</a>${h.cta3 ? `<a class="btn btn--coral" href="${u.lessons}#tarieven">${h.cta3}</a>` : ''}</div>
+      <div class="hero-cta"><a class="btn btn--primary" href="${u.book}">${h.cta1}</a><a class="btn btn--ghost" href="${u.lessons}">${h.cta2}</a>${h.cta3 ? `<a class="btn btn--coral" href="${u.lessons}#tarifs">${h.cta3}</a>` : ''}</div>
       <div class="hero-facts">${h.facts.map(f => `<div class="hero-fact"><b>${f.b}</b><span>${f.s}</span></div>`).join('')}</div>
       <p class="we-speak">We speak <span aria-hidden="true">🇫🇷 🇳🇱 🇩🇪 🇬🇧 🇪🇸</span></p>
     </div>
@@ -528,7 +528,7 @@ ${reviewsSection(t, lang)}
     </div>
   </div>
 </section>
-<section class="cta-band"><div class="wrap"><div><h2>${t.cta.h}</h2><p>${t.cta.p}</p></div><div class="hero-cta"><a class="btn btn--coral" href="${u.contact}">${t.cta.b1}</a><a class="btn btn--primary" href="${u.lessons}#tarieven">${t.hero.cta3}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.cta.b2}</a></div></div></section>`;
+<section class="cta-band"><div class="wrap"><div><h2>${t.cta.h}</h2><p>${t.cta.p}</p></div><div class="hero-cta"><a class="btn btn--coral" href="${u.contact}">${t.cta.b1}</a><a class="btn btn--primary" href="${u.lessons}#tarifs">${t.hero.cta3}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.cta.b2}</a></div></div></section>`;
   },
 
   lessons(u, t, ui) {

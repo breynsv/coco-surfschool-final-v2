@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { mkdtemp, readFile, readdir, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const REPO = dirname(dirname(fileURLToPath(import.meta.url)));
@@ -325,4 +325,56 @@ test('every RENDER key is a page the site actually emits', async () => {
   assert.ok(pageKeys.size >= 10, `PAGES parse found only ${pageKeys.size} key(s); the parse is broken`);
   const unreachable = renderKeys.filter(k => !pageKeys.has(k));
   assert.deepEqual(unreachable, [], `RENDER keys with no PAGES entry: ${unreachable.join(', ')}`);
+});
+
+/**
+ * A same-page fragment link whose target id does not exist fails silently: the
+ * browser stays put or lands at the top of the destination page, and nothing
+ * logs. The homepage "see the rates" CTA shipped pointing at `#tarieven` while
+ * every language rendered the section as `id="tarifs"`, so the highest-intent
+ * button on the site quietly dropped visitors above the pricing they asked for.
+ * Nothing in the suite noticed, because every page still built and every link
+ * still resolved to a real page.
+ */
+test('every in-page fragment link resolves to an id that exists', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const pages = new Map();
+  const walk = async (dir) => {
+    for (const e of await readdir(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name);
+      if (e.isDirectory()) await walk(p);
+      else if (e.name.endsWith('.html')) pages.set(p, await readFile(p, 'utf8'));
+    }
+  };
+  await walk(out);
+  assert.ok(pages.size >= 50, `walk found only ${pages.size} page(s); the parse is broken`);
+
+  const idsOf = (html) => new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]));
+  const broken = [];
+
+  for (const [file, html] of pages) {
+    for (const m of html.matchAll(/<a\b[^>]*\bhref="([^"]*#[^"]+)"/g)) {
+      const [path, frag] = m[1].split('#');
+      if (!frag || frag.startsWith('!')) continue;
+      // Cloudflare rewrites mailto: into /cdn-cgi/l/email-protection#<hash>.
+      if (path.startsWith('/cdn-cgi/')) continue;
+      if (/^(https?:|mailto:|tel:)/.test(path)) continue;
+
+      // Resolve the link target relative to the page that carries it.
+      const targetFile = path === ''
+        ? file
+        : join(dirname(file), path.endsWith('/') ? join(path, 'index.html') : path);
+
+      const targetHtml = pages.get(targetFile);
+      if (targetHtml === undefined) {
+        broken.push(`${relative(out, file)} -> ${m[1]} (no such page)`);
+        continue;
+      }
+      if (!idsOf(targetHtml).has(frag)) {
+        broken.push(`${relative(out, file)} -> ${m[1]} (no id="${frag}" on target)`);
+      }
+    }
+  }
+
+  assert.deepEqual(broken, [], `fragment links pointing at ids that do not exist:\n  ${broken.join('\n  ')}`);
 });
