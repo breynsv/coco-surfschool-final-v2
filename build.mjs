@@ -226,10 +226,39 @@ const firstEuro = (s) => {
   return m ? (m[1] ?? m[2]).replace(',', '.') : null;
 };
 
+/**
+ * Location, kept here rather than in the five content files because it is
+ * language-neutral and five copies is five chances to drift.
+ *
+ * This is a SERVICE-AREA business, not a shopfront. The school is itinerant —
+ * its own Google profile says "Ecole Itinerante No Local Sur La Plage", and the
+ * meeting point is agreed per lesson depending on where the conditions send
+ * them that day (Les Bourdaines, elsewhere in Seignosse, Hossegor, Capbreton).
+ *
+ * So the address here is not a place you can walk into: it is the pin Google
+ * already publishes on the Business Profile ("plage des Bourdaines, 40510
+ * Seignosse"), restated verbatim. For a local business, the site and the
+ * profile agreeing is what Google cross-checks; a near-miss is worse than
+ * saying less. `areaServed` on the entity carries the real story — the school
+ * operates across the whole stretch of coast, not from this point.
+ *
+ * Coordinates are the OpenStreetMap geocode of that address, not an estimate.
+ *
+ * There is deliberately no openingHoursSpecification: the profile shows a 20:00
+ * closing time but the opening time and weekly pattern are unconfirmed, and
+ * published hours that are wrong send people to a beach for nothing.
+ */
+const BUSINESS_PLACE = {
+  streetAddress: 'Plage des Bourdaines',
+  geo: { '@type': 'GeoCoordinates', latitude: 43.6979, longitude: -1.4392 },
+};
+
 /** The business entity itself. Only the home page emits this. */
 const businessSchema = (biz) => ({
   ...biz,
   '@id': BUSINESS_ID,
+  address: { ...biz.address, streetAddress: BUSINESS_PLACE.streetAddress },
+  geo: BUSINESS_PLACE.geo,
   sameAs: BUSINESS_SAMEAS,
   image: `${SITE}/assets/images/carousel-1.jpg`,
   currenciesAccepted: 'EUR',

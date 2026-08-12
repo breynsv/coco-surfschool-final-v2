@@ -229,3 +229,42 @@ test('no JSON-LD string carries raw HTML or undecoded entities', async () => {
   for (const [file, blocks] of await allPages()) blocks.forEach((b, i) => scan(b, `[${i}]`, file));
   assert.deepEqual(offenders, [], `JSON-LD strings carrying markup:\n  ${offenders.join('\n  ')}`);
 });
+
+/**
+ * For a local business, the site and the Google Business Profile agreeing is
+ * the whole point — Google cross-checks them, and a near-miss is worse than
+ * saying less. The profile reads "plage des Bourdaines, 40510 Seignosse,
+ * France"; these assertions pin the site to that.
+ */
+test('the business address and coordinates match the Google Business Profile', async () => {
+  for (const lang of LANGS) {
+    const biz = (await ld(`${lang}/index.html`)).find(b => b['@type'] === 'SportsActivityLocation');
+    assert.ok(biz, `${lang}: no business schema`);
+
+    assert.equal(biz.address.streetAddress, 'Plage des Bourdaines', `${lang}: streetAddress drifted`);
+    assert.equal(biz.address.postalCode, '40510', `${lang}: postcode drifted`);
+    assert.equal(biz.address.addressLocality, 'Seignosse', `${lang}: locality drifted`);
+    assert.equal(biz.address.addressCountry, 'FR');
+
+    // Les Bourdaines, geocoded via OpenStreetMap. The tolerance is wide enough
+    // to allow a re-geocode and narrow enough to catch a transposed sign or a
+    // decimal slip, which would land the school in the ocean or another country.
+    assert.ok(Math.abs(biz.geo.latitude - 43.6979) < 0.01, `${lang}: latitude is off: ${biz.geo.latitude}`);
+    assert.ok(Math.abs(biz.geo.longitude - -1.4392) < 0.01, `${lang}: longitude is off: ${biz.geo.longitude}`);
+    assert.equal(biz.geo['@type'], 'GeoCoordinates');
+  }
+});
+
+/**
+ * Opening hours are NOT published, on purpose: only the 20:00 closing time is
+ * confirmed. If someone adds them later this test should be updated with the
+ * real pattern, not deleted — hours that are wrong send people to a beach for
+ * nothing, which is worse than no hours at all.
+ */
+test('no opening hours are published while they are unconfirmed', async () => {
+  for (const lang of LANGS) {
+    const biz = (await ld(`${lang}/index.html`)).find(b => b['@type'] === 'SportsActivityLocation');
+    assert.ok(!biz.openingHoursSpecification && !biz.openingHours,
+      `${lang}: opening hours are published — confirm the full weekly pattern against the Google profile first`);
+  }
+});
