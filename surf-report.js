@@ -46,7 +46,12 @@
     storm: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 13a4 4 0 0 0-.5-8 5.5 5.5 0 0 0-10.6 1.4A3.8 3.8 0 0 0 6 13z"/><path d="m12 12-2 4h3l-1.5 4"/></svg>'
   };
   function group(c) { if (c === 0) return 'clear'; if (c <= 2) return 'partly'; if (c === 3) return 'cloudy'; if (c <= 48) return 'fog'; if (c <= 67) return 'rain'; if (c <= 77) return 'snow'; if (c <= 82) return 'rain'; if (c <= 86) return 'snow'; return 'storm'; }
-  function uvInfo(uv) { uv = Math.round(uv || 0); if (uv <= 2) return { c: '#3ea72d', k: 'low' }; if (uv <= 5) return { c: '#d9a300', k: 'mod' }; if (uv <= 7) return { c: '#e8730c', k: 'high' }; if (uv <= 10) return { c: '#d5001c', k: 'vhigh' }; return { c: '#8a3fb0', k: 'extreme' }; }
+  // Badge colours follow the WHO UV ramp (green -> yellow -> orange -> red ->
+  // purple) but are darkened from the poster-standard values, which carry white
+  // text at only 3.10:1 (low), 2.29:1 (moderate) and 3.05:1 (high) against the
+  // 4.5 WCAG AA wants at this size. These are all >= 5:1, and the badge shows
+  // whichever band today falls in — so "moderate" failing meant most days did.
+  function uvInfo(uv) { uv = Math.round(uv || 0); if (uv <= 2) return { c: '#2F7F22', k: 'low' }; if (uv <= 5) return { c: '#8A6800', k: 'mod' }; if (uv <= 7) return { c: '#9C4B05', k: 'high' }; if (uv <= 10) return { c: '#B00017', k: 'vhigh' }; return { c: '#6E2F8E', k: 'extreme' }; }
 
   function curveSvg(pts) {
     if (!pts.length) return '';

@@ -395,3 +395,65 @@ test('every in-page fragment link resolves to an id that exists', async () => {
 
   assert.deepEqual(broken, [], `fragment links pointing at ids that do not exist:\n  ${broken.join('\n  ')}`);
 });
+
+test('every page carries Twitter card metadata', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const missing = [];
+  const walk = async (dir, rel) => {
+    for (const e of await readdir(dir, { withFileTypes: true })) {
+      if (e.isDirectory()) { await walk(join(dir, e.name), `${rel}${e.name}/`); continue; }
+      if (e.name !== 'index.html' || !['fr', 'nl', 'de', 'en', 'es'].includes(rel.split('/')[0])) continue;
+      const html = await readFile(join(dir, e.name), 'utf8');
+      for (const tag of ['twitter:card', 'twitter:title', 'twitter:description', 'twitter:image', 'og:image:alt']) {
+        if (!html.includes(`"${tag}"`)) missing.push(`${rel}${e.name}: ${tag}`);
+      }
+    }
+  };
+  await walk(out, '');
+  assert.deepEqual(missing, [], `pages missing social metadata:\n  ${missing.slice(0, 10).join('\n  ')}`);
+});
+
+/**
+ * lastmod is only a useful recrawl hint while it is true, so it is derived from
+ * the git history of build.mjs and the language's content file. In a checkout
+ * with no git history the build must emit none rather than invent one.
+ */
+test('the sitemap carries a real lastmod for every url', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const xml = await readFile(join(out, 'sitemap.xml'), 'utf8');
+  const urls = xml.match(/<url>/g)?.length ?? 0;
+  const mods = [...xml.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map(m => m[1]);
+  assert.equal(mods.length, urls, `${urls} urls but ${mods.length} lastmod values`);
+  for (const m of mods) {
+    assert.match(m, /^\d{4}-\d{2}-\d{2}T/, `lastmod is not an ISO datetime: ${m}`);
+    assert.ok(!Number.isNaN(Date.parse(m)), `unparseable lastmod: ${m}`);
+    assert.ok(Date.parse(m) <= Date.now() + 86400000, `lastmod is in the future: ${m}`);
+  }
+});
+
+test('llms.txt is emitted and states the real prices and group sizes', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const txt = await readFile(join(out, 'llms.txt'), 'utf8');
+  assert.match(txt, /^# Coco Surf School/, 'llms.txt should open with the site name as an h1');
+  for (const fact of ['Seignosse', 'Hossegor', 'maximum 6', '1h30', 'cocobosurfschool@gmail.com', '819 825 613 00030']) {
+    assert.ok(txt.includes(fact), `llms.txt does not mention "${fact}"`);
+  }
+  assert.ok(!/<[a-z/][^>]*>/i.test(txt), 'llms.txt contains HTML; it must be plain markdown');
+  assert.ok(!/&(amp|nbsp|#\d+);/.test(txt), 'llms.txt contains undecoded HTML entities');
+  // The prices it quotes must be prices the site actually shows.
+  const lessons = await readFile(join(out, 'en', 'surf-lessons', 'index.html'), 'utf8');
+  for (const m of txt.matchAll(/€\s?(\d+)|(\d+)\s?€/g)) {
+    const n = m[1] || m[2];
+    assert.ok(lessons.includes(n), `llms.txt quotes ${n} € but the lessons page does not show it`);
+  }
+});
+
+test('the team building page is reachable from the footer of every page', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const SLUG = { fr: 'team-building-surf', nl: 'surf-teambuilding', de: 'surf-teambuilding', en: 'team-building', es: 'surf-team-building' };
+  for (const [lang, slug] of Object.entries(SLUG)) {
+    const html = await readFile(join(out, lang, 'index.html'), 'utf8');
+    const foot = html.match(/<footer[\s\S]*?<\/footer>/)[0];
+    assert.ok(foot.includes(`${slug}/`), `${lang}: footer does not link the team building page`);
+  }
+});

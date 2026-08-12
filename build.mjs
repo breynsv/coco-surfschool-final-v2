@@ -1,4 +1,5 @@
 // Coco Surf School — design-06 (coral) multipage generator
+import { execFileSync } from 'node:child_process';
 import { cp, mkdir, writeFile } from 'node:fs/promises';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -349,6 +350,75 @@ const breadcrumbSchema = (lang, key, c) => key === 'home' ? null : ({
   ],
 });
 
+/**
+ * A plain-markdown brief at /llms.txt. Everything in it is read out of the
+ * English content and the FR rate cards, so it restates the site rather than
+ * asserting anything the site does not.
+ */
+function llmsTxt() {
+  const c = C.en;
+  const biz = C.fr.pages.home.jsonld;      // only priceRange is read, which is language-neutral
+  const rates = C.en.pages.lessons.rates;  // the brief is in English; so are its labels
+
+  const formulas = (rates.cards || []).map(card => {
+    const lines = (card.lines || [])
+      .map(([label, price]) => `  - ${plain(label)}: ${plain(price)}`)
+      .join('\n');
+    return `### ${plain(card.h)}\n${plain(card.sub)}\n${lines}`;
+  }).join('\n\n');
+
+  const pages = EMITTED
+    .filter(k => k !== 'home')
+    .map(k => `- [${plain(C.en.pages[k].crumb || C.en.pages[k].h1 || k)}](${abs('en', k)})`)
+    .join('\n');
+
+  return `# Coco Surf School
+
+> ${plain(c.pages.home.desc)}
+
+A surf school in Seignosse (Les Bourdaines) and Hossegor, in the Landes,
+south-west France. Lessons are taught by Annelies, in Dutch, French, English,
+German and Spanish. Rating ${RATING_VALUE} from ${REVIEW_COUNT}+ Google reviews.
+
+## Facts
+
+- Locations: Seignosse (Les Bourdaines), Hossegor, Capbreton — Landes, France
+- Deluxe group lessons: maximum 6 people per instructor (minimum 2 to run)
+- Group lessons: maximum 8 per instructor (minimum 3 to run)
+- Lesson length: 1h30 in the water, about 2h in total
+- Surfboard and wetsuit are included in every lesson and course
+- Price range: ${plain(biz.priceRange)}
+- A 30% deposit is due at booking; payment by bank transfer or cash
+- Phone / WhatsApp: +33 6 47 45 42 65
+- Email: cocobosurfschool@gmail.com
+- SIRET: 819 825 613 00030
+
+## Prices
+
+All prices in EUR. "pp" means per person. These are the published ${new Date().getUTCFullYear()} rates;
+the lessons page is authoritative.
+
+${formulas}
+
+## Languages
+
+The site is published in French, Dutch, German, English and Spanish. French is
+the default. Replace the /en/ segment with /fr/, /nl/, /de/ or /es/.
+
+## Pages
+
+${pages}
+
+## Notes
+
+- Lesson times depend on the tide, ocean conditions and your level, so they are
+  agreed per booking rather than fixed.
+- Annelies holds a Master in Physical Education (KU Leuven), an ISA Level 1 surf
+  coaching qualification, the French carte professionnelle for surf instruction,
+  and PSE1 first aid.
+`;
+}
+
 /** Every JSON-LD object a page should carry, in emission order. */
 function schemasFor(key, c, lang) {
   const t = c.pages[key], out = [];
@@ -397,6 +467,11 @@ ${alt}
 <meta property="og:description" content="${t.ogDesc || t.desc}">
 <meta property="og:url" content="${abs(lang, key)}">
 <meta property="og:image" content="${ogImg}">
+<meta property="og:image:alt" content="${t.ogImageAlt || 'Coco Surf School — Seignosse &amp; Hossegor'}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${t.ogTitle || t.title}">
+<meta name="twitter:description" content="${t.ogDesc || t.desc}">
+<meta name="twitter:image" content="${ogImg}">
 <meta name="theme-color" content="#23413A">
 <link rel="preload" href="${u.root}assets/fonts/petrona-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${u.css}?v=13">
@@ -461,6 +536,10 @@ function footer(lang, key, c) {
         <ul>
           ${navcol}
           <li><a href="${u.learn}">${ui.nav.learn || 'Learn to surf'}</a></li>
+          <!-- Corporate team building is a high-value booking and was the least
+               linked page on the site: in neither nav, so 5 inbound links against
+               6+ everywhere else. The footer is the cheapest place to fix that. -->
+          <li><a href="${u.team}">${ui.nav.team || c.pages.team.crumb}</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -739,12 +818,15 @@ ${reviewsSection(t, lang)}
   },
 
   rental(u, t, ui) {
-    const table = (cols, rows) => `<div class="rental-table-wrap"><table class="rental-table"><thead><tr>${cols.map((h, i) => `<th${i === 0 ? '' : ' class="num"'}>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr><th>${r[0]}</th>${r.slice(1).map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    // The wrapper scrolls horizontally on narrow screens (min-width: 480px on
+    // the table). A scrollable box that cannot be focused is unreachable by
+    // keyboard, so it takes tabindex plus a name to announce — WCAG 2.1.1.
+    const table = (cols, rows, label) => `<div class="rental-table-wrap" tabindex="0" role="region" aria-label="${label}"><table class="rental-table"><thead><tr>${cols.map((h, i) => `<th${i === 0 ? '' : ' class="num"'}>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr><th>${r[0]}</th>${r.slice(1).map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
     return `
 <section class="page-hero"><div class="wrap"><div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p></div></div></section>
 <section class="section"><div class="wrap">
-  <div class="reveal">${table(t.cols1, [[t.board, ...t.rows1.board], [t.wetsuit, ...t.rows1.wetsuit]])}</div>
-  <div class="reveal" style="margin-top:1.3rem">${table(t.cols2, [[t.board, ...t.rows2.board], [t.wetsuit, ...t.rows2.wetsuit]])}</div>
+  <div class="reveal">${table(t.cols1, [[t.board, ...t.rows1.board], [t.wetsuit, ...t.rows1.wetsuit]], t.cols1[0])}</div>
+  <div class="reveal" style="margin-top:1.3rem">${table(t.cols2, [[t.board, ...t.rows2.board], [t.wetsuit, ...t.rows2.wetsuit]], t.cols2[0])}</div>
   <p class="lessons-note reveal" style="margin-top:1.5rem"><span>💡</span><span>${t.note}</span></p>
   <p class="reveal" style="margin-top:1.6rem;text-align:center"><a class="btn btn--primary" href="${u.contact}">${t.cta}</a></p>
 </div></section>`;
@@ -893,10 +975,30 @@ async function build() {
     }
   }
   // sitemap + robots
+  //
+  // lastmod is a recrawl hint Google only respects while it stays honest, so it
+  // is derived from git rather than stamped with "now": a page is generated
+  // from build.mjs plus its language's content file, so its last real change is
+  // the later of those two commits. If git is unavailable (a shallow CI clone,
+  // an exported tarball) we emit NO lastmod rather than an invented one.
+  const lastmodFor = (lang) => {
+    const at = (file) => {
+      try {
+        return execFileSync('git', ['log', '-1', '--format=%cI', '--', file],
+          { cwd: REPO, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim() || null;
+      } catch { return null; }
+    };
+    const dates = [at('build.mjs'), at(`content/${lang}.mjs`)].filter(Boolean);
+    if (!dates.length) return '';
+    return dates.sort().pop();
+  };
+  const LASTMOD = Object.fromEntries(LANGS.map(l => [l, lastmodFor(l)]));
+
   const urlset = [];
   for (const key of EMITTED) for (const lang of LANGS) {
     const alts = LANGS.map(l => `    <xhtml:link rel="alternate" hreflang="${l}" href="${abs(l, key)}"/>`).join('\n');
-    urlset.push(`  <url>\n    <loc>${abs(lang, key)}</loc>\n${alts}\n  </url>`);
+    const lm = LASTMOD[lang] ? `\n    <lastmod>${LASTMOD[lang]}</lastmod>` : '';
+    urlset.push(`  <url>\n    <loc>${abs(lang, key)}</loc>${lm}\n${alts}\n  </url>`);
   }
   await writeFile(join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urlset.join('\n')}\n</urlset>\n`);
   // Production defence-in-depth: keep crawlers off the private/internal
@@ -913,6 +1015,12 @@ async function build() {
     ? `User-agent: *\nAllow: /\n\n${PROD_DISALLOW}\n\nSitemap: ${SITE}/sitemap.xml\n`
     : `User-agent: *\nDisallow: /\n`);
   await writeFile(join(ROOT, '404.html'), notFound());
+
+  // llms.txt — a plain-markdown brief for AI answer engines, which quote
+  // schools' prices and group sizes constantly and do better from one
+  // unambiguous source than from five localised pages. Generated from the same
+  // content and rate cards the pages render, so it cannot drift from them.
+  if (PROD) await writeFile(join(ROOT, 'llms.txt'), llmsTxt());
   // root redirect
   await writeFile(join(ROOT, 'index.html'), `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">${PROD ? '' : '<meta name="robots" content="noindex">'}<title>Coco Surf School</title><link rel="icon" href="assets/images/favicon-32.png" sizes="32x32" type="image/png"><script>var s={fr:1,en:1,nl:1,de:1,es:1},l=(navigator.languages||[navigator.language||'fr']),p='fr';for(var i=0;i<l.length;i++){var x=(l[i]||'').slice(0,2).toLowerCase();if(s[x]){p=x;break}}location.replace('./'+p+'/')</script></head><body><p style="font-family:sans-serif;text-align:center;padding:2rem">Coco Surf School — <a href="./fr/">Français</a> · <a href="./en/">English</a> · <a href="./nl/">Nederlands</a></p></body></html>\n`);
   await copyStaticAssets();
