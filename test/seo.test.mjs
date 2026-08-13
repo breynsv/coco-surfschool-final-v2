@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { mkdtemp, readFile, readdir, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const REPO = dirname(dirname(fileURLToPath(import.meta.url)));
@@ -185,14 +185,31 @@ test('home schema links the social profiles via sameAs', async () => {
   }
 });
 
-test('location pages carry business schema', async () => {
+/**
+ * This used to assert that each spot page carried a full copy of the business
+ * schema. That was the bug, not the contract: the same SportsActivityLocation
+ * was declared on 15 URLs with no @id, so nothing told a search engine these
+ * were one business rather than fifteen. A spot page is the same school
+ * teaching at a named beach, so it now carries a Service that POINTS AT the
+ * business @id. The assertion is no weaker — a spot page that loses its schema,
+ * or that starts cloning the business again, still fails here.
+ */
+test('location pages describe the business without redeclaring it', async () => {
   const out = await builtTo({ PROD: '1' });
   for (const [lang, slugs] of Object.entries(SPOT_SLUGS)) {
     for (const slug of slugs) {
       const html = await readFile(join(out, lang, slug, 'index.html'), 'utf8');
-      const biz = jsonLdOf(html).find(o => o['@type'] === 'SportsActivityLocation');
-      assert.ok(biz, `${lang}/${slug}: no business schema`);
-      assert.ok(Array.isArray(biz.sameAs) && biz.sameAs.length >= 2, `${lang}/${slug}: sameAs missing`);
+      const blocks = jsonLdOf(html);
+
+      assert.ok(!blocks.some(o => o['@type'] === 'SportsActivityLocation'),
+        `${lang}/${slug}: the business is cloned here instead of referenced by @id`);
+
+      const svc = blocks.find(o => o['@type'] === 'Service');
+      assert.ok(svc, `${lang}/${slug}: no Service schema`);
+      assert.deepEqual(svc.provider, { '@id': 'https://www.coco-surfschool.com/#business' },
+        `${lang}/${slug}: Service does not point at the business @id`);
+      assert.ok(svc.areaServed && svc.areaServed.name,
+        `${lang}/${slug}: Service names no areaServed, so it says nothing about the location`);
     }
   }
 });
@@ -325,4 +342,118 @@ test('every RENDER key is a page the site actually emits', async () => {
   assert.ok(pageKeys.size >= 10, `PAGES parse found only ${pageKeys.size} key(s); the parse is broken`);
   const unreachable = renderKeys.filter(k => !pageKeys.has(k));
   assert.deepEqual(unreachable, [], `RENDER keys with no PAGES entry: ${unreachable.join(', ')}`);
+});
+
+/**
+ * A same-page fragment link whose target id does not exist fails silently: the
+ * browser stays put or lands at the top of the destination page, and nothing
+ * logs. The homepage "see the rates" CTA shipped pointing at `#tarieven` while
+ * every language rendered the section as `id="tarifs"`, so the highest-intent
+ * button on the site quietly dropped visitors above the pricing they asked for.
+ * Nothing in the suite noticed, because every page still built and every link
+ * still resolved to a real page.
+ */
+test('every in-page fragment link resolves to an id that exists', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const pages = new Map();
+  const walk = async (dir) => {
+    for (const e of await readdir(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name);
+      if (e.isDirectory()) await walk(p);
+      else if (e.name.endsWith('.html')) pages.set(p, await readFile(p, 'utf8'));
+    }
+  };
+  await walk(out);
+  assert.ok(pages.size >= 50, `walk found only ${pages.size} page(s); the parse is broken`);
+
+  const idsOf = (html) => new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]));
+  const broken = [];
+
+  for (const [file, html] of pages) {
+    for (const m of html.matchAll(/<a\b[^>]*\bhref="([^"]*#[^"]+)"/g)) {
+      const [path, frag] = m[1].split('#');
+      if (!frag || frag.startsWith('!')) continue;
+      // Cloudflare rewrites mailto: into /cdn-cgi/l/email-protection#<hash>.
+      if (path.startsWith('/cdn-cgi/')) continue;
+      if (/^(https?:|mailto:|tel:)/.test(path)) continue;
+
+      // Resolve the link target relative to the page that carries it.
+      const targetFile = path === ''
+        ? file
+        : join(dirname(file), path.endsWith('/') ? join(path, 'index.html') : path);
+
+      const targetHtml = pages.get(targetFile);
+      if (targetHtml === undefined) {
+        broken.push(`${relative(out, file)} -> ${m[1]} (no such page)`);
+        continue;
+      }
+      if (!idsOf(targetHtml).has(frag)) {
+        broken.push(`${relative(out, file)} -> ${m[1]} (no id="${frag}" on target)`);
+      }
+    }
+  }
+
+  assert.deepEqual(broken, [], `fragment links pointing at ids that do not exist:\n  ${broken.join('\n  ')}`);
+});
+
+test('every page carries Twitter card metadata', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const missing = [];
+  const walk = async (dir, rel) => {
+    for (const e of await readdir(dir, { withFileTypes: true })) {
+      if (e.isDirectory()) { await walk(join(dir, e.name), `${rel}${e.name}/`); continue; }
+      if (e.name !== 'index.html' || !['fr', 'nl', 'de', 'en', 'es'].includes(rel.split('/')[0])) continue;
+      const html = await readFile(join(dir, e.name), 'utf8');
+      for (const tag of ['twitter:card', 'twitter:title', 'twitter:description', 'twitter:image', 'og:image:alt']) {
+        if (!html.includes(`"${tag}"`)) missing.push(`${rel}${e.name}: ${tag}`);
+      }
+    }
+  };
+  await walk(out, '');
+  assert.deepEqual(missing, [], `pages missing social metadata:\n  ${missing.slice(0, 10).join('\n  ')}`);
+});
+
+/**
+ * lastmod is only a useful recrawl hint while it is true, so it is derived from
+ * the git history of build.mjs and the language's content file. In a checkout
+ * with no git history the build must emit none rather than invent one.
+ */
+test('the sitemap carries a real lastmod for every url', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const xml = await readFile(join(out, 'sitemap.xml'), 'utf8');
+  const urls = xml.match(/<url>/g)?.length ?? 0;
+  const mods = [...xml.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)].map(m => m[1]);
+  assert.equal(mods.length, urls, `${urls} urls but ${mods.length} lastmod values`);
+  for (const m of mods) {
+    assert.match(m, /^\d{4}-\d{2}-\d{2}T/, `lastmod is not an ISO datetime: ${m}`);
+    assert.ok(!Number.isNaN(Date.parse(m)), `unparseable lastmod: ${m}`);
+    assert.ok(Date.parse(m) <= Date.now() + 86400000, `lastmod is in the future: ${m}`);
+  }
+});
+
+test('llms.txt is emitted and states the real prices and group sizes', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const txt = await readFile(join(out, 'llms.txt'), 'utf8');
+  assert.match(txt, /^# Coco Surf School/, 'llms.txt should open with the site name as an h1');
+  for (const fact of ['Seignosse', 'Hossegor', 'maximum 6', '1h30', 'cocobosurfschool@gmail.com', '819 825 613 00030']) {
+    assert.ok(txt.includes(fact), `llms.txt does not mention "${fact}"`);
+  }
+  assert.ok(!/<[a-z/][^>]*>/i.test(txt), 'llms.txt contains HTML; it must be plain markdown');
+  assert.ok(!/&(amp|nbsp|#\d+);/.test(txt), 'llms.txt contains undecoded HTML entities');
+  // The prices it quotes must be prices the site actually shows.
+  const lessons = await readFile(join(out, 'en', 'surf-lessons', 'index.html'), 'utf8');
+  for (const m of txt.matchAll(/€\s?(\d+)|(\d+)\s?€/g)) {
+    const n = m[1] || m[2];
+    assert.ok(lessons.includes(n), `llms.txt quotes ${n} € but the lessons page does not show it`);
+  }
+});
+
+test('the team building page is reachable from the footer of every page', async () => {
+  const out = await builtTo({ PROD: '1' });
+  const SLUG = { fr: 'team-building-surf', nl: 'surf-teambuilding', de: 'surf-teambuilding', en: 'team-building', es: 'surf-team-building' };
+  for (const [lang, slug] of Object.entries(SLUG)) {
+    const html = await readFile(join(out, lang, 'index.html'), 'utf8');
+    const foot = html.match(/<footer[\s\S]*?<\/footer>/)[0];
+    assert.ok(foot.includes(`${slug}/`), `${lang}: footer does not link the team building page`);
+  }
 });

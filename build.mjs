@@ -1,4 +1,5 @@
 // Coco Surf School — design-06 (coral) multipage generator
+import { execFileSync } from 'node:child_process';
 import { cp, mkdir, writeFile } from 'node:fs/promises';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -38,7 +39,7 @@ if (!PROD && basename(resolve(ROOT)) === DEPLOY_DIR) {
 // are already beside the output; when building to a separate directory (the
 // Cloudflare path) they must be copied in, or the site ships without CSS,
 // JS, images, tide data, or its redirect rules.
-const STATIC_ASSETS = ['styles.css', 'script.js', 'surf-report.js', '_redirects', 'assets', 'data'];
+const STATIC_ASSETS = ['styles.css', 'script.js', 'surf-report.js', '_redirects', '_headers', 'assets', 'data'];
 
 async function copyStaticAssets() {
   if (resolve(ROOT) === resolve(REPO)) return; // building in place — nothing to copy
@@ -191,23 +192,289 @@ const BUSINESS_SAMEAS = [FB_URL, IG_URL].filter(Boolean);
 /** The two spot pages describe the same business, so they carry its schema too. */
 const SPOT_KEYS = new Set(['hossegor', 'seignosse']);
 
+/**
+ * ONE identity for the school, shared by every page in every language.
+ *
+ * The full SportsActivityLocation used to be re-emitted on 15 URLs (home +
+ * the two spot pages, x5 languages), each declaring its own page as `url` and
+ * none carrying an @id — so nothing told a search engine these were one
+ * business rather than fifteen competing ones. Now the entity is declared once
+ * per language on the home page under a language-independent @id, and every
+ * other page references that @id instead of restating it.
+ */
+const BUSINESS_ID = `${SITE}/#business`;
+
+/** Text destined for JSON-LD: strip markup and decode the entities the content files carry. */
+const plain = (s) => String(s)
+  .replace(/<[^>]+>/g, ' ')
+  .replace(/&amp;/g, '&').replace(/&nbsp;|&#160;/g, ' ')
+  .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+  .replace(/\s+/g, ' ')
+  .trim();
+
+/**
+ * First euro amount in a rate line. The content files are not consistent about
+ * which side the symbol goes: fr/de/es write "44 € pp", nl/en write "€44 p.p."
+ * Matching only one form silently produced zero Offers for two languages, so
+ * both are handled here.
+ *   "44 € pp"                                  -> "44"
+ *   "€44 p.p."                                 -> "44"
+ *   "130 € <small>juil.–août : 180 €</small>"  -> "130"
+ */
+const firstEuro = (s) => {
+  const m = plain(s).match(/€\s*(\d+(?:[.,]\d+)?)|(\d+(?:[.,]\d+)?)\s*€/);
+  return m ? (m[1] ?? m[2]).replace(',', '.') : null;
+};
+
+/**
+ * Location, kept here rather than in the five content files because it is
+ * language-neutral and five copies is five chances to drift.
+ *
+ * This is a SERVICE-AREA business, not a shopfront. The school is itinerant —
+ * its own Google profile says "Ecole Itinerante No Local Sur La Plage", and the
+ * meeting point is agreed per lesson depending on where the conditions send
+ * them that day (Les Bourdaines, elsewhere in Seignosse, Hossegor, Capbreton).
+ *
+ * So the address here is not a place you can walk into: it is the pin Google
+ * already publishes on the Business Profile ("plage des Bourdaines, 40510
+ * Seignosse"), restated verbatim. For a local business, the site and the
+ * profile agreeing is what Google cross-checks; a near-miss is worse than
+ * saying less. `areaServed` on the entity carries the real story — the school
+ * operates across the whole stretch of coast, not from this point.
+ *
+ * Coordinates are the OpenStreetMap geocode of that address, not an estimate.
+ *
+ * There is deliberately no openingHoursSpecification: the profile shows a 20:00
+ * closing time but the opening time and weekly pattern are unconfirmed, and
+ * published hours that are wrong send people to a beach for nothing.
+ */
+const BUSINESS_PLACE = {
+  streetAddress: 'Plage des Bourdaines',
+  geo: { '@type': 'GeoCoordinates', latitude: 43.6979, longitude: -1.4392 },
+};
+
+/** The business entity itself. Only the home page emits this. */
+const businessSchema = (biz) => ({
+  ...biz,
+  '@id': BUSINESS_ID,
+  address: { ...biz.address, streetAddress: BUSINESS_PLACE.streetAddress },
+  geo: BUSINESS_PLACE.geo,
+  sameAs: BUSINESS_SAMEAS,
+  image: `${SITE}/assets/images/carousel-1.jpg`,
+  currenciesAccepted: 'EUR',
+  aggregateRating: { '@type': 'AggregateRating', ratingValue: RATING_VALUE, reviewCount: String(REVIEW_COUNT) },
+});
+
+/** A reference to the business, for pages that mention it but must not redeclare it. */
+const businessRef = { '@id': BUSINESS_ID };
+
+/** Annelies's occupation, per language. schema.org jobTitle wants a job, not a page kicker. */
+const COACH_TITLE = {
+  fr: 'Monitrice de surf',
+  nl: 'Surfcoach',
+  de: 'Surflehrerin',
+  en: 'Surf coach',
+  es: 'Monitora de surf',
+};
+
+/**
+ * Offers derived from the rate cards that actually render, so the published
+ * prices and the marked-up prices cannot drift — the same reason faqSchema
+ * reads t.faq rather than a hand-kept copy. A card whose lines carry no euro
+ * amount (e.g. "on request") simply contributes no Offer.
+ */
+function offersFrom(rates, lang, key) {
+  if (!rates || !Array.isArray(rates.cards)) return [];
+  const out = [];
+  for (const card of rates.cards) {
+    for (const [label, price] of card.lines || []) {
+      const amount = firstEuro(price);
+      if (!amount) continue;
+      out.push({
+        '@type': 'Offer',
+        name: `${plain(card.h)} — ${plain(label)}`,
+        price: amount,
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+        url: abs(lang, key),
+      });
+    }
+  }
+  return out;
+}
+
+/** The lessons page: a Service the school provides, with its price list attached. */
+function lessonsServiceSchema(t, lang, key) {
+  const offers = offersFrom(t.rates, lang, key);
+  if (!offers.length) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `${abs(lang, key)}#service`,
+    name: plain(t.h1 || t.crumb),
+    description: plain(t.desc),
+    serviceType: 'Surf lessons',
+    provider: businessRef,
+    areaServed: ['Seignosse', 'Hossegor', 'Capbreton', 'Les Landes'],
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: plain(t.rates.title || t.rates.eyebrow),
+      itemListElement: offers,
+    },
+  };
+}
+
+/**
+ * A spot page is not a second business — it is the same school teaching at a
+ * named beach. Modelling it as a Service with areaServed keeps the location
+ * signal without cloning the LocalBusiness onto another URL.
+ */
+const spotServiceSchema = (t, lang, key, area) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  '@id': `${abs(lang, key)}#service`,
+  name: plain(t.h1html || t.h1 || t.crumb),
+  description: plain(t.desc),
+  serviceType: 'Surf lessons',
+  provider: businessRef,
+  areaServed: { '@type': 'Place', name: area },
+});
+
+/**
+ * Annelies is the school's expertise, and the coach page already lists her
+ * degree and certifications in prose. Person + hasCredential makes that
+ * legible instead of leaving it as unmarked text.
+ */
+const coachSchema = (t, lang, key) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${SITE}/#annelies`,
+  name: 'Annelies',
+  // Not t.eyebrow — that is the page's kicker ("Votre coach"), which is a
+  // greeting rather than an occupation.
+  jobTitle: COACH_TITLE[lang],
+  description: plain((t.body || [])[0] || t.desc),
+  worksFor: businessRef,
+  image: `${SITE}/assets/images/owner-coach-new.jpg`,
+  knowsLanguage: ['nl', 'fr', 'en', 'de', 'es'],
+  ...(Array.isArray(t.diplomas) && t.diplomas.length ? {
+    hasCredential: t.diplomas.map(d => ({
+      '@type': 'EducationalOccupationalCredential',
+      name: plain(`${d[0]} ${d[1] || ''}`),
+    })),
+  } : {}),
+});
+
+/**
+ * Breadcrumbs render on every interior page but were never marked up. Built
+ * from the same two values crumbs() prints, so the markup cannot describe a
+ * trail the visitor does not see.
+ */
+const breadcrumbSchema = (lang, key, c) => key === 'home' ? null : ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: plain(c.ui.crumbHome), item: abs(lang, 'home') },
+    { '@type': 'ListItem', position: 2, name: plain(c.pages[key].crumb || c.pages[key].h1), item: abs(lang, key) },
+  ],
+});
+
+/**
+ * A plain-markdown brief at /llms.txt. Everything in it is read out of the
+ * English content and the FR rate cards, so it restates the site rather than
+ * asserting anything the site does not.
+ */
+function llmsTxt() {
+  const c = C.en;
+  const biz = C.fr.pages.home.jsonld;      // only priceRange is read, which is language-neutral
+  const rates = C.en.pages.lessons.rates;  // the brief is in English; so are its labels
+
+  const formulas = (rates.cards || []).map(card => {
+    const lines = (card.lines || [])
+      .map(([label, price]) => `  - ${plain(label)}: ${plain(price)}`)
+      .join('\n');
+    return `### ${plain(card.h)}\n${plain(card.sub)}\n${lines}`;
+  }).join('\n\n');
+
+  const pages = EMITTED
+    .filter(k => k !== 'home')
+    .map(k => `- [${plain(C.en.pages[k].crumb || C.en.pages[k].h1 || k)}](${abs('en', k)})`)
+    .join('\n');
+
+  return `# Coco Surf School
+
+> ${plain(c.pages.home.desc)}
+
+A surf school in Seignosse (Les Bourdaines) and Hossegor, in the Landes,
+south-west France. Lessons are taught by Annelies, in Dutch, French, English,
+German and Spanish. Rating ${RATING_VALUE} from ${REVIEW_COUNT}+ Google reviews.
+
+## Facts
+
+- Locations: Seignosse (Les Bourdaines), Hossegor, Capbreton — Landes, France
+- Deluxe group lessons: maximum 6 people per instructor (minimum 2 to run)
+- Group lessons: maximum 8 per instructor (minimum 3 to run)
+- Lesson length: 1h30 in the water, about 2h in total
+- Surfboard and wetsuit are included in every lesson and course
+- Price range: ${plain(biz.priceRange)}
+- A 30% deposit is due at booking; payment by bank transfer or cash
+- Phone / WhatsApp: +33 6 47 45 42 65
+- Email: cocobosurfschool@gmail.com
+- SIRET: 819 825 613 00030
+
+## Prices
+
+All prices in EUR. "pp" means per person. These are the published ${new Date().getUTCFullYear()} rates;
+the lessons page is authoritative.
+
+${formulas}
+
+## Languages
+
+The site is published in French, Dutch, German, English and Spanish. French is
+the default. Replace the /en/ segment with /fr/, /nl/, /de/ or /es/.
+
+## Pages
+
+${pages}
+
+## Notes
+
+- Lesson times depend on the tide, ocean conditions and your level, so they are
+  agreed per booking rather than fixed.
+- Annelies holds a Master in Physical Education (KU Leuven), an ISA Level 1 surf
+  coaching qualification, the French carte professionnelle for surf instruction,
+  and PSE1 first aid.
+`;
+}
+
 /** Every JSON-LD object a page should carry, in emission order. */
-function schemasFor(key, c) {
+function schemasFor(key, c, lang) {
   const t = c.pages[key], out = [];
-  const biz = t.jsonld || (SPOT_KEYS.has(key) ? c.pages.home.jsonld : null);
-  if (biz) out.push(biz['@type'] === 'SportsActivityLocation' ? {
-    ...biz,
-    sameAs: BUSINESS_SAMEAS,
-    aggregateRating: { '@type': 'AggregateRating', ratingValue: RATING_VALUE, reviewCount: String(REVIEW_COUNT) },
-  } : biz);
+
+  if (key === 'home' && t.jsonld) {
+    out.push(businessSchema(t.jsonld));
+  } else if (SPOT_KEYS.has(key)) {
+    out.push(spotServiceSchema(t, lang, key, key === 'hossegor' ? 'Hossegor' : 'Seignosse — Les Bourdaines'));
+  } else if (t.jsonld) {
+    // Any other page that ships its own block keeps it verbatim.
+    out.push(t.jsonld);
+  }
+
+  if (key === 'lessons') { const s = lessonsServiceSchema(t, lang, key); if (s) out.push(s); }
+  if (key === 'coach') out.push(coachSchema(t, lang, key));
   if (key === 'contact') { const faq = faqSchema(t); if (faq) out.push(faq); }
+
+  const bc = breadcrumbSchema(lang, key, c);
+  if (bc) out.push(bc);
+
   return out;
 }
 
 function head(lang, key, c) {
   const t = c.pages[key], u = urls(lang, key);
   const alt = LANGS.map(l => `<link rel="alternate" hreflang="${l}" href="${abs(l, key)}">`).join('\n');
-  const ld = schemasFor(key, c)
+  const ld = schemasFor(key, c, lang)
     .map(s => `\n<script type="application/ld+json">\n${JSON.stringify(s, null, 2)}\n</script>`)
     .join('');
   const ogImg = `${SITE}/assets/images/${t.ogImage || 'a29fce_9ddbf1309cf04bb189e246d843dfc188.jpg'}`;
@@ -229,6 +496,11 @@ ${alt}
 <meta property="og:description" content="${t.ogDesc || t.desc}">
 <meta property="og:url" content="${abs(lang, key)}">
 <meta property="og:image" content="${ogImg}">
+<meta property="og:image:alt" content="${t.ogImageAlt || 'Coco Surf School — Seignosse &amp; Hossegor'}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${t.ogTitle || t.title}">
+<meta name="twitter:description" content="${t.ogDesc || t.desc}">
+<meta name="twitter:image" content="${ogImg}">
 <meta name="theme-color" content="#23413A">
 <link rel="preload" href="${u.root}assets/fonts/petrona-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${u.css}?v=13">
@@ -293,6 +565,10 @@ function footer(lang, key, c) {
         <ul>
           ${navcol}
           <li><a href="${u.learn}">${ui.nav.learn || 'Learn to surf'}</a></li>
+          <!-- Corporate team building is a high-value booking and was the least
+               linked page on the site: in neither nav, so 5 inbound links against
+               6+ everywhere else. The footer is the cheapest place to fix that. -->
+          <li><a href="${u.team}">${ui.nav.team || c.pages.team.crumb}</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -440,7 +716,7 @@ const R = {
       <a class="rating-badge" href="${GOOGLE_REVIEWS_URL}" target="_blank" rel="noopener"><span class="rb-stars" aria-hidden="true">★★★★★</span><b>${RATING_VALUE.replace('.', ',')}</b><span class="rb-count">${REVIEW_COUNT}+ ${REVIEWS_WORD[lang]}</span></a>
       <h1>${h.h1}</h1>
       <p class="lead">${h.lead}</p>
-      <div class="hero-cta"><a class="btn btn--primary" href="${u.book}">${h.cta1}</a><a class="btn btn--ghost" href="${u.lessons}">${h.cta2}</a>${h.cta3 ? `<a class="btn btn--coral" href="${u.lessons}#tarieven">${h.cta3}</a>` : ''}</div>
+      <div class="hero-cta"><a class="btn btn--primary" href="${u.book}">${h.cta1}</a><a class="btn btn--ghost" href="${u.lessons}">${h.cta2}</a>${h.cta3 ? `<a class="btn btn--coral" href="${u.lessons}#tarifs">${h.cta3}</a>` : ''}</div>
       <div class="hero-facts">${h.facts.map(f => `<div class="hero-fact"><b>${f.b}</b><span>${f.s}</span></div>`).join('')}</div>
       <p class="we-speak">We speak <span aria-hidden="true">🇫🇷 🇳🇱 🇩🇪 🇬🇧 🇪🇸</span></p>
     </div>
@@ -528,7 +804,7 @@ ${reviewsSection(t, lang)}
     </div>
   </div>
 </section>
-<section class="cta-band"><div class="wrap"><div><h2>${t.cta.h}</h2><p>${t.cta.p}</p></div><div class="hero-cta"><a class="btn btn--coral" href="${u.contact}">${t.cta.b1}</a><a class="btn btn--primary" href="${u.lessons}#tarieven">${t.hero.cta3}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.cta.b2}</a></div></div></section>`;
+<section class="cta-band"><div class="wrap"><div><h2>${t.cta.h}</h2><p>${t.cta.p}</p></div><div class="hero-cta"><a class="btn btn--coral" href="${u.contact}">${t.cta.b1}</a><a class="btn btn--primary" href="${u.lessons}#tarifs">${t.hero.cta3}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.cta.b2}</a></div></div></section>`;
   },
 
   lessons(u, t, ui) {
@@ -571,12 +847,15 @@ ${reviewsSection(t, lang)}
   },
 
   rental(u, t, ui) {
-    const table = (cols, rows) => `<div class="rental-table-wrap"><table class="rental-table"><thead><tr>${cols.map((h, i) => `<th${i === 0 ? '' : ' class="num"'}>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr><th>${r[0]}</th>${r.slice(1).map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    // The wrapper scrolls horizontally on narrow screens (min-width: 480px on
+    // the table). A scrollable box that cannot be focused is unreachable by
+    // keyboard, so it takes tabindex plus a name to announce — WCAG 2.1.1.
+    const table = (cols, rows, label) => `<div class="rental-table-wrap" tabindex="0" role="region" aria-label="${label}"><table class="rental-table"><thead><tr>${cols.map((h, i) => `<th${i === 0 ? '' : ' class="num"'}>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr><th>${r[0]}</th>${r.slice(1).map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
     return `
 <section class="page-hero"><div class="wrap"><div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p></div></div></section>
 <section class="section"><div class="wrap">
-  <div class="reveal">${table(t.cols1, [[t.board, ...t.rows1.board], [t.wetsuit, ...t.rows1.wetsuit]])}</div>
-  <div class="reveal" style="margin-top:1.3rem">${table(t.cols2, [[t.board, ...t.rows2.board], [t.wetsuit, ...t.rows2.wetsuit]])}</div>
+  <div class="reveal">${table(t.cols1, [[t.board, ...t.rows1.board], [t.wetsuit, ...t.rows1.wetsuit]], t.cols1[0])}</div>
+  <div class="reveal" style="margin-top:1.3rem">${table(t.cols2, [[t.board, ...t.rows2.board], [t.wetsuit, ...t.rows2.wetsuit]], t.cols2[0])}</div>
   <p class="lessons-note reveal" style="margin-top:1.5rem"><span>💡</span><span>${t.note}</span></p>
   <p class="reveal" style="margin-top:1.6rem;text-align:center"><a class="btn btn--primary" href="${u.contact}">${t.cta}</a></p>
 </div></section>`;
@@ -725,10 +1004,30 @@ async function build() {
     }
   }
   // sitemap + robots
+  //
+  // lastmod is a recrawl hint Google only respects while it stays honest, so it
+  // is derived from git rather than stamped with "now": a page is generated
+  // from build.mjs plus its language's content file, so its last real change is
+  // the later of those two commits. If git is unavailable (a shallow CI clone,
+  // an exported tarball) we emit NO lastmod rather than an invented one.
+  const lastmodFor = (lang) => {
+    const at = (file) => {
+      try {
+        return execFileSync('git', ['log', '-1', '--format=%cI', '--', file],
+          { cwd: REPO, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim() || null;
+      } catch { return null; }
+    };
+    const dates = [at('build.mjs'), at(`content/${lang}.mjs`)].filter(Boolean);
+    if (!dates.length) return '';
+    return dates.sort().pop();
+  };
+  const LASTMOD = Object.fromEntries(LANGS.map(l => [l, lastmodFor(l)]));
+
   const urlset = [];
   for (const key of EMITTED) for (const lang of LANGS) {
     const alts = LANGS.map(l => `    <xhtml:link rel="alternate" hreflang="${l}" href="${abs(l, key)}"/>`).join('\n');
-    urlset.push(`  <url>\n    <loc>${abs(lang, key)}</loc>\n${alts}\n  </url>`);
+    const lm = LASTMOD[lang] ? `\n    <lastmod>${LASTMOD[lang]}</lastmod>` : '';
+    urlset.push(`  <url>\n    <loc>${abs(lang, key)}</loc>${lm}\n${alts}\n  </url>`);
   }
   await writeFile(join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urlset.join('\n')}\n</urlset>\n`);
   // Production defence-in-depth: keep crawlers off the private/internal
@@ -745,6 +1044,12 @@ async function build() {
     ? `User-agent: *\nAllow: /\n\n${PROD_DISALLOW}\n\nSitemap: ${SITE}/sitemap.xml\n`
     : `User-agent: *\nDisallow: /\n`);
   await writeFile(join(ROOT, '404.html'), notFound());
+
+  // llms.txt — a plain-markdown brief for AI answer engines, which quote
+  // schools' prices and group sizes constantly and do better from one
+  // unambiguous source than from five localised pages. Generated from the same
+  // content and rate cards the pages render, so it cannot drift from them.
+  if (PROD) await writeFile(join(ROOT, 'llms.txt'), llmsTxt());
   // root redirect
   await writeFile(join(ROOT, 'index.html'), `<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">${PROD ? '' : '<meta name="robots" content="noindex">'}<title>Coco Surf School</title><link rel="icon" href="assets/images/favicon-32.png" sizes="32x32" type="image/png"><script>var s={fr:1,en:1,nl:1,de:1,es:1},l=(navigator.languages||[navigator.language||'fr']),p='fr';for(var i=0;i<l.length;i++){var x=(l[i]||'').slice(0,2).toLowerCase();if(s[x]){p=x;break}}location.replace('./'+p+'/')</script></head><body><p style="font-family:sans-serif;text-align:center;padding:2rem">Coco Surf School — <a href="./fr/">Français</a> · <a href="./en/">English</a> · <a href="./nl/">Nederlands</a></p></body></html>\n`);
   await copyStaticAssets();

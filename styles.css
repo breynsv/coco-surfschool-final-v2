@@ -60,7 +60,11 @@
   --ink-soft:    #4C635C;   /* body text (AA on cream) */
   --coral:       #E9A899;
   --coral-soft:  #F5D3CA;
-  --coral-deep:  #B0543F;   /* accent text / details — darkened for WCAG AA on cream/white */
+  /* Accent text / details. Was #B0543F, which cleared AA on white (5.02:1) but
+     NOT on the --cream-2 tint the breadcrumb bar sits on: 4.37:1 against the
+     4.5 requirement, so the "Accueil" crumb failed on every interior page.
+     This is 5.48:1 on white and 4.78:1 on --cream-2. */
+  --coral-deep:  #A94E37;
   --seafoam-deep:#3F6957;   /* readable variant of seafoam (>=4.5:1 on white/cream/mint) */
   --gold:        #E4B24C;   /* soft amber review stars */
   --white:       #FFFFFF;
@@ -343,7 +347,10 @@ h1, h2, h3, h4 {
 .rate-card.featured { background: linear-gradient(175deg, var(--mint), #fff 80%); border-color: var(--mint-2); }
 .rate-card .rate-head { display: flex; align-items: baseline; justify-content: space-between; gap: .6rem; margin-bottom: .2rem; }
 .rate-card h3 { font-size: 1.3rem; margin: 0; }
-.rate-card .flag { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--coral-deep); background: var(--coral-soft); padding: .25rem .6rem; border-radius: 100px; }
+/* The "most popular" chip sits on --coral-soft, a far darker ground than the
+   cream --coral-deep was tuned for: it lands at 3.93:1 there, under the 4.5
+   this 11.5px bold text needs. This darker coral is 5.21:1 on --coral-soft. */
+.rate-card .flag { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #8F3E2A; background: var(--coral-soft); padding: .25rem .6rem; border-radius: 100px; }
 .rate-card .sub { font-size: .86rem; color: var(--ink-soft); margin: 0 0 1.1rem; }
 .price-list { list-style: none; margin: 0 0 1.2rem; padding: 0; }
 .price-list li { display: flex; justify-content: space-between; gap: 1rem; padding: .55rem 0; border-bottom: 1px solid var(--mint-line); font-size: .93rem; }
@@ -361,7 +368,9 @@ h1, h2, h3, h4 {
 /* Rental price tables */
 .rental-table-wrap { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1px solid rgba(180,211,196,.4); }
 .rental-table { width: 100%; border-collapse: collapse; background: var(--white); min-width: 480px; }
-.rental-table thead th { background: var(--seafoam); color: #fff; text-align: right; padding: .95rem 1.15rem; font-family: var(--font-body); font-weight: 700; font-size: .78rem; letter-spacing: .05em; text-transform: uppercase; }
+/* --seafoam is a pale mint: white on it is 2.13:1, well under the 4.5 these
+   12.5px caps need. --seafoam-deep exists for exactly this and gives 6.23:1. */
+.rental-table thead th { background: var(--seafoam-deep); color: #fff; text-align: right; padding: .95rem 1.15rem; font-family: var(--font-body); font-weight: 700; font-size: .78rem; letter-spacing: .05em; text-transform: uppercase; }
 .rental-table thead th:first-child { text-align: left; }
 .rental-table tbody th { text-align: left; padding: .9rem 1.15rem; font-weight: 600; color: var(--ink); font-family: var(--font-display); font-size: 1.02rem; }
 .rental-table tbody td { text-align: right; padding: .9rem 1.15rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
