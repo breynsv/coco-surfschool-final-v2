@@ -66,13 +66,21 @@ test('the homepage lesson cards quote the rate card, not a stale copy', () => {
   }
 });
 
-test('the homepage hero "from" figure is a price that exists', () => {
+/**
+ * The hero says "from X per person", so X must be the cheapest lesson anyone
+ * can actually buy — not the headline formula's price. It quoted the deluxe
+ * rate while a cheaper group lesson existed, which advertises a higher entry
+ * price than the school really has; in France a "à partir de" that is not the
+ * real minimum is a consumer-protection issue, not just a weaker hook.
+ * Decision: the hero tracks the minimum (Sven, 2026-08-12).
+ */
+test('the homepage hero quotes the cheapest lesson, not the headline one', () => {
   for (const lang of LANGS) {
     const s = singlesOf(C[lang]);
     const facts = C[lang].pages.home.hero.facts.map(f => euros(f.b)[0]).filter(Number.isFinite);
     assert.equal(facts.length, 1, `${lang}: expected exactly one priced hero fact, got ${facts.length}`);
-    assert.ok([s.deluxe, s.group].includes(facts[0]),
-      `${lang}: hero quotes ${facts[0]} €, which is neither the deluxe (${s.deluxe}) nor the group (${s.group}) price`);
+    assert.equal(facts[0], Math.min(s.deluxe, s.group),
+      `${lang}: hero says "from ${facts[0]} €" but the cheapest lesson is ${Math.min(s.deluxe, s.group)} €`);
   }
 });
 
