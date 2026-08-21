@@ -294,3 +294,47 @@ test('GET reports the dormant layers as dormant', async () => {
   assert.equal(body.protections.turnstile, false);
   assert.equal(body.protections.resendConfigured, false);
 });
+
+// --- newsletter opt-in ------------------------------------------------------
+//
+// There is no list system behind this form: the enquiry email IS the record of
+// consent. So the opt-in has to be legible in the mail Annelies opens, and an
+// absent or unticked box must read as an explicit "no" rather than as silence —
+// otherwise a message that never asked and a message that asked and was refused
+// look identical, and the difference is exactly what GDPR consent turns on.
+
+test('a ticked opt-in is reported in the email as a yes', async () => {
+  await withStubbedResend(async (calls) => {
+    const res = await onRequestPost({ request: req({ body: { ...GOOD, consent: true } }), env: ENV });
+    assert.equal(res.status, 200);
+    assert.match(calls[0].body.text, /News opt-in: YES/);
+    assert.match(calls[0].body.html, /News opt-in:<\/b> YES/);
+  });
+});
+
+test('an unticked opt-in is reported as a no, not omitted', async () => {
+  await withStubbedResend(async (calls) => {
+    const res = await onRequestPost({ request: req({ body: { ...GOOD, consent: false } }), env: ENV });
+    assert.equal(res.status, 200);
+    assert.match(calls[0].body.text, /News opt-in: no/);
+    assert.doesNotMatch(calls[0].body.text, /YES/);
+  });
+});
+
+test('a message with no consent field at all still reports a no', async () => {
+  await withStubbedResend(async (calls) => {
+    const res = await onRequestPost({ request: req(), env: ENV });
+    assert.equal(res.status, 200);
+    assert.match(calls[0].body.text, /News opt-in: no/);
+  });
+});
+
+test('the checkbox value "1" counts as a yes', async () => {
+  // Belt and braces: script.js sends a real boolean, but the checkbox itself
+  // carries value="1", so anything posting the form natively sends the string.
+  await withStubbedResend(async (calls) => {
+    const res = await onRequestPost({ request: req({ body: { ...GOOD, consent: '1' } }), env: ENV });
+    assert.equal(res.status, 200);
+    assert.match(calls[0].body.text, /News opt-in: YES/);
+  });
+});

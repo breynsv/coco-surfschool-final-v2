@@ -8,7 +8,7 @@ const CARDS = [
 export default {
   waText: 'Hello Coco Surf School, I’d love to book a surf lesson.',
   ui: {
-    nav: { lessons: 'Lessons &amp; rates', coach: 'Coach', stay: 'Stay', rental: 'Rental', srilanka: 'Sri Lanka', contact: 'Contact', learn: 'Learn to surf' },
+    nav: { lessons: 'Lessons &amp; rates', coach: 'Coach', stay: 'Stay', rental: 'Rental', srilanka: 'Sri Lanka', contact: 'Contact', learn: 'Learn to surf', faq: 'FAQ', legal: 'Legal notice', privacy: 'Privacy' },
     navLabel: 'Main navigation', book: 'Book now', langLabel: 'Language', menuOpen: 'Open menu',
     crumbHome: 'Home', footTagline: 'Surf school in Seignosse &amp; Hossegor. Quality over quantity — small-group lessons with Annelies.', footNav: 'Explore', langWord: 'Language',
   },
@@ -78,6 +78,9 @@ export default {
       title: 'Contact &amp; booking — Coco Surf School Hossegor &amp; Seignosse', desc: 'Book your surf lesson at Coco Surf School. Phone +33 6 47 45 42 65, email cocobosurfschool@gmail.com. 30% deposit.', h1: 'Contact', crumb: 'Contact',
       eyebrow: 'Contact', lead: 'The school welcomes you in Seignosse, Hossegor and Capbreton. Write to us to book your lesson or ask a question — we’ll be happy to reply.',
       phone: 'Phone', where: 'Where', deposit: 'A 30% deposit is requested on booking. Payment by bank transfer or cash.', fName: 'Name', fEmail: 'Email', fMsg: 'Message', fPlaceholder: 'Which lesson interests you? How many people? Which dates?', send: 'Send', fSending: 'Sending…', fOk: 'Thanks! We’ll be in touch soon.', fErr: 'Something went wrong. Please email us at cocobosurfschool@gmail.com.', faqTitle: 'Frequently asked questions',
+      fConsent: 'I’d like to get occasional news from the school (new dates, offers). Optional.',
+      fPrivacy: 'Your name, email and message are used to answer your enquiry and kept for two years. Details:',
+      faqMore: 'See all frequently asked questions',
       h1: 'Come surf with Coco Surf School',
       faq: [
         { q: 'Where do the surf lessons take place?', a: 'Coco Surf School is a mobile school between Hossegor and Seignosse: the best spot is chosen for your level and the conditions. In summer the school is based at Seignosse, Les Bourdaines.' },
@@ -110,6 +113,74 @@ export default {
       eyebrow: 'For beginners', h1html: 'Learn to <em>surf</em>', lead: 'Never surfed? No worries. Here’s exactly how your first lesson works, what’s included and how quickly you progress.', cta1: 'Book your first lesson', cta2: 'See rates', img: 'a29fce_4b942950b2834ef2ad4e3191df3d547a.jpg', imgAlt: 'Students learning to surf in the white water',
       body: '<p class="lead">Surfing is one of the finest feelings there is — and you don’t need experience to start. At Coco Surf School you learn in a small group of 6 maximum, so the coach is with you from your very first wave.</p><h2>Your first lesson, step by step</h2><p>A lesson lasts 1h30 in the water — allow ±2h in total. We start on the beach with a warm-up and the basics — lying on the board, paddling, standing up. Then we head into the white water (the already-broken waves, near the shore), the safest and easiest place for your first rides. Most beginners get to their feet within the first few lessons.</p><h2>What’s included</h2><ul class="ticks"><li>Board and wetsuit — always included.</li><li>A certified coach, in a group of 6 maximum (8 on request).</li><li>The most beginner-friendly beach, chosen for the conditions of the day.</li></ul><h2>What to bring</h2><p>A swimsuit under the wetsuit, a towel, sunscreen and water. We take care of the rest.</p><h2>How quickly do you progress?</h2><p>Small groups = more coaching and faster progression. A <strong>little surf trip (3 lessons)</strong> or a <strong>5-day camp</strong> helps you really take off.</p>',
       aside: { h: 'Your first lesson', p: 'Small groups · all levels · gear included · 1h30.', b1: 'Book a lesson', b2: 'WhatsApp' },
+    },
+    faq: {
+      title: 'Learning to surf — frequently asked questions | Coco Surf School', desc: 'Do you need to swim? From what age? How many lessons before you stand up? Annelies answers the questions beginners ask before their first surf lesson.', h1: 'Frequently asked questions', crumb: 'FAQ',
+      eyebrow: 'You are wondering…', h1html: 'The questions <em>everyone</em> asks', lead: 'These answers are Annelies’s own, the way she explains it on the phone. If your question is not here, just write to us.',
+      cta1: 'Book a lesson', cta2: 'See the prices',
+      outro: 'Another question? Send us a message — we always reply.',
+      faq: [
+        { g: 'Before you start', q: 'Do you need to be able to swim to take a surf lesson?', a: 'As an adult, yes: you need to be able to swim. For very young children, from 5 to 9, it is not necessary — at that age we stay in the whitewater close to shore and we never go into deep water anyway.' },
+        { g: 'Before you start', q: 'From what age can children join a lesson?', a: 'From about 5 or 6, depending on how keen the child is to join in and on how they are developing. Every child is different.' },
+        { g: 'Before you start', q: 'Am I too old to learn to surf?', a: 'You are never too old to learn to surf. Many of my students start after 40 or 50 and have the time of their lives. Do not hesitate: with the right coaching we have an enormous amount of fun. It is not about being the best, it is about enjoying yourself — as we say, the best surfer is the one having the most fun. Surfers from 5 to 120 welcome.' },
+        { g: 'Before you start', q: 'How can I prepare for my surf lessons?', a: 'The fitter you are, the easier learning to surf becomes. You can prepare by training in a gym with a personal coach beforehand, or simply by swimming regularly before you come.' },
+        { g: 'Your lesson', q: 'How many lessons before I can stand up on a wave?', a: 'We recommend a minimum of 3 lessons to get standing up in the whitewater reliably, and a 5-day course if you really want to master it — with, at the end of the course, the chance to surf your first unbroken wave.' },
+        { g: 'Your lesson', q: 'What should I bring to a surf lesson?', a: 'Your swimsuit or boardshorts, sun cream, water and your good vibes. The board and the wetsuit are provided.' },
+        { g: 'Your lesson', q: 'What happens if the weather is bad or the sea is too rough?', a: 'In bad weather lessons go ahead: you are going to get wet anyway, and rain is not a problem. If the waves are too big — red flag — the lesson is moved to another day, or refunded if moving it is not possible.' },
+        { g: 'Where and when', q: 'What is the best time of year to learn to surf in the Landes?', a: 'The summer months are the warmest, with nice small waves and warm water. May, June and September are very good too. In April and November you can certainly still surf, but the water is cooler and the temperatures are less predictable.' },
+        { g: 'Where and when', q: 'When is the surf school open?', a: 'We teach from April through November, every day of the week. Times depend on the tide, the ocean conditions and your level, so they are agreed with you when you book.' },
+        { g: 'Where and when', q: 'Why is Les Bourdaines in Seignosse so good for beginners?', a: 'Les Bourdaines is a beach with a gentle sandbank and long whitewater waves — exactly what you need to learn to surf safely. For your first waves you go no deeper than hip height, and there are no rocks. It is also an excellent beach for experienced surfers: there is something for everyone.' },
+        { g: 'Where and when', q: 'What is the difference between Hossegor and Seignosse for a beginner?', a: 'Seignosse has more beaches, so there is often more room to surf. Hossegor is excellent on days when the waves in Seignosse are too big: one of its beaches takes smaller waves on those days, and that is where we arrange to meet. That is the advantage of being a mobile surf school.' },
+      ],
+    },
+    legal: {
+      title: 'Legal notice — Coco Surf School', desc: 'Legal notice for coco-surfschool.com: publisher, SIRET registration, hosting provider and terms of use.', h1: 'Legal notice', crumb: 'Legal notice',
+      eyebrow: 'Legal information', h1html: 'Legal <em>notice</em>', lead: 'Who publishes this site, and how to reach us.',
+      idTitle: 'Site publisher',
+      rowLabels: { publisher: 'Publisher', status: 'Legal form', address: 'Address', siret: 'SIRET', ape: 'APE / NAF code', vat: 'VAT', registered: 'Registered', director: 'Publication director', phone: 'Phone', email: 'Email', host: 'Hosting provider' },
+      statusText: 'Sole trader — auto-entrepreneur, liberal profession (France)',
+      apeText: 'Sports and recreation instruction',
+      vatText: 'VAT not applicable, article 293 B of the French General Tax Code',
+      body: `<h2>Regulated activity</h2>
+<p>Teaching surfing for payment is a regulated activity in France. Annelies Debo holds a carte professionnelle d’éducateur sportif (surf) and the PSE1 first-aid certificate, as well as a Master in Physical Education and an ISA surf coaching qualification. The details are on the <a href="{coach}">Coach</a> page.</p>
+<h2>Intellectual property</h2>
+<p>All content on this site — text, photographs, logo and graphic elements — belongs to Coco Surf School unless stated otherwise. Reproduction or reuse, in whole or in part, without prior written permission is not allowed.</p>
+<h2>Personal data</h2>
+<p>Anything you send us through the contact form is handled as described in our <a href="{privacy}">privacy policy</a>.</p>
+<h2>Complaints</h2>
+<p>If something goes wrong, write to us first — we always look for an amicable solution. You can reach us by email or phone via the <a href="{contact}">Contact</a> page.</p>
+<h2>Credits</h2>
+<p>Tide times: Stormglass. Weather and swell: Open-Meteo. Photographs: Coco Surf School.</p>`,
+      updated: 'Last updated: 21 August 2026.',
+    },
+    privacy: {
+      title: 'Privacy policy — Coco Surf School', desc: 'What happens to your message: what we collect, how long we keep it, which processors are involved and what your rights are. This site sets no cookies.', h1: 'Privacy policy', crumb: 'Privacy',
+      eyebrow: 'Your data', h1html: 'Privacy <em>policy</em>', lead: 'This site sets no cookies and does not track you. Here, in plain language, is what happens to what you write to us.',
+      body: `<h2>Who is responsible for your data?</h2>
+<p>Annelies Debo, trading as Coco Surf School, 47 E avenue de la Marquèze, 40510 Seignosse, France. Questions? <a href="mailto:cocobosurfschool@gmail.com">cocobosurfschool@gmail.com</a>. The full details are in the <a href="{legal}">legal notice</a>.</p>
+<h2>What do we collect?</h2>
+<p>Only what you type into the contact form yourself: your name, your email address and your message. Nothing else. There is no account on this site, no profile and no advertising tracking.</p>
+<h2>Why, and on what legal basis?</h2>
+<ul class="ticks">
+<li><strong>To answer your enquiry</strong> and prepare your booking — legal basis: steps taken at your request before entering into a contract (GDPR art. 6.1.b).</li>
+<li><strong>To send you occasional news from the school</strong>, such as new dates or an offer — only if you ticked the box for it. Legal basis: your consent (GDPR art. 6.1.a). You can withdraw it at any time, simply by replying to one of our emails.</li>
+</ul>
+<h2>How long do we keep it?</h2>
+<p><strong>Two years</strong> from our last exchange. After that your message and your details are deleted. If you signed up for news from the school, we keep your address until you unsubscribe.</p>
+<h2>Who else sees it?</h2>
+<p>Two technical providers, and nobody else. Your data is never sold, rented or traded.</p>
+<ul class="ticks">
+<li><strong>Resend</strong> delivers the form message to our mailbox. It is based in the United States; the transfer is covered by the European Commission’s standard contractual clauses.</li>
+<li><strong>Cloudflare</strong> hosts and serves the site. Cloudflare processes your IP address for site security and abuse protection.</li>
+</ul>
+<h2>The surf report on the home page</h2>
+<p>The home page shows today’s conditions at Les Bourdaines. Your browser requests that data directly from <strong>Open-Meteo</strong>, which means your IP address reaches that service. Open-Meteo sets no cookies and builds no visitor profile. The tide times, by contrast, are pre-loaded on our own server and involve no external call at all.</p>
+<h2>Cookies</h2>
+<p>This site sets <strong>no cookies</strong>, uses no local storage, and embeds no analytics, advertising pixels or third-party content. That is also why you are not asked to accept a consent banner.</p>
+<h2>Your rights</h2>
+<p>You have the right of access, rectification, erasure, restriction, objection and portability, and the right to withdraw your consent at any time. Write to <a href="mailto:cocobosurfschool@gmail.com">cocobosurfschool@gmail.com</a> and we will reply within one month.</p>
+<p>If our answer does not satisfy you, you can lodge a complaint with the French data protection authority CNIL, 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07 — <a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a> — or with the authority in your own country.</p>`,
+      updated: 'Last updated: 21 August 2026.',
     },
     book: {
       title: 'Book a surf lesson — Coco Surf School', desc: 'Book your surf lesson online at Coco Surf School: pick a session, your party size and your formula.', h1: 'Book a lesson', crumb: 'Book',

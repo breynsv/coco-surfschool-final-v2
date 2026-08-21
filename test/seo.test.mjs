@@ -102,10 +102,17 @@ const jsonLdOf = (html) =>
     .map(b => JSON.parse(b.replace(/<\/?script[^>]*>/g, '')));
 
 const CONTACT_SLUGS = { fr: 'contact', en: 'contact', nl: 'contact', de: 'kontakt', es: 'contacto' };
+const FAQ_SLUGS = { fr: 'questions-frequentes', en: 'faq', nl: 'veelgestelde-vragen', de: 'haeufige-fragen', es: 'preguntas-frecuentes' };
+
+/** Every page on the site that renders a FAQ, as [lang, slug] pairs. */
+const FAQ_PAGES = [
+  ...Object.entries(CONTACT_SLUGS),
+  ...Object.entries(FAQ_SLUGS),
+];
 
 test('FAQ schema covers every rendered FAQ item, in all languages', async () => {
   const out = await builtTo({ PROD: '1' });
-  for (const [lang, slug] of Object.entries(CONTACT_SLUGS)) {
+  for (const [lang, slug] of FAQ_PAGES) {
     const html = await readFile(join(out, lang, slug, 'index.html'), 'utf8');
     const rendered = (html.match(/<details class="faq-item/g) || []).length;
     const faq = jsonLdOf(html).find(o => o['@type'] === 'FAQPage');
@@ -118,7 +125,7 @@ test('FAQ schema covers every rendered FAQ item, in all languages', async () => 
 
 test('every FAQ answer in schema matches the rendered answer verbatim', async () => {
   const out = await builtTo({ PROD: '1' });
-  for (const [lang, slug] of Object.entries(CONTACT_SLUGS)) {
+  for (const [lang, slug] of FAQ_PAGES) {
     const html = await readFile(join(out, lang, slug, 'index.html'), 'utf8');
     const faq = jsonLdOf(html).find(o => o['@type'] === 'FAQPage');
     for (const item of faq.mainEntity) {
