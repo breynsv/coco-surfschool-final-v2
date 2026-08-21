@@ -256,15 +256,37 @@ test('the business address and coordinates match the Google Business Profile', a
 });
 
 /**
- * Opening hours are NOT published, on purpose: only the 20:00 closing time is
- * confirmed. If someone adds them later this test should be updated with the
- * real pattern, not deleted — hours that are wrong send people to a beach for
- * nothing, which is worse than no hours at all.
+ * Hours are published as a SEASON and nothing more.
+ *
+ * Annelies confirmed on 2026-08-21 that the school teaches April to November,
+ * seven days a week. She did not give daily opening and closing times, and
+ * there is a reason they are not a fixed pair of numbers: lesson times follow
+ * the tide, so they are agreed per booking.
+ *
+ * So this test replaces the older "publish no hours at all" guard with the
+ * narrower thing that actually protects visitors: the markup may say WHICH DAYS
+ * and WHICH MONTHS, and must never invent a clock time. An `opens` of 09:00
+ * nobody confirmed is what sends someone to a beach for nothing.
  */
-test('no opening hours are published while they are unconfirmed', async () => {
+test('opening hours state the season, and never an unconfirmed clock time', async () => {
   for (const lang of LANGS) {
     const biz = (await ld(`${lang}/index.html`)).find(b => b['@type'] === 'SportsActivityLocation');
-    assert.ok(!biz.openingHoursSpecification && !biz.openingHours,
-      `${lang}: opening hours are published — confirm the full weekly pattern against the Google profile first`);
+    assert.ok(!biz.openingHours, `${lang}: the flat openingHours form is not what this site publishes`);
+
+    const spec = biz.openingHoursSpecification;
+    assert.ok(Array.isArray(spec) && spec.length === 1, `${lang}: expected exactly one hours specification`);
+    const s = spec[0];
+
+    assert.equal(s['@type'], 'OpeningHoursSpecification');
+    assert.equal(s.dayOfWeek.length, 7, `${lang}: the school teaches every day of the week`);
+
+    // April to November, on the year this build is for — a December build must
+    // roll forward rather than ship a validThrough already in the past.
+    assert.match(s.validFrom, /^\d{4}-04-01$/, `${lang}: season should open on 1 April, got ${s.validFrom}`);
+    assert.match(s.validThrough, /^\d{4}-11-30$/, `${lang}: season should close on 30 November, got ${s.validThrough}`);
+    assert.ok(new Date(s.validThrough) > new Date(), `${lang}: validThrough ${s.validThrough} is already in the past`);
+
+    assert.ok(!('opens' in s) && !('closes' in s),
+      `${lang}: a clock time is published that Annelies never confirmed`);
   }
 });

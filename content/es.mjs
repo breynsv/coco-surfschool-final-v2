@@ -8,7 +8,7 @@ const CARDS = [
 export default {
   waText: 'Hola Coco Surf School, me gustaría reservar una clase de surf.',
   ui: {
-    nav: { lessons: 'Clases &amp; tarifas', coach: 'Coach', stay: 'Alojamiento', rental: 'Alquiler', contact: 'Contacto', learn: 'Aprender a surfear' },
+    nav: { lessons: 'Clases &amp; tarifas', coach: 'Coach', stay: 'Alojamiento', rental: 'Alquiler', contact: 'Contacto', learn: 'Aprender a surfear', faq: 'Preguntas frecuentes', legal: 'Aviso legal', privacy: 'Privacidad' },
     navLabel: 'Navegación principal', book: 'Reservar', langLabel: 'Selección de idioma', menuOpen: 'Abrir menú',
     crumbHome: 'Inicio', footTagline: 'Escuela de surf en Seignosse &amp; Hossegor. Calidad antes que cantidad — clases en grupos pequeños con Annelies.', footNav: 'Descubrir', langWord: 'Idioma',
   },
@@ -68,6 +68,9 @@ export default {
       title: 'Contacto &amp; reserva — Coco Surf School Hossegor &amp; Seignosse', desc: 'Reserva tu clase de surf en Coco Surf School. Teléfono +33 6 47 45 42 65, email cocobosurfschool@gmail.com. Anticipo del 30 %.', h1: 'Contacto', crumb: 'Contacto',
       eyebrow: 'Contacto', lead: 'La escuela te acoge en Seignosse, Hossegor y Capbreton. Escríbenos para reservar tu clase o hacer una pregunta — te respondemos encantados.',
       phone: 'Teléfono', where: 'Dónde', deposit: 'Se pide un anticipo del 30 % al reservar. Pago por transferencia bancaria o en efectivo.', fName: 'Nombre', fEmail: 'Email', fMsg: 'Mensaje', fPlaceholder: '¿Qué clase te interesa? ¿Cuántas personas? ¿Qué fechas?', send: 'Enviar', fSending: 'Enviando…', fOk: '¡Gracias! Te responderemos muy pronto.', fErr: 'Algo salió mal. Escríbenos directamente a cocobosurfschool@gmail.com.', faqTitle: 'Preguntas frecuentes',
+      fConsent: 'Quiero recibir de vez en cuando novedades de la escuela (nuevas fechas, ofertas). Opcional.',
+      fPrivacy: 'Usamos tu nombre, email y mensaje para responder a tu consulta y los guardamos dos años. Más información:',
+      faqMore: 'Ver todas las preguntas frecuentes',
       h1: 'Ven a surfear con Coco Surf School',
       faq: [
         { q: '¿Dónde tienen lugar las clases de surf?', a: 'Coco Surf School es una escuela móvil entre Hossegor y Seignosse: el mejor spot para tu nivel se elige según las condiciones. En verano la escuela está en Seignosse, Les Bourdaines.' },
@@ -100,6 +103,74 @@ export default {
       eyebrow: 'Para principiantes', h1html: 'Aprender a <em>surfear</em>', lead: '¿Nunca has surfeado? Sin problema. Esto es exactamente cómo transcurre tu primera clase, qué está incluido y a qué velocidad progresas.', cta1: 'Reserva tu primera clase', cta2: 'Ver tarifas', img: 'a29fce_4b942950b2834ef2ad4e3191df3d547a.jpg', imgAlt: 'Alumnos aprendiendo a surfear en la espuma',
       body: '<p class="lead">Surfear es una de las mejores sensaciones que existen — y no necesitas experiencia para empezar. En Coco Surf School aprendes en un grupo pequeño de 6 máximo, para que el coach te acompañe desde tu primera ola.</p><h2>Tu primera clase, paso a paso</h2><p>Una clase dura 1h30 en el agua — cuenta con ±2 h en total. Empezamos en la playa con un calentamiento y lo básico — tumbarse en la tabla, remar, ponerse de pie. Después entramos en la espuma (las olas ya rotas, cerca de la orilla), el lugar más seguro y fácil para tus primeros deslizamientos. La mayoría de los principiantes se ponen de pie durante las primeras clases.</p><h2>Qué está incluido</h2><ul class="ticks"><li>Tabla y neopreno — siempre incluidos.</li><li>Una coach diplomada, en un grupo de 6 máximo (8 a petición).</li><li>La playa más adecuada para principiantes, elegida según las condiciones del día.</li></ul><h2>Qué traer</h2><p>Un bañador bajo el neopreno, una toalla, crema solar y agua. Del resto nos ocupamos nosotros.</p><h2>¿A qué velocidad se progresa?</h2><p>Grupos pequeños = más coaching y una progresión más rápida. Un <strong>pequeño surf trip (3 clases)</strong> o un <strong>curso de 5 días</strong> te ayuda a despegar de verdad.</p>',
       aside: { h: 'Tu primera clase', p: 'Grupos pequeños · todos los niveles · material incluido · 1h30.', b1: 'Reservar una clase', b2: 'WhatsApp' },
+    },
+    faq: {
+      title: 'Aprender a surfear — preguntas frecuentes | Coco Surf School', desc: '¿Hay que saber nadar? ¿Desde qué edad? ¿Cuántas clases hacen falta? Annelies responde a las preguntas que se hacen los principiantes antes de su primera clase de surf.', h1: 'Preguntas frecuentes', crumb: 'Preguntas frecuentes',
+      eyebrow: 'Te preguntas…', h1html: 'Las preguntas que <em>todo el mundo</em> hace', lead: 'Las respuestas son de Annelies, tal como las explica por teléfono. Si tu pregunta no está aquí, escríbenos sin problema.',
+      cta1: 'Reservar una clase', cta2: 'Ver las tarifas',
+      outro: '¿Otra pregunta? Escríbenos, siempre respondemos.',
+      faq: [
+        { g: 'Antes de empezar', q: '¿Hay que saber nadar para dar una clase de surf?', a: 'Los adultos sí: hay que saber nadar. Para los más pequeños, de 5 a 9 años, no hace falta — a esa edad nos quedamos en la espuma cerca de la orilla y nunca vamos a aguas profundas.' },
+        { g: 'Antes de empezar', q: '¿A partir de qué edad pueden participar los niños?', a: 'A partir de los 5 o 6 años, según las ganas que tenga el niño de participar y según su desarrollo. Cada niño es diferente.' },
+        { g: 'Antes de empezar', q: '¿Soy demasiado mayor para aprender a surfear?', a: 'Nunca se es demasiado mayor para aprender a surfear. Muchos de mis alumnos empiezan después de los 40 o los 50 y se lo pasan como nunca. No hay que dudarlo: con una buena guía nos divertimos muchísimo. No se trata de ser el mejor, se trata de disfrutar — como decimos, the best surfer is the one having the most fun. Surfistas de 5 a 120 años bienvenidos.' },
+        { g: 'Antes de empezar', q: '¿Cómo puedo prepararme antes de mis clases de surf?', a: 'Cuanto mejor sea tu forma física, más fácil resulta aprender. Puedes prepararte entrenando antes en un gimnasio con un entrenador personal, o simplemente nadando con regularidad antes de venir.' },
+        { g: 'Tu clase', q: '¿Cuántas clases hacen falta para ponerse de pie en una ola?', a: 'Recomendamos un mínimo de 3 clases para levantarse con regularidad en la espuma, y un curso de 5 días si de verdad quieres dominarlo — con la posibilidad, al final del curso, de surfear tu primera ola sin romper.' },
+        { g: 'Tu clase', q: '¿Qué hay que llevar a una clase de surf?', a: 'Tu bañador, crema solar, agua y tus good vibes. La tabla y el neopreno los ponemos nosotros.' },
+        { g: 'Tu clase', q: '¿Qué pasa si hace mal tiempo o el mar está muy movido?', a: 'Con mal tiempo las clases se dan igual: de todos modos te vas a mojar, y la lluvia no es problema. Si las olas son demasiado grandes — bandera roja — la clase se traslada a otro día, o se devuelve el importe si no es posible cambiarla.' },
+        { g: 'Dónde y cuándo', q: '¿Cuál es la mejor época para aprender a surfear en las Landas?', a: 'Los meses de verano son los más cálidos, con olas pequeñas y agradables y agua templada. Mayo, junio y septiembre también son muy buenos. En abril y noviembre se puede surfear perfectamente, pero el agua está más fresca y las temperaturas son menos previsibles.' },
+        { g: 'Dónde y cuándo', q: '¿Cuándo está abierta la escuela de surf?', a: 'Damos clases de abril a noviembre, todos los días de la semana. Los horarios dependen de la marea, del estado del mar y de tu nivel, así que se acuerdan contigo al reservar.' },
+        { g: 'Dónde y cuándo', q: '¿Por qué Les Bourdaines, en Seignosse, es tan buena para principiantes?', a: 'Les Bourdaines es una playa con un banco de arena suave y olas de espuma largas — justo lo que hace falta para aprender a surfear con total seguridad. Para tus primeras olas no pasas de la altura de la cadera, y no hay rocas. Además es una playa excelente para surfistas con experiencia: hay para todos los niveles.' },
+        { g: 'Dónde y cuándo', q: '¿Qué diferencia hay entre Hossegor y Seignosse para quien empieza?', a: 'Seignosse tiene más playas, así que a menudo hay más sitio para surfear. Hossegor es excelente los días en que las olas de Seignosse son demasiado grandes: una de sus playas recibe entonces olas más pequeñas, y esos días quedamos allí. Esa es la ventaja de ser una escuela de surf itinerante.' },
+      ],
+    },
+    legal: {
+      title: 'Aviso legal — Coco Surf School', desc: 'Aviso legal de coco-surfschool.com: titular, número SIRET, alojamiento y condiciones de uso.', h1: 'Aviso legal', crumb: 'Aviso legal',
+      eyebrow: 'Información legal', h1html: 'Aviso <em>legal</em>', lead: 'Quién edita esta web y cómo contactarnos.',
+      idTitle: 'Titular de la web',
+      rowLabels: { publisher: 'Titular', status: 'Forma jurídica', address: 'Dirección', siret: 'SIRET', ape: 'Código APE / NAF', vat: 'IVA', registered: 'Alta', director: 'Responsable de la publicación', phone: 'Teléfono', email: 'Email', host: 'Alojamiento' },
+      statusText: 'Empresaria individual — auto-entrepreneur, profesión liberal (Francia)',
+      apeText: 'Enseñanza de disciplinas deportivas y actividades de ocio',
+      vatText: 'IVA no aplicable, artículo 293 B del Código general de impuestos francés',
+      body: `<h2>Actividad regulada</h2>
+<p>Enseñar surf a cambio de una remuneración es una actividad regulada en Francia. Annelies Debo ejerce con una carte professionnelle d’éducateur sportif (surf) y cuenta con el certificado de primeros auxilios PSE1, además de un máster en Educación Física y una cualificación ISA de entrenadora de surf. El detalle está en la página <a href="{coach}">Coach</a>.</p>
+<h2>Propiedad intelectual</h2>
+<p>Todo el contenido de esta web — textos, fotografías, logotipo y elementos gráficos — pertenece a Coco Surf School, salvo indicación en contrario. Queda prohibida su reproducción o reutilización, total o parcial, sin autorización previa por escrito.</p>
+<h2>Datos personales</h2>
+<p>Lo que nos envías a través del formulario de contacto se trata como se describe en nuestra <a href="{privacy}">política de privacidad</a>.</p>
+<h2>Reclamaciones</h2>
+<p>Si algo no va bien, escríbenos primero: siempre buscamos una solución amistosa. Puedes contactarnos por email o por teléfono desde la página <a href="{contact}">Contacto</a>.</p>
+<h2>Créditos</h2>
+<p>Horarios de marea: Stormglass. Meteorología y oleaje: Open-Meteo. Fotografías: Coco Surf School.</p>`,
+      updated: 'Última actualización: 21 de agosto de 2026.',
+    },
+    privacy: {
+      title: 'Política de privacidad — Coco Surf School', desc: 'Qué pasa con tu mensaje: qué datos recogemos, cuánto tiempo los guardamos, qué proveedores intervienen y cuáles son tus derechos. Esta web no usa cookies.', h1: 'Política de privacidad', crumb: 'Privacidad',
+      eyebrow: 'Tus datos', h1html: 'Política de <em>privacidad</em>', lead: 'Esta web no usa cookies y no te rastrea. Aquí tienes, en lenguaje claro, qué ocurre con lo que nos escribes.',
+      body: `<h2>¿Quién es responsable de tus datos?</h2>
+<p>Annelies Debo, bajo el nombre comercial Coco Surf School, 47 E avenue de la Marquèze, 40510 Seignosse, Francia. ¿Dudas? <a href="mailto:cocobosurfschool@gmail.com">cocobosurfschool@gmail.com</a>. Los datos completos están en el <a href="{legal}">aviso legal</a>.</p>
+<h2>¿Qué datos recogemos?</h2>
+<p>Únicamente lo que escribes tú mismo en el formulario de contacto: tu nombre, tu dirección de email y tu mensaje. Nada más. En esta web no hay cuenta, ni perfil, ni seguimiento publicitario.</p>
+<h2>¿Para qué, y con qué base jurídica?</h2>
+<ul class="ticks">
+<li><strong>Para responder a tu consulta</strong> y preparar tu reserva — base jurídica: medidas precontractuales adoptadas a petición tuya (RGPD art. 6.1.b).</li>
+<li><strong>Para enviarte de vez en cuando novedades de la escuela</strong>, como nuevas fechas o una oferta — solo si has marcado la casilla correspondiente. Base jurídica: tu consentimiento (RGPD art. 6.1.a). Puedes retirarlo en cualquier momento, simplemente respondiendo a uno de nuestros emails.</li>
+</ul>
+<h2>¿Cuánto tiempo los guardamos?</h2>
+<p><strong>Dos años</strong> desde nuestro último contacto. Pasado ese plazo, tu mensaje y tus datos se eliminan. Si te has apuntado a las novedades de la escuela, conservamos tu dirección hasta que te des de baja.</p>
+<h2>¿Quién más los ve?</h2>
+<p>Dos proveedores técnicos, y nadie más. Tus datos no se venden, ni se alquilan, ni se intercambian.</p>
+<ul class="ticks">
+<li><strong>Resend</strong> entrega el mensaje del formulario en nuestro buzón. Está establecido en Estados Unidos; la transferencia se ampara en las cláusulas contractuales tipo de la Comisión Europea.</li>
+<li><strong>Cloudflare</strong> aloja y sirve la web. Cloudflare trata tu dirección IP por seguridad del sitio y protección frente a abusos.</li>
+</ul>
+<h2>El surf report de la portada</h2>
+<p>La portada muestra las condiciones del día en Les Bourdaines. Tu navegador pide esos datos directamente a <strong>Open-Meteo</strong>, lo que hace que tu dirección IP llegue a ese servicio. Open-Meteo no usa cookies ni construye ningún perfil de visitante. Los horarios de marea, en cambio, están precargados en nuestro propio servidor y no implican ninguna llamada externa.</p>
+<h2>Cookies</h2>
+<p>Esta web no instala <strong>ninguna cookie</strong>, no usa almacenamiento local y no incorpora herramientas de analítica, píxeles publicitarios ni contenido incrustado de terceros. Por eso tampoco se te pide aceptar ningún banner de consentimiento.</p>
+<h2>Tus derechos</h2>
+<p>Tienes derecho de acceso, rectificación, supresión, limitación, oposición y portabilidad, y puedes retirar tu consentimiento en cualquier momento. Escribe a <a href="mailto:cocobosurfschool@gmail.com">cocobosurfschool@gmail.com</a>: respondemos en el plazo de un mes.</p>
+<p>Si nuestra respuesta no te satisface, puedes reclamar ante la autoridad francesa de protección de datos, la CNIL, 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07 — <a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a> — o ante la autoridad de tu propio país.</p>`,
+      updated: 'Última actualización: 21 de agosto de 2026.',
     },
     book: {
       title: 'Reservar una clase de surf — Coco Surf School', desc: 'Reserva tu clase de surf online en Coco Surf School: elige una sesión, el número de personas y tu formula.', h1: 'Reservar una clase', crumb: 'Reservar',

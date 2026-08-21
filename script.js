@@ -178,6 +178,10 @@
         email: form.email.value || "",
         message: form.message.value || "",
         company: form.company ? form.company.value || "" : "",
+        // Newsletter opt-in. Sent as a real boolean rather than the checkbox's
+        // "1" so an unticked box is an explicit false in the email, not a
+        // missing field that reads as "we never asked".
+        consent: form.consent ? !!form.consent.checked : false,
       };
       if (btn) btn.disabled = true;
       setStatus(form.getAttribute("data-sending") || "Sending…", "pending");

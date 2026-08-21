@@ -56,10 +56,15 @@ test('production root index.html drops noindex', async () => {
   assert.doesNotMatch(await read(out, 'index.html'), /noindex/);
 });
 
+// 13 page types x 5 languages. The booking pages are withheld in production,
+// which is what the second test below checks; if this number moves, a page type
+// was added or (the failure worth catching) silently dropped.
+const PROD_URLS = 65;
+
 test('sitemap always uses the www canonical host', async () => {
   const out = await buildTo({ PROD: '1' });
   const xml = await read(out, 'sitemap.xml');
-  assert.equal((xml.match(/<loc>/g) || []).length, 50);
+  assert.equal((xml.match(/<loc>/g) || []).length, PROD_URLS);
   assert.doesNotMatch(xml, /<loc>https:\/\/coco-surfschool\.com/);
 });
 
@@ -99,7 +104,7 @@ test('preview still builds the booking pages', async () => {
 test('production sitemap excludes the booking pages', async () => {
   const out = await buildTo({ PROD: '1' });
   const xml = await read(out, 'sitemap.xml');
-  assert.equal((xml.match(/<loc>/g) || []).length, 50);
+  assert.equal((xml.match(/<loc>/g) || []).length, PROD_URLS);
   for (const slug of ['reserver', '/book/', 'reserveren', 'buchen', 'reservar']) {
     assert.ok(!xml.includes(slug), `sitemap must not reference ${slug}`);
   }

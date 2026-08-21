@@ -8,7 +8,7 @@ const CARDS = [
 export default {
   waText: 'Hallo Coco Surf School, ik wil graag een surfles boeken.',
   ui: {
-    nav: { lessons: 'Lessen &amp; tarieven', coach: 'Coach', stay: 'Verblijf', rental: 'Verhuur', srilanka: 'Sri Lanka', contact: 'Contact', learn: 'Leren surfen' },
+    nav: { lessons: 'Lessen &amp; tarieven', coach: 'Coach', stay: 'Verblijf', rental: 'Verhuur', srilanka: 'Sri Lanka', contact: 'Contact', learn: 'Leren surfen', faq: 'Veelgestelde vragen', legal: 'Wettelijke vermeldingen', privacy: 'Privacy' },
     navLabel: 'Hoofdnavigatie', book: 'Boek nu', langLabel: 'Taalkeuze', menuOpen: 'Menu openen',
     crumbHome: 'Home', footTagline: 'Surfschool in Seignosse &amp; Hossegor. Kwaliteit boven kwantiteit — lessen in kleine groepjes met Annelies.', footNav: 'Ontdek', langWord: 'Taal',
   },
@@ -78,6 +78,9 @@ export default {
       title: 'Contact &amp; reservatie — Coco Surf School Hossegor &amp; Seignosse', desc: 'Boek je surfles bij Coco Surf School. Telefoon +33 6 47 45 42 65, e-mail cocobosurfschool@gmail.com. Voorschot van 30%.', h1: 'Contact', crumb: 'Contact',
       eyebrow: 'Contact', lead: 'De school verwelkomt je in Seignosse, Hossegor en Capbreton. Schrijf ons om je les te boeken of een vraag te stellen — we antwoorden je graag.',
       phone: 'Telefoon', where: 'Waar', deposit: 'Bij reservatie wordt een voorschot van 30% gevraagd. Betalen via bankoverschrijving of cash.', fName: 'Naam', fEmail: 'E-mail', fMsg: 'Bericht', fPlaceholder: 'Welke les interesseert je? Met hoeveel personen? Welke data?', send: 'Verzenden', fSending: 'Versturen…', fOk: 'Bedankt! We nemen snel contact met je op.', fErr: 'Er ging iets mis. Mail ons rechtstreeks op cocobosurfschool@gmail.com.', faqTitle: 'Veelgestelde vragen',
+      fConsent: 'Ik ontvang graag af en toe nieuws van de surfschool (nieuwe data, aanbiedingen). Optioneel.',
+      fPrivacy: 'Je naam, e-mailadres en bericht gebruiken we om je vraag te beantwoorden en bewaren we twee jaar. Meer uitleg:',
+      faqMore: 'Bekijk alle veelgestelde vragen',
       h1: 'Kom surfen met Coco Surf School',
       faq: [
         { q: 'Waar gaan de surflessen door?', a: 'Coco Surf School is een mobiele school tussen Hossegor en Seignosse: de beste spot voor jouw niveau wordt gekozen op basis van de condities. In de zomer is de school gevestigd in Seignosse, Les Bourdaines.' },
@@ -110,6 +113,74 @@ export default {
       eyebrow: 'Voor beginners', h1html: 'Leren <em>surfen</em>', lead: 'Nog nooit gesurft? Geen zorgen. Dit is precies hoe je eerste les verloopt, wat inbegrepen is en hoe snel je vordert.', cta1: 'Boek je eerste les', cta2: 'Bekijk tarieven', img: 'a29fce_4b942950b2834ef2ad4e3191df3d547a.jpg', imgAlt: 'Leerlingen die leren surfen in het witwater',
       body: '<p class="lead">Surfen is een van de heerlijkste sensaties die er zijn — en je hebt geen ervaring nodig om te beginnen. Bij Coco Surf School leer je in een klein groepje van maximum 6, zodat de coach je vanaf je eerste golf begeleidt.</p><h2>Je eerste les, stap voor stap</h2><p>Een les duurt 1u30 in het water — reken ±2u in totaal. We starten op het strand met een opwarming en de basis — op de plank liggen, peddelen, rechtstaan. Daarna gaan we het witwater in (de golven die al gebroken zijn, dicht bij de kant), de veiligste en makkelijkste plek voor je eerste glijpartijen. De meeste beginners staan al recht tijdens de eerste lessen.</p><h2>Wat is inbegrepen</h2><ul class="ticks"><li>Board en wetsuit — altijd inbegrepen.</li><li>Een gediplomeerde coach, in een groepje van maximum 6 (8 op aanvraag).</li><li>Het strand dat het best geschikt is voor beginners, gekozen volgens de condities van de dag.</li></ul><h2>Wat je meebrengt</h2><p>Een zwempak onder de wetsuit, een handdoek, zonnecrème en water. Wij zorgen voor de rest.</p><h2>Hoe snel vorder je?</h2><p>Kleine groepjes = meer coaching en snellere progressie. Een <strong>kleine surftrip (3 lessen)</strong> of een <strong>5-daagse stage</strong> helpt je echt om door te breken.</p>',
       aside: { h: 'Je eerste les', p: 'Kleine groepjes · alle niveaus · materiaal inbegrepen · 1u30.', b1: 'Boek een les', b2: 'WhatsApp' },
+    },
+    faq: {
+      title: 'Veelgestelde vragen over leren surfen — Coco Surf School', desc: 'Moet je kunnen zwemmen? Vanaf welke leeftijd? Hoeveel lessen heb je nodig? Annelies beantwoordt de vragen die beginners stellen voor hun eerste surfles.', h1: 'Veelgestelde vragen', crumb: 'Veelgestelde vragen',
+      eyebrow: 'Je vraagt je af…', h1html: 'De vragen die <em>iedereen</em> stelt', lead: 'De antwoorden komen van Annelies zelf, zoals ze het aan de telefoon uitlegt. Staat jouw vraag er niet bij? Schrijf ons gerust.',
+      cta1: 'Een les boeken', cta2: 'Tarieven bekijken',
+      outro: 'Nog een vraag? Stuur ons een bericht, we antwoorden altijd.',
+      faq: [
+        { g: 'Voor je begint', q: 'Moet je kunnen zwemmen om surfles te volgen?', a: 'Als volwassene wel: je moet kunnen zwemmen. Voor heel kleine kinderen van 5 tot 9 jaar hoeft het niet — op die leeftijd blijven we in het schuim dicht bij de kant en gaan we sowieso niet diep.' },
+        { g: 'Voor je begint', q: 'Vanaf welke leeftijd kunnen kinderen meedoen?', a: 'Vanaf 5 à 6 jaar, afhankelijk van hun zin om mee te doen en van hun ontwikkeling. Elk kind is anders.' },
+        { g: 'Voor je begint', q: 'Ben ik te oud om nog te leren surfen?', a: 'Je bent nooit te oud om te leren surfen. Veel van mijn leerlingen starten na hun 40 of 50 en hebben the time of their life. Niet twijfelen dus: met de juiste begeleiding hebben we ontzettend veel plezier. Het gaat er niet om de beste te zijn, het gaat om fun — zoals we zeggen: the best surfer is the one having the most fun. Surfers van 5 tot 120 jaar welkom.' },
+        { g: 'Voor je begint', q: 'Hoe bereid ik me voor op mijn surflessen?', a: 'Hoe fitter je bent, hoe makkelijker het gaat. Je kan je voorbereiden door vooraf te trainen in een fitness met een personal coach, of gewoon regelmatig te gaan zwemmen voor je vertrekt.' },
+        { g: 'Je les', q: 'Hoeveel lessen heb je nodig voor je recht staat op een golf?', a: 'We raden minimum 3 lessen aan om het staan in het schuim regelmatig te laten lukken, en een vijfdaagse stage als je het echt onder de knie wil krijgen — met op het einde van de stage eventueel je eerste ongebroken golf.' },
+        { g: 'Je les', q: 'Wat moet ik meebrengen naar een les?', a: 'Je badpak of zwembroek, zonnecrème, water en je good vibes. De plank en het wetsuit krijg je van ons.' },
+        { g: 'Je les', q: 'Wat als het weer slecht is of de zee te woelig?', a: 'Bij slecht weer gaan de lessen gewoon door: je wordt sowieso nat, en regen is niet erg. Bij te grote golven — rode vlag — worden de lessen verplaatst, of terugbetaald als verplaatsen niet lukt.' },
+        { g: 'Waar en wanneer', q: 'Wat is de beste periode om te leren surfen in de Landes?', a: 'De zomermaanden zijn de warmste, met leuke kleine golven en warm water. Maar ook mei, juni en september zijn heel goed. In april en november kan er zeker gesurft worden, alleen is het water dan wat frisser en zijn we minder zeker qua temperaturen.' },
+        { g: 'Waar en wanneer', q: 'Wanneer is de surfschool open?', a: 'We geven les van april tot en met november, elke dag van de week. De uren hangen af van het getij, de omstandigheden op zee en je niveau: die spreken we samen af bij je boeking.' },
+        { g: 'Waar en wanneer', q: 'Waarom is Les Bourdaines in Seignosse zo goed voor beginners?', a: 'Les Bourdaines is een strand met een zachte zandbank en lange schuimgolven — net wat we nodig hebben om in alle veiligheid te leren surfen. Voor je eerste golven ga je niet dieper dan tot je heupen, en er zijn geen rotsen. Het is trouwens ook een uitstekend strand voor gevorderde surfers: voor elk wat wils.' },
+        { g: 'Waar en wanneer', q: 'Wat is het verschil tussen Hossegor en Seignosse als je begint?', a: 'Seignosse heeft meer stranden, dus vaak heb je er meer plaats om te surfen. Hossegor is uitstekend op dagen dat de golven in Seignosse te groot zijn: daar is een strand waar de golven dan kleiner binnenkomen, en op die dagen geven we afspraak in Hossegor. Dat is het voordeel van een mobiele surfschool te zijn.' },
+      ],
+    },
+    legal: {
+      title: 'Wettelijke vermeldingen — Coco Surf School', desc: 'Wettelijke vermeldingen van coco-surfschool.com: uitgever, SIRET, hosting en gebruiksvoorwaarden.', h1: 'Wettelijke vermeldingen', crumb: 'Wettelijke vermeldingen',
+      eyebrow: 'Juridische informatie', h1html: 'Wettelijke <em>vermeldingen</em>', lead: 'Wie deze site uitgeeft, en hoe je ons bereikt.',
+      idTitle: 'Uitgever van de site',
+      rowLabels: { publisher: 'Uitgever', status: 'Rechtsvorm', address: 'Adres', siret: 'SIRET', ape: 'APE / NAF-code', vat: 'Btw', registered: 'Inschrijving', director: 'Verantwoordelijke uitgever', phone: 'Telefoon', email: 'E-mail', host: 'Hosting' },
+      statusText: 'Eenmanszaak — auto-entrepreneur, vrij beroep (Frankrijk)',
+      apeText: 'Onderwijs in sport en vrijetijdsactiviteiten',
+      vatText: 'Btw niet van toepassing, artikel 293 B van de Franse Code général des impôts',
+      body: `<h2>Gereglementeerd beroep</h2>
+<p>Surfles geven tegen betaling is in Frankrijk een gereglementeerd beroep. Annelies Debo werkt met een carte professionnelle d’éducateur sportif (surf) en heeft het PSE1-brevet, een master lichamelijke opvoeding en een ISA-kwalificatie als surfcoach. De details staan op de pagina <a href="{coach}">Coach</a>.</p>
+<h2>Intellectuele eigendom</h2>
+<p>Alle inhoud van deze site — teksten, foto’s, logo en grafische elementen — is eigendom van Coco Surf School, tenzij anders vermeld. Gehele of gedeeltelijke reproductie of hergebruik zonder voorafgaande schriftelijke toestemming is niet toegestaan.</p>
+<h2>Persoonsgegevens</h2>
+<p>Wat je ons via het contactformulier bezorgt, wordt verwerkt zoals beschreven in ons <a href="{privacy}">privacybeleid</a>.</p>
+<h2>Klachten</h2>
+<p>Loopt er iets mis? Schrijf ons eerst — we zoeken altijd naar een oplossing in der minne. Je bereikt ons per e-mail of telefoon via de pagina <a href="{contact}">Contact</a>.</p>
+<h2>Bronnen</h2>
+<p>Getijden: Stormglass. Weer en golfhoogte: Open-Meteo. Foto’s: Coco Surf School.</p>`,
+      updated: 'Laatst bijgewerkt: 21 augustus 2026.',
+    },
+    privacy: {
+      title: 'Privacybeleid — Coco Surf School', desc: 'Wat er met je bericht gebeurt: welke gegevens we bewaren, hoe lang, welke dienstverleners we gebruiken en welke rechten je hebt. Deze site plaatst geen cookies.', h1: 'Privacybeleid', crumb: 'Privacy',
+      eyebrow: 'Je gegevens', h1html: '<em>Privacy</em>beleid', lead: 'Deze site plaatst geen cookies en volgt je niet. Hier staat, in gewone taal, wat er gebeurt met wat je ons schrijft.',
+      body: `<h2>Wie is verantwoordelijk voor je gegevens?</h2>
+<p>Annelies Debo, handelend onder de naam Coco Surf School, 47 E avenue de la Marquèze, 40510 Seignosse, Frankrijk. Vragen? <a href="mailto:cocobosurfschool@gmail.com">cocobosurfschool@gmail.com</a>. De volledige gegevens staan bij de <a href="{legal}">wettelijke vermeldingen</a>.</p>
+<h2>Welke gegevens verzamelen we?</h2>
+<p>Alleen wat je zelf in het contactformulier invult: je naam, je e-mailadres en je bericht. Meer niet. Er is op deze site geen account, geen profiel en geen advertentietracking.</p>
+<h2>Waarom, en op welke grondslag?</h2>
+<ul class="ticks">
+<li><strong>Om je vraag te beantwoorden</strong> en je boeking voor te bereiden — grondslag: maatregelen die op jouw verzoek voorafgaan aan een overeenkomst (AVG art. 6.1.b).</li>
+<li><strong>Om je af en toe nieuws van de surfschool te sturen</strong>, zoals nieuwe data of een aanbieding — alleen als je daarvoor het vakje hebt aangevinkt. Grondslag: jouw toestemming (AVG art. 6.1.a). Je kan die op elk moment intrekken door gewoon op een van onze mails te antwoorden.</li>
+</ul>
+<h2>Hoe lang bewaren we ze?</h2>
+<p><strong>Twee jaar</strong> na ons laatste contact. Daarna worden je bericht en je gegevens gewist. Heb je je ingeschreven voor nieuws van de school, dan houden we je adres bij tot je je uitschrijft.</p>
+<h2>Wie krijgt ze nog te zien?</h2>
+<p>Twee technische dienstverleners, en niemand anders. Je gegevens worden niet verkocht, verhuurd of geruild.</p>
+<ul class="ticks">
+<li><strong>Resend</strong> bezorgt het bericht uit het formulier in onze mailbox. Die dienst is gevestigd in de Verenigde Staten; de doorgifte verloopt via de modelcontractbepalingen van de Europese Commissie.</li>
+<li><strong>Cloudflare</strong> host de site en levert hem uit. Cloudflare verwerkt je IP-adres voor de beveiliging van de site en de bescherming tegen misbruik.</li>
+</ul>
+<h2>Het surf report op de homepage</h2>
+<p>De homepage toont de condities van de dag aan Les Bourdaines. Die gegevens vraagt je browser rechtstreeks op bij <strong>Open-Meteo</strong>, waardoor je IP-adres naar die dienst gaat. Open-Meteo plaatst geen cookies en bouwt geen bezoekersprofiel op. De getijdenuren staan wel op onze eigen server klaar en vragen geen enkele externe oproep.</p>
+<h2>Cookies</h2>
+<p>Deze site plaatst <strong>geen enkele cookie</strong>, gebruikt geen lokale opslag en bevat geen bezoekersstatistieken, advertentiepixels of ingesloten inhoud van derden. Daarom krijg je hier ook geen cookiebanner te zien.</p>
+<h2>Je rechten</h2>
+<p>Je hebt recht op inzage, verbetering, wissing, beperking, bezwaar en overdraagbaarheid, en je mag je toestemming op elk moment intrekken. Schrijf ons op <a href="mailto:cocobosurfschool@gmail.com">cocobosurfschool@gmail.com</a>: we antwoorden binnen een maand.</p>
+<p>Ben je niet tevreden met ons antwoord, dan kan je klacht indienen bij de Franse toezichthouder CNIL, 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07 — <a href="https://www.cnil.fr" target="_blank" rel="noopener">cnil.fr</a> — of bij de toezichthouder van je eigen land.</p>`,
+      updated: 'Laatst bijgewerkt: 21 augustus 2026.',
     },
     book: {
       title: 'Boek een surfles — Coco Surf School', desc: 'Boek je surfles online bij Coco Surf School: kies een sessie, je groepsgrootte en je formule.', h1: 'Boek een les', crumb: 'Boeken',

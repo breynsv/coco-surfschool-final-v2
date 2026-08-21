@@ -169,6 +169,11 @@ export async function onRequestPost({ request, env }) {
   const email = (data.email || '').toString().trim();
   const message = (data.message || '').toString().trim();
   const honeypot = (data.company || '').toString().trim(); // hidden field; bots fill it
+  // Newsletter opt-in, ticked by the visitor. It is carried into the email
+  // rather than stored anywhere: there is no list system behind this form, so
+  // the only record of consent is the enquiry itself — and Annelies needs to
+  // see, per message, whether she may add that address to her news list.
+  const consent = data.consent === true || data.consent === 'true' || data.consent === '1' || data.consent === 1;
 
   // Silently accept spam so bots don't learn what tripped them.
   if (honeypot) return json({ ok: true });
@@ -198,13 +203,15 @@ export async function onRequestPost({ request, env }) {
   const text =
     `New enquiry from the Coco Surf School website\n\n` +
     `Name:  ${name}\n` +
-    `Email: ${email}\n\n` +
+    `Email: ${email}\n` +
+    `News opt-in: ${consent ? 'YES — may be added to the news list' : 'no'}\n\n` +
     `${message}\n`;
 
   const html =
     `<h2>New enquiry from the Coco Surf School website</h2>` +
     `<p><b>Name:</b> ${escapeHtml(name)}<br>` +
-    `<b>Email:</b> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>` +
+    `<b>Email:</b> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a><br>` +
+    `<b>News opt-in:</b> ${consent ? 'YES — may be added to the news list' : 'no'}</p>` +
     `<p style="white-space:pre-wrap">${escapeHtml(message)}</p>`;
 
   const res = await fetch('https://api.resend.com/emails', {

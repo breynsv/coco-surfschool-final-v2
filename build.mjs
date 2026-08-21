@@ -110,6 +110,9 @@ const PAGES = {
   seignosse: { fr: 'cours-de-surf-seignosse', en: 'surf-lessons-seignosse', nl: 'surflessen-seignosse', de: 'surfkurse-seignosse',  es: 'clases-de-surf-seignosse' },
   team:      { fr: 'team-building-surf',      en: 'team-building',          nl: 'surf-teambuilding',    de: 'surf-teambuilding',    es: 'surf-team-building' },
   learn:     { fr: 'apprendre-a-surfer',      en: 'learn-to-surf',          nl: 'leren-surfen',         de: 'surfen-lernen',        es: 'aprender-a-surfear' },
+  faq:       { fr: 'questions-frequentes',    en: 'faq',                    nl: 'veelgestelde-vragen',  de: 'haeufige-fragen',      es: 'preguntas-frecuentes' },
+  legal:     { fr: 'mentions-legales',        en: 'legal-notice',           nl: 'wettelijke-vermeldingen', de: 'impressum',         es: 'aviso-legal' },
+  privacy:   { fr: 'politique-de-confidentialite', en: 'privacy-policy',    nl: 'privacybeleid',        de: 'datenschutz',          es: 'politica-de-privacidad' },
   book:      { fr: 'reserver',                en: 'book',                   nl: 'reserveren',           de: 'buchen',               es: 'reservar' },
 };
 const KEYS = Object.keys(PAGES);
@@ -244,14 +247,85 @@ const firstEuro = (s) => {
  *
  * Coordinates are the OpenStreetMap geocode of that address, not an estimate.
  *
- * There is deliberately no openingHoursSpecification: the profile shows a 20:00
- * closing time but the opening time and weekly pattern are unconfirmed, and
- * published hours that are wrong send people to a beach for nothing.
+ * Opening hours are published as a SEASON, not as clock times — see SEASON and
+ * businessHours() below.
  */
 const BUSINESS_PLACE = {
   streetAddress: 'Plage des Bourdaines',
   geo: { '@type': 'GeoCoordinates', latitude: 43.6979, longitude: -1.4392 },
 };
+
+/**
+ * The school's teaching season, confirmed by Annelies on 2026-08-21: lessons run
+ * from April to November, seven days a week.
+ *
+ * What she did NOT confirm is the daily opening and closing time, and there is a
+ * good reason it is not a fixed pair of numbers: lesson times follow the tide and
+ * the conditions, so they are agreed per booking. The Google profile shows a
+ * 20:00 close and no opening time at all.
+ *
+ * So the markup states exactly what is known — every day, within this window —
+ * and no `opens`/`closes`. Both are optional in schema.org. A search engine may
+ * choose to ignore a specification without times; being ignored costs nothing,
+ * whereas an invented 09:00 sends someone to a beach for nothing. That is the
+ * same reasoning that kept hours off the site entirely until now, applied to the
+ * half of the question she answered.
+ */
+const SEASON = { fromMonth: '04', fromDay: '01', toMonth: '11', toDay: '30' };
+const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+/**
+ * The season window as absolute dates, for the year the build is run in — and
+ * for NEXT year once this season has closed, so a December deploy does not ship
+ * a validThrough that is already in the past.
+ */
+function seasonDates(now = new Date()) {
+  const year = now.getUTCFullYear() + (now.getUTCMonth() + 1 > Number(SEASON.toMonth) ? 1 : 0);
+  return {
+    validFrom: `${year}-${SEASON.fromMonth}-${SEASON.fromDay}`,
+    validThrough: `${year}-${SEASON.toMonth}-${SEASON.toDay}`,
+  };
+}
+
+const businessHours = () => [{
+  '@type': 'OpeningHoursSpecification',
+  dayOfWeek: DAYS.map(d => `https://schema.org/${d}`),
+  ...seasonDates(),
+}];
+
+/**
+ * Who publishes the site, in one place.
+ *
+ * France requires this to be on the site at all (LCEN art. 6-III), so it is a
+ * legal obligation rather than a nicety, and the same facts also appear in the
+ * footer, the privacy policy and llms.txt. Five copies is five chances to drift,
+ * which is why it lives here rather than in the five content files — the
+ * content files translate the LABELS around these values, never the values.
+ *
+ * Source: Annelies's own URSSAF auto-entrepreneur record, 2026-08-21. The SIRET
+ * it shows (81982561300030) matches the one the footer has always carried.
+ */
+const OWNER = {
+  legalName: 'Annelies Maria Flore Debo',
+  tradingName: 'Coco Surf School',
+  street: '47 E avenue de la Marquèze',
+  postcode: '40510',
+  city: 'Seignosse',
+  country: 'France',
+  siret: '819 825 613 00030',
+  siren: '819 825 613',
+  ape: '8551Z',
+  registered: '14/04/2016',
+  phone: '+33 6 47 45 42 65',
+  phoneHref: '+33647454265',
+  email: 'cocobosurfschool@gmail.com',
+  host: {
+    name: 'Cloudflare, Inc.',
+    address: '101 Townsend Street, San Francisco, CA 94107, United States',
+    url: 'https://www.cloudflare.com',
+  },
+};
+OWNER.fullAddress = `${OWNER.street}, ${OWNER.postcode} ${OWNER.city}, ${OWNER.country}`;
 
 /** The business entity itself. Only the home page emits this. */
 const businessSchema = (biz) => ({
@@ -262,6 +336,7 @@ const businessSchema = (biz) => ({
   sameAs: BUSINESS_SAMEAS,
   image: `${SITE}/assets/images/carousel-1.jpg`,
   currenciesAccepted: 'EUR',
+  openingHoursSpecification: businessHours(),
   aggregateRating: { '@type': 'AggregateRating', ratingValue: RATING_VALUE, reviewCount: String(REVIEW_COUNT) },
 });
 
@@ -396,6 +471,13 @@ function llmsTxt() {
     return `### ${plain(card.h)}\n${plain(card.sub)}\n${lines}`;
   }).join('\n\n');
 
+  // Answer engines quote beginner questions more than anything else on a surf
+  // school's site, and these answers are Annelies's own words rather than copy
+  // written for a page. Read from the same list the FAQ page renders.
+  const faqs = (c.pages.faq.faq || [])
+    .map(f => `### ${plain(f.q)}\n${plain(f.a)}`)
+    .join('\n\n');
+
   const pages = EMITTED
     .filter(k => k !== 'home')
     .map(k => `- [${plain(C.en.pages[k].crumb || C.en.pages[k].h1 || k)}](${abs('en', k)})`)
@@ -417,6 +499,8 @@ German and Spanish. Rating ${RATING_VALUE} from ${REVIEW_COUNT}+ Google reviews.
 - Lesson length: 1h30 in the water, about 2h in total
 - Surfboard and wetsuit are included in every lesson and course
 - Price range: ${plain(biz.priceRange)}
+- Season: lessons run from April to November, seven days a week. Times follow
+  the tide and the conditions, so they are agreed per booking rather than fixed
 - A 30% deposit is due at booking; payment by bank transfer or cash
 - Phone / WhatsApp: +33 6 47 45 42 65
 - Email: cocobosurfschool@gmail.com
@@ -428,6 +512,10 @@ All prices in EUR. "pp" means per person. These are the published ${new Date().g
 the lessons page is authoritative.
 
 ${formulas}
+
+## Common questions
+
+${faqs}
 
 ## Languages
 
@@ -463,7 +551,9 @@ function schemasFor(key, c, lang) {
 
   if (key === 'lessons') { const s = lessonsServiceSchema(t, lang, key); if (s) out.push(s); }
   if (key === 'coach') out.push(coachSchema(t, lang, key));
-  if (key === 'contact') { const faq = faqSchema(t); if (faq) out.push(faq); }
+  // Any page that renders a FAQ gets the markup for it — the contact page's
+  // booking questions, and the dedicated FAQ page's beginner questions.
+  { const faq = faqSchema(t); if (faq) out.push(faq); }
 
   const bc = breadcrumbSchema(lang, key, c);
   if (bc) out.push(bc);
@@ -503,7 +593,7 @@ ${alt}
 <meta name="twitter:image" content="${ogImg}">
 <meta name="theme-color" content="#23413A">
 <link rel="preload" href="${u.root}assets/fonts/petrona-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="${u.css}?v=13">
+<link rel="stylesheet" href="${u.css}?v=14">
 <link rel="icon" href="${u.root}assets/images/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="${u.root}assets/images/favicon-180.png">${ld}
 </head>`;
@@ -569,6 +659,7 @@ function footer(lang, key, c) {
                linked page on the site: in neither nav, so 5 inbound links against
                6+ everywhere else. The footer is the cheapest place to fix that. -->
           <li><a href="${u.team}">${ui.nav.team || c.pages.team.crumb}</a></li>
+          <li><a href="${u.faq}">${ui.nav.faq || c.pages.faq.crumb}</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -581,7 +672,11 @@ function footer(lang, key, c) {
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Coco Surf School · SIRET 819 825 613 00030</span>
+      <span>© ${new Date().getUTCFullYear()} Coco Surf School · SIRET ${OWNER.siret}</span>
+      <!-- France requires the mentions légales to be reachable from every page
+           (LCEN art. 6-III), so they live in the footer rather than in a nav
+           that only some pages carry. -->
+      <span class="footer-legal"><a href="${u.legal}">${ui.nav.legal || c.pages.legal.crumb}</a><a href="${u.privacy}">${ui.nav.privacy || c.pages.privacy.crumb}</a></span>
       <span class="lang-inline">${ui.langWord} :
         ${flangs}
       </span>
@@ -589,7 +684,7 @@ function footer(lang, key, c) {
   </div>
 </footer>
 <a class="wa-fab" href="${u.wa}" target="_blank" rel="noopener" aria-label="WhatsApp">${WA_SVG}</a>
-<script src="${u.js}?v=6" defer></script>
+<script src="${u.js}?v=7" defer></script>
 </body>
 </html>`;
 }
@@ -860,7 +955,7 @@ ${reviewsSection(t, lang)}
   <p class="reveal" style="margin-top:1.6rem;text-align:center"><a class="btn btn--primary" href="${u.contact}">${t.cta}</a></p>
 </div></section>`;
   },
-  contact(u, t, ui) {
+  contact(u, t, ui, lang, key, c) {
     return `
 <section class="section section--tint" id="contact" style="padding-top:clamp(2.4rem,5vw,3.4rem)"><div class="wrap contact-grid">
   <div class="contact-info reveal">
@@ -878,6 +973,12 @@ ${reviewsSection(t, lang)}
     <div class="field"><label for="c-email">${t.fEmail}</label><input id="c-email" name="email" type="email" autocomplete="email" required></div>
     <div class="field"><label for="c-msg">${t.fMsg}</label><textarea id="c-msg" name="message" placeholder="${t.fPlaceholder}" required></textarea></div>
     <div class="hp" aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden"><label for="c-company">Company</label><input id="c-company" name="company" type="text" tabindex="-1" autocomplete="off"></div>
+    <!-- Annelies does reuse these addresses for occasional news, so the opt-in
+         is asked for here rather than assumed. Unticked by default, and the box
+         is not required to send the form: GDPR consent has to be a free choice,
+         and bundling it into "send" would not be one. -->
+    <p class="form-privacy">${t.fPrivacy} <a href="${u.privacy}">${c.pages.privacy.crumb}</a>.</p>
+    <label class="surf-consent"><input type="checkbox" name="consent" value="1"> <span>${t.fConsent}</span></label>
     <button type="submit" class="btn btn--coral">${t.send}</button>
     <p class="form-status" role="status" aria-live="polite" hidden></p>
   </form>
@@ -885,6 +986,7 @@ ${reviewsSection(t, lang)}
 <section class="section" id="faq"><div class="wrap">
   <div class="section-head center reveal"><p class="eyebrow">FAQ</p><h2 class="section-title" style="margin-inline:auto">${t.faqTitle}</h2></div>
   <div class="faq-list">${t.faq.map(f => `<details class="faq-item reveal"><summary>${f.q}<span class="chev">+</span></summary><div class="faq-body"><p>${f.a}</p></div></details>`).join('')}</div>
+  <p class="faq-more reveal"><a class="link" href="${u.faq}">${t.faqMore} <span aria-hidden="true">→</span></a></p>
 </div></section>`;
   },
 
@@ -903,6 +1005,65 @@ ${reviewsSection(t, lang)}
 <section class="section"><div class="wrap article-grid">
   <div class="prose reveal">${t.body}</div>
   <aside class="aside-card reveal"><h3>${t.aside.h}</h3><p>${t.aside.p}</p><div class="mini"><a href="tel:+33647454265">06 47 45 42 65</a><a href="mailto:cocobosurfschool@gmail.com">cocobosurfschool@gmail.com</a></div><a class="btn btn--primary" href="${u.contact}">${t.aside.b1}</a><a class="btn btn--ghost" href="${u.wa}" target="_blank" rel="noopener">${t.aside.b2}</a>${crossLink}</aside>
+</div></section>`;
+  },
+
+  /**
+   * The beginner FAQ. Questions carry a `g` (group) label and are rendered in
+   * runs under an h2, so the page reads as three themed sections rather than a
+   * wall of eleven toggles — without splitting the list into a nested shape the
+   * FAQPage schema would then have to flatten back out.
+   */
+  faq(u, t, ui, lang, key, c) {
+    const groups = [];
+    for (const f of t.faq) {
+      if (!groups.length || groups[groups.length - 1].g !== f.g) groups.push({ g: f.g, items: [] });
+      groups[groups.length - 1].items.push(f);
+    }
+    const item = f => `<details class="faq-item reveal"><summary>${f.q}<span class="chev">+</span></summary><div class="faq-body"><p>${f.a}</p></div></details>`;
+    return `
+<section class="page-hero"><div class="wrap"><div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p><div class="hero-cta"><a class="btn btn--primary" href="${u.contact}">${t.cta1}</a><a class="btn btn--ghost" href="${u.lessons}">${t.cta2}</a></div></div></div></section>
+<section class="section" id="faq"><div class="wrap">
+  ${groups.map(g => `<div class="faq-group reveal"><h2 class="section-title">${g.g}</h2><div class="faq-list">${g.items.map(item).join('')}</div></div>`).join('\n  ')}
+  <div class="faq-outro reveal"><p>${t.outro}</p><a class="btn btn--coral" href="${u.contact}">${t.cta1}</a></div>
+</div></section>`;
+  },
+
+  /**
+   * The two legal documents — mentions légales and privacy policy. Same shape:
+   * a hero, an optional identity table built from OWNER, then prose.
+   *
+   * The identity values come from OWNER, never from the content files. The
+   * content files supply the row LABELS and the prose around them, so a
+   * translation can never quietly restate a SIRET or an address.
+   */
+  doc(u, t, ui, lang, key, c) {
+    // Internal links inside the prose are written as {privacy}, {legal},
+    // {contact}, {coach}… and resolved here. The slugs differ per language, so
+    // a hand-written relative href in a content file would be right in French
+    // and quietly 404 in the other four.
+    const body = t.body.replace(/\{(\w+)\}/g, (m, k) => u[k] || m);
+    const L = t.rowLabels;
+    const rows = key !== 'legal' ? null : [
+      [L.publisher, `${OWNER.legalName} — ${OWNER.tradingName}`],
+      [L.status, t.statusText],
+      [L.address, OWNER.fullAddress],
+      [L.siret, `${OWNER.siret} <span class="dl-note">(SIREN ${OWNER.siren})</span>`],
+      [L.ape, `${OWNER.ape} — ${t.apeText}`],
+      [L.vat, t.vatText],
+      [L.registered, OWNER.registered],
+      [L.director, OWNER.legalName],
+      [L.phone, `<a href="tel:${OWNER.phoneHref}">${OWNER.phone}</a>`],
+      [L.email, `<a href="mailto:${OWNER.email}">${OWNER.email}</a>`],
+      [L.host, `${OWNER.host.name}, ${OWNER.host.address} — <a href="${OWNER.host.url}" target="_blank" rel="noopener">cloudflare.com</a>`],
+    ];
+    return `
+<section class="page-hero"><div class="wrap"><div class="ph-copy reveal"><p class="eyebrow">${t.eyebrow}</p><h1>${t.h1html}</h1><p class="lead">${t.lead}</p></div></div></section>
+<section class="section"><div class="wrap doc-wrap">
+  ${rows ? `<h2 class="doc-h2 reveal">${t.idTitle}</h2>
+  <dl class="legal-dl reveal">${rows.map(([k, v]) => `<div class="legal-row"><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>` : ''}
+  <div class="prose reveal">${body}</div>
+  <p class="doc-updated reveal">${t.updated}</p>
 </div></section>`;
   },
 
@@ -954,7 +1115,7 @@ ${reviewsSection(t, lang)}
 </div></section>`;
   },
 };
-const RENDER = { home: R.home, lessons: R.lessons, coach: R.coach, stay: R.stay, rental: R.rental, contact: R.contact, hossegor: R.article, seignosse: R.article, team: R.article, learn: R.article, book: R.book };
+const RENDER = { home: R.home, lessons: R.lessons, coach: R.coach, stay: R.stay, rental: R.rental, contact: R.contact, hossegor: R.article, seignosse: R.article, team: R.article, learn: R.article, faq: R.faq, legal: R.doc, privacy: R.doc, book: R.book };
 
 // Cloudflare Pages serves this for any unmatched path, at any depth, so every
 // asset reference must be root-absolute. Stays noindex in every build.
