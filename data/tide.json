@@ -1,14 +1,9 @@
 {
-  "updated": "2026-10-22T21:11:37.576Z",
+  "updated": "2026-10-23T03:22:57.777Z",
   "station": "bayonne_boucau",
   "lat": 43.6889,
   "lng": -1.4372,
   "extremes": [
-    {
-      "type": "high",
-      "time": "2026-10-22T00:40:00+00:00",
-      "height": 0.9
-    },
     {
       "type": "low",
       "time": "2026-10-22T06:35:00+00:00",
