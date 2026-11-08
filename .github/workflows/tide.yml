@@ -29,5 +29,8 @@ jobs:
           git config user.name "tide-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/tide.json
-          git diff --staged --quiet || git commit -m "chore: update tide data [skip ci]"
+          # No "[skip ci]" here: Cloudflare Pages skips any commit that says so, which left the live
+          # tide data frozen from 7 Oct to 8 Nov 2026. A GITHUB_TOKEN push triggers no other workflow anyway.
+          # Cost: ~4 Pages builds a day (~120/month, free plan allows 500).
+          git diff --staged --quiet || git commit -m "chore: update tide data"
           git push
