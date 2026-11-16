@@ -140,7 +140,7 @@ export default {
 <h2>Beschwerden</h2>
 <p>Wenn etwas schiefläuft, schreib uns bitte zuerst — wir suchen immer eine gütliche Lösung. Du erreichst uns per E-Mail oder Telefon über die Seite <a href="{contact}">Kontakt</a>.</p>
 <h2>Quellen</h2>
-<p>Gezeiten: Stormglass. Wetter und Wellengang: Open-Meteo. Fotos: Coco Surf School.</p>`,
+<p>Gezeiten: von uns berechnet aus den Messungen des Pegels Boucau-Bayonne (<a href="https://doi.org/10.17183/REFMAR#RONIM">REFMAR</a> – Shom, Licence Ouverte 2.0). Wetter und Wellengang: Open-Meteo. Fotos: Coco Surf School.</p>`,
       updated: 'Zuletzt aktualisiert: 21. August 2026.',
     },
     privacy: {

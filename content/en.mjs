@@ -150,7 +150,7 @@ export default {
 <h2>Complaints</h2>
 <p>If something goes wrong, write to us first — we always look for an amicable solution. You can reach us by email or phone via the <a href="{contact}">Contact</a> page.</p>
 <h2>Credits</h2>
-<p>Tide times: Stormglass. Weather and swell: Open-Meteo. Photographs: Coco Surf School.</p>`,
+<p>Tide times: calculated by us from the Boucau-Bayonne tide gauge records (<a href="https://doi.org/10.17183/REFMAR#RONIM">REFMAR</a> – Shom, Licence Ouverte 2.0). Weather and swell: Open-Meteo. Photographs: Coco Surf School.</p>`,
       updated: 'Last updated: 21 August 2026.',
     },
     privacy: {

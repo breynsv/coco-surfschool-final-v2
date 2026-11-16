@@ -285,7 +285,7 @@ const MUST_NOT_SHIP = [
 const MUST_SHIP = [
   'index.html', '404.html', 'sitemap.xml', 'robots.txt', '_redirects',
   'styles.css', 'script.js', 'surf-report.js',
-  'assets/images', 'assets/fonts', 'data/tide.json',
+  'assets/images', 'assets/fonts', 'data/tide/' + new Date().getUTCFullYear() + '.json',
   'fr/index.html', 'en/index.html', 'nl/index.html', 'de/index.html', 'es/index.html',
 ];
 

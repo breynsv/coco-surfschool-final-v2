@@ -850,7 +850,7 @@ ${reviewsSection(t, lang)}
     <div class="ts-body reveal"><h2>${t.coachT.title}</h2><p class="coach-quote">${t.coachT.quote}</p><p>${t.coachT.p}</p><p><a class="btn btn--ghost" href="${u.coach}">${t.coachT.cta}</a></p></div>
   </div>
 </section>
-<section class="section section--tint" id="surf-report" data-lang="${lang}" data-tide="${u.root}data/tide.json" data-high="${t.surfReport.high}" data-low="${t.surfReport.low}">
+<section class="section section--tint" id="surf-report" data-lang="${lang}" data-tide="${u.root}data/tide/" data-high="${t.surfReport.high}" data-low="${t.surfReport.low}">
   <div class="wrap">
     <p class="eyebrow sr-eyebrow reveal">${t.surfReport.eyebrow}</p>
     <div class="sr-tabs reveal">

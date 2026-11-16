@@ -1,14 +1,14 @@
 /* Coco Surf School — live surf report for Les Bourdaines (Seignosse).
    Weather / waves / water-temp / UV / sun: Open-Meteo (free, no key, browser).
-   Tide: /data/tide.json (written a few times a day by the tide GitHub Action from
-   Stormglass — the key stays a repo secret and never reaches the browser).
+   Tide: /data/tide/<year>.json — high and low waters computed in advance from the
+   Boucau-Bayonne tide gauge (REFMAR/Shom open data) by scripts/tide/. No API call.
    Today / tomorrow toggle; tide curve drawn from the extremes. */
 (function () {
   var el = document.getElementById('surf-report');
   if (!el) return;
   var LAT = 43.6889, LNG = -1.4372;
   var lang = el.getAttribute('data-lang') || 'fr';
-  var tideUrl = el.getAttribute('data-tide') || 'data/tide.json';
+  var tideBase = el.getAttribute('data-tide') || 'data/tide/';
   var HI = el.getAttribute('data-high') || 'High', LO = el.getAttribute('data-low') || 'Low';
   var locale = { fr: 'fr-FR', nl: 'nl-BE', de: 'de-DE', en: 'en-GB', es: 'es-ES' }[lang] || 'fr-FR';
 
@@ -18,6 +18,19 @@
   function hhmm(iso) { try { return new Date(iso).toLocaleTimeString(locale, { timeZone: 'Europe/Paris', hour: '2-digit', minute: '2-digit' }); } catch (e) { return '–'; } }
   function pDate(iso) { try { return new Date(iso).toLocaleDateString('en-CA', { timeZone: 'Europe/Paris' }); } catch (e) { return ''; } }
   function getJSON(u) { return fetch(u).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); }
+  // Today and tomorrow (Europe/Paris) can fall in two years on 31 December, so
+  // fetch each year's table they touch and merge them.
+  function getTides() {
+    var now = Date.now(), years = [];
+    [now, now + 864e5].forEach(function (ms) { var y = pDate(new Date(ms).toISOString()).slice(0, 4); if (y && years.indexOf(y) < 0) years.push(y); });
+    return Promise.all(years.map(function (y) { return getJSON(tideBase + y + '.json').catch(function () { return null; }); }))
+      .then(function (tables) {
+        var seen = {}, out = [];
+        tables.forEach(function (t) { ((t && t.extremes) || []).forEach(function (e) { if (!seen[e.time]) { seen[e.time] = 1; out.push(e); } }); });
+        out.sort(function (a, b) { return a.time < b.time ? -1 : 1; });
+        return { extremes: out };
+      });
+  }
   function fail() { el.classList.add('sr-down'); }
 
   var CT = {
@@ -117,7 +130,7 @@
   var mr = 'https://marine-api.open-meteo.com/v1/marine?latitude=' + LAT + '&longitude=' + LNG +
     '&current=wave_height&daily=wave_height_max&timezone=Europe%2FParis&forecast_days=2';
 
-  Promise.all([getJSON(fc), getJSON(mr).catch(function () { return null; }), getJSON(tideUrl).catch(function () { return null; })])
+  Promise.all([getJSON(fc), getJSON(mr).catch(function () { return null; }), getTides().catch(function () { return null; })])
     .then(function (res) {
       var f = res[0], m = res[1], t = res[2];
       var c = f.current || {}, dl = f.daily || {};
