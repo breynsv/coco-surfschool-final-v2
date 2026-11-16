@@ -150,7 +150,7 @@ export default {
 <h2>Klachten</h2>
 <p>Loopt er iets mis? Schrijf ons eerst — we zoeken altijd naar een oplossing in der minne. Je bereikt ons per e-mail of telefoon via de pagina <a href="{contact}">Contact</a>.</p>
 <h2>Bronnen</h2>
-<p>Getijden: Stormglass. Weer en golfhoogte: Open-Meteo. Foto’s: Coco Surf School.</p>`,
+<p>Getijden: zelf berekend op basis van de metingen van de getijdenmeter van Boucau-Bayonne (<a href="https://doi.org/10.17183/REFMAR#RONIM">REFMAR</a> – Shom, Licence Ouverte 2.0). Weer en golfhoogte: Open-Meteo. Foto’s: Coco Surf School.</p>`,
       updated: 'Laatst bijgewerkt: 21 augustus 2026.',
     },
     privacy: {

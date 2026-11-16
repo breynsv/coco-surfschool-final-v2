@@ -150,7 +150,7 @@ export default {
 <h2>Réclamations</h2>
 <p>En cas de difficulté, écrivez-nous d’abord : nous cherchons toujours une solution à l’amiable. Vous pouvez nous joindre par email ou par téléphone via la page <a href="{contact}">Contact</a>.</p>
 <h2>Crédits</h2>
-<p>Horaires de marée : Stormglass. Conditions météo et houle : Open-Meteo. Photographies : Coco Surf School.</p>`,
+<p>Horaires de marée : calculés par nos soins à partir des mesures du marégraphe de Boucau-Bayonne (<a href="https://doi.org/10.17183/REFMAR#RONIM">REFMAR</a> – Shom, Licence Ouverte 2.0). Conditions météo et houle : Open-Meteo. Photographies : Coco Surf School.</p>`,
       updated: 'Dernière mise à jour : 21 août 2026.',
     },
     privacy: {
